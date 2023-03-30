@@ -25,12 +25,12 @@ export default function Login() {
                   <div className="left-signup">
                     <Image src={require('@/app/assets/img/logo.svg')} alt="" width="200" height="29" className='logos' />
                     <div className="text-block">
-                      <h4>WELCOME TO PLUG’N’PLAY</h4>
-                      <p>Minimize your efforts. Maximize the results.</p>
+                      <h4>Welcome to Reporting Portal</h4>
+                      <p>Streamline your reporting process with ease and efficiency</p>
                       <ul>
-                        <li>Create your own event in a few clicks</li>
-                        <li>Sort out event registration in no time</li>
-                        <li>Get your own customized event app</li>
+                        <li>Customization following easy steps</li>
+                        <li>Sales forecasting and analytics</li>
+                        <li>User management features, including access controls and user authentication.</li>
                         <li>Feel safe with our step by step navigation</li>
                       </ul>
                     </div>

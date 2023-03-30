@@ -102,58 +102,60 @@ export default function OrderListing() {
                   <div className="col-8">
                     <div className="right-top-header">
                       <button className="btn btn-default">
-                        <i className="material-symbols-outlined">add</i> Create Order
+                        Export Orders
                       </button>
                     </div>
                   </div>
                 </div>
               </div>
               <div style={{ background: "#fff" }} className="main-data-table">
-                <div className="ebs-ticket-section">
+              <div className="ebs-ticket-section">
                   <h4>Tickets</h4>
                   <div className="row d-flex">
-                    <div className="col-10">
+                    <div className="col-6">
                       <div className="row">
                         <div className="col">
-                          <div className="ebs-ticket-information">
+                          <div className="ebs-ticket-information ebs-bg-light">
                             <strong>4</strong>
                             <span>LEFT</span>
                           </div>
                         </div>
                         <div className="col">
-                          <div className="ebs-ticket-information">
+                          <div className="ebs-ticket-information ebs-bg-light">
                             <strong>33</strong>
                             <span>sold</span>
                           </div>
                         </div>
                         <div className="col">
-                          <div className="ebs-ticket-information">
+                          <div className="ebs-ticket-information ebs-bg-light">
                             <strong>34</strong>
                             <span>total</span>
                           </div>
                         </div>
-                        <div className="col">
-                          <div className="ebs-ticket-information">
-                            <strong>2</strong>
-                            <span>My Sold Tickets</span>
-                          </div>
-                        </div>
-                        <div className="col">
-                          <div className="ebs-ticket-information">
-                            <strong>12325</strong>
-                            <span>
-                              My Revenue <br />
-                              <small>(DKK)</small>
-                            </span>
-                          </div>
-                        </div>
                       </div>
                     </div>
-                    <div className="col-2">
-                      <div className="ebs-time-counter">
-                        <strong>00:00:00:00</strong>
-                        <span>Time left</span>
+                    <div className="col-6">
+                     <div className="row d-flex align-items-end h-100">
+                      <div className="col-8 h-100">
+                        <div className="ebs-time-counter d-flex align-items-center">
+                          <div className="col-5">
+                            <div className="p-1">
+                              <strong>0,00 DKK</strong>
+                              <span>Revenue</span>
+                            </div>
+                          </div>
+                          <div className="col-7">
+                            <div className="ebs-border-left p-1">
+                              <strong>18854.98 DKK</strong>
+                              <span>Total Revenue</span>
+                            </div>
+                          </div>
+                        </div>
                       </div>
+                      <div className="col-4">
+                        <p className='m-0 ebs-info-vat'><i className="material-symbols-outlined">info</i>All prices are excluding VAT.</p>
+                      </div>
+                     </div>
                     </div>
                   </div>
                 </div>
@@ -161,8 +163,20 @@ export default function OrderListing() {
                   <div className="ebs-order-header">
                     <h4>Orders List</h4>
                     <div className="row">
-                      <div className="col-5 d-flex">
-                        <input type="text" className="ebs-search-area" defaultValue="Search" />
+                      <div className="col-8 d-flex">
+                        <input style={{ width: "410px" }} type="text" className="ebs-search-area" defaultValue="Search" />
+                        <label style={{ width: "210px" }} className="label-select-alt">
+                          <Dropdown
+                            label="Select type"
+                            listitems={[
+                              { id: "active_future", name: "Active and future events" },
+                              { id: "active", name: "Active events" },
+                              { id: "future", name: "Future events" },
+                              { id: "expired", name: "Expired events" },
+                              { id: "name", name: "All events" },
+                            ]}
+                          />
+                        </label>
                         <label style={{ width: "210px" }} className="label-select-alt">
                           <Dropdown
                             label="Select type"
@@ -176,7 +190,7 @@ export default function OrderListing() {
                           />
                         </label>
                       </div>
-                      <div className="col-7 d-flex justify-content-end align-items-center">
+                      <div className="col-4 d-flex justify-content-end align-items-center">
                         <button className="btn-full-screen">
                           <Image src={require("@/app/assets/img/ico-fullscreen.svg")} alt="" width="27" height="28" />
                         </button>
@@ -197,72 +211,72 @@ export default function OrderListing() {
                   <div className="ebs-data-table ebs-order-table">
                     <div className="d-flex align-items-center ebs-table-header">
                       <div className="ebs-table-box ebs-box-1"><strong>Order #</strong></div>
-                      <div className="ebs-table-box ebs-box-1"><strong>Date</strong></div>
+                      <div className="ebs-table-box ebs-box-1"><strong>Date <i className="material-icons">unfold_more</i></strong></div>
                       <div className="ebs-table-box ebs-box-2"><strong>Name</strong></div>
                       <div className="ebs-table-box ebs-box-2"><strong>Email</strong></div>
+                      <div style={{width: 150}} className="ebs-table-box ebs-box-2"><strong>Job Title</strong></div>
                       <div className="ebs-table-box ebs-box-4"><strong>Company</strong></div>
-                      <div className="ebs-table-box ebs-box-4"><strong>Sold Ticket</strong></div>
-                      <div className="ebs-table-box ebs-box-4"><strong>Revenue</strong></div>
-                      <div className="ebs-table-box ebs-box-4" style={{paddingRight: 0}}><strong>Payment STATus</strong></div>
-                      <div className="ebs-table-box ebs-box-2"  />
+                      <div className="ebs-table-box ebs-box-4"><strong>Amount</strong></div>
+                      <div className="ebs-table-box ebs-box-4"><strong>Sales Agent</strong></div>
+                      <div className="ebs-table-box ebs-box-4" style={{width: 150}}><strong>Payment STATus</strong></div>
                     </div>
                     {[...Array(10)].map((item,k) => 
                     <div key={k} className="d-flex align-items-center ebs-table-content">
                       <div className="ebs-table-box ebs-box-1"><p>25100{k}</p></div>
                       <div className="ebs-table-box ebs-box-1"><p>12/04/2022</p></div>
-                      <div className="ebs-table-box ebs-box-2"><p>Mudassir Umer Reg</p></div>
+                      <div className="ebs-table-box ebs-box-2 ebs-attendee-name-list">
+                        {k%2 === 0 ? <p>Mudassir Umer Reg</p> : (
+                           <div onClick={(e) => e.stopPropagation()} className="ebs-dropdown-area">
+                            <div className="d-flex align-items-center">
+                              <p>Mudassir Umer Reg</p>  
+                              <button onClick={handleToggle} className='ebs-btn-panel ebs-btn-dropdown'>
+                                <i className="material-icons">expand_more</i>
+                              </button>
+                              <div style={{minWidth: 180}} className="ebs-dropdown-menu">
+                                <h5>attendees (8)</h5>
+                                <div className="ebs-dropdown-list">
+                                  <p className="name">Walter White</p>
+                                  <p className="email">ge_info@mail.com</p>
+                                </div>
+                                <div className="ebs-dropdown-list">
+                                  <p className="name">Walter White</p>
+                                  <p className="email">ge_info@mail.com</p>
+                                </div>
+                                <div className="ebs-dropdown-list">
+                                  <p className="name">Walter White</p>
+                                  <p className="email">ge_info@mail.com</p>
+                                </div>
+                                <div className="ebs-dropdown-list">
+                                  <p className="name">Walter White</p>
+                                  <p className="email">ge_info@mail.com</p>
+                                </div>
+                                <div className="ebs-dropdown-list">
+                                  <p className="name">Walter White</p>
+                                  <p className="email">ge_info@mail.com</p>
+                                </div>
+                                <div className="ebs-dropdown-list">
+                                  <p className="name">Walter White</p>
+                                  <p className="email">ge_info@mail.com</p>
+                                </div>
+                                <div className="ebs-dropdown-list">
+                                  <p className="name">Walter White</p>
+                                  <p className="email">ge_info@mail.com</p>
+                                </div>
+                                <div className="ebs-dropdown-list">
+                                  <p className="name">Walter White</p>
+                                  <p className="email">ge_info@mail.com</p>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        )}
+                      </div>
                       <div className="ebs-table-box ebs-box-2"><p>sales_info@mail.com</p></div>
+                      <div style={{width: 150}} className="ebs-table-box ebs-box-2"><p>Project manager</p></div>
                       <div className="ebs-table-box ebs-box-4"><p>Ab Tech</p></div>
                       <div className="ebs-table-box ebs-box-4"><p>1</p></div>
                       <div className="ebs-table-box ebs-box-4"><p>52315 DKK</p></div>
-                      <div className="ebs-table-box ebs-box-4" style={{paddingRight: 0}}><p>Pending</p></div>
-                      <div className="ebs-table-box ebs-box-2 d-flex justify-content-end">
-                        <ul className='d-flex ebs-panel-list m-0'>
-                          <li>
-                            <button className='ebs-btn-panel'>
-                              <Image
-                                src={require("@/app/assets/img/ico-edit.svg")}
-                                alt=""
-                                width="12"
-                                height="12"
-                              />
-                            </button>
-                          </li>
-                          <li>
-                            <button className='ebs-btn-panel'>
-                              <Image
-                                src={require("@/app/assets/img/ico-folder.svg")}
-                                alt=""
-                                width="12"
-                                height="12"
-                              />
-                            </button>
-                          </li>
-                          <li>
-                            <button className='ebs-btn-panel'>
-                              <Image
-                                src={require("@/app/assets/img/ico-trash.svg")}
-                                alt=""
-                                width="12"
-                                height="14"
-                              />
-                            </button>
-                          </li>
-                          <li>
-                            <div onClick={(e) => e.stopPropagation()} className="ebs-dropdown-area">
-                              <button onClick={handleToggle} className='ebs-btn-panel ebs-btn-dropdown'>
-                                <i className="material-icons">more_horiz</i>
-                              </button>
-                              <div style={{minWidth: 130}} className="ebs-dropdown-menu">
-                                <button className="dropdown-item">View</button>
-                                <button className="dropdown-item">Print Badge</button>
-                                <button className="dropdown-item">Download </button>
-                                <button style={{borderTop: '1px solid #F2F2F2'}} className="dropdown-item">Download as Invoice</button>
-                              </div>
-                            </div>
-                          </li>
-                        </ul>
-                      </div>
+                      <div className="ebs-table-box ebs-box-4" style={{width: 150}}><p style={{fontWeight: 600, color: '#AB8D2E'}}>Pending</p></div>
                     </div>)}
                   </div>
                 </div>
