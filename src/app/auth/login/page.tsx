@@ -1,7 +1,8 @@
 "use client"; // this is a client component
 import { useState } from "react";
 import Image from 'next/image';
-import Illustration from '@/app/assets/img/illustration.png'
+import Link from "next/link";
+// import Illustration from '@/app/assets/img/illustration.png'
 
 
 const languages = [{ id: 1, name: "English" }, { id: 2, name: "Danish" }];
@@ -23,7 +24,7 @@ export default function Login() {
               <div className="row">
                 <div className="col-6">
                   <div className="left-signup">
-                    <Image src={require('@/app/assets/img/logo.svg')} alt="" width="200" height="29" className='logos' />
+                    <Image src={'/img/logo.svg'} alt="" width="200" height="29" className='logos' />
                     <div className="text-block">
                       <h4>Welcome to Reporting Portal</h4>
                       <p>Streamline your reporting process with ease and efficiency</p>
@@ -34,7 +35,7 @@ export default function Login() {
                         <li>Feel safe with our step by step navigation</li>
                       </ul>
                     </div>
-                    <Image src={Illustration} alt="" width="300" height="220" className='illustration' />
+                    <Image src={'/img/illustration.png'} alt="" width="300" height="220" className='illustration' />
                   </div>
                 </div>
                 <div className="col-6">
@@ -42,7 +43,7 @@ export default function Login() {
                     <ul className="main-navigation">
                       <li>
                           <a href="#!">
-                            <i className="icons"><Image src={require('@/app/assets/img/ico-globe.svg')} alt="" width="16" height="16" /></i>
+                            <i className="icons"><Image src={'/img/ico-globe.svg'} alt="" width="16" height="16" /></i>
                             <span id="language-switch">English</span><i className="material-icons">keyboard_arrow_down</i>
                           </a>
                           <ul>
@@ -67,14 +68,14 @@ export default function Login() {
                           </div>
                           <div className='form-row-box'>
                               <span className="icon-eye">
-                                <Image onClick={handleShowPass} src={require(`@/app/assets/img/${passwordType ? 'close-eye':'icon-eye'}.svg`)} width="17" height="17" alt="" />
+                                <Image onClick={handleShowPass} src={`/img/${passwordType ? 'close-eye':'icon-eye'}.svg`} width="17" height="17" alt="" />
                               </span>
                               <input className={password ? 'ieHack': ''} type={passwordType ? 'password' : 'text'} value={password} id="password" onChange={(e) => setPassword(e.target.value)}  />
                               <label className="title">Password</label>
                           </div>
                           <div className="login-others clearfix">
                             <label><i className={`material-icons`}>check_box_outline_blank</i>Remember me</label>
-                              <a href="#!">Forgot Password?</a>
+                              <Link href="/auth/forgot-password/request">Forgot Password?</Link>
                           </div>
                           <div className="form-row-box button-panel">
                               <button className="btn btn-primary">Sign in</button>

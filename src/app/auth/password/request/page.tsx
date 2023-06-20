@@ -1,7 +1,7 @@
 "use client"; // this is a client component
 import { useState } from "react";
 import Image from 'next/image';
-import Illustration from '@/app/assets/img/illustration.png'
+// import Illustration from '@/app/assets/img/illustration.png'
 
 
 const languages = [{ id: 1, name: "English" }, { id: 2, name: "Danish" }];
@@ -19,7 +19,7 @@ export default function Login() {
               <div className="row">
                 <div className="col-6">
                   <div className="left-signup">
-                    <Image src={require('@/app/assets/img/logo.svg')} alt="" width="200" height="29" className='logos' />
+                    <Image src={'/img/logo.svg'} alt="" width="200" height="29" className='logos' />
                     <div className="text-block">
                       <h4>WELCOME TO PLUG’N’PLAY</h4>
                       <p>Minimize your efforts. Maximize the results.</p>
@@ -30,7 +30,7 @@ export default function Login() {
                         <li>Feel safe with our step by step navigation</li>
                       </ul>
                     </div>
-                    <Image src={Illustration} alt="" width="300" height="220" className='illustration' />
+                    <Image src={'img/illustration.png'} alt="" width="300" height="220" className='illustration' />
                   </div>
                 </div>
                 <div className="col-6">
@@ -38,7 +38,7 @@ export default function Login() {
                     <ul className="main-navigation">
                       <li>
                           <a href="#!">
-                            <i className="icons"><Image src={require('@/app/assets/img/ico-globe.svg')} alt="" width="16" height="16" /></i>
+                            <i className="icons"><Image src={'/img/ico-globe.svg'} alt="" width="16" height="16" /></i>
                             <span id="language-switch">English</span><i className="material-icons">keyboard_arrow_down</i>
                           </a>
                           <ul>

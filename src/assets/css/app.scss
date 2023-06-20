@@ -55,7 +55,7 @@
 			font-size: 16px;
 			color: $darktext;
 			line-height: 20px;
-			background: url(../img/ico-tick-alt.svg) no-repeat left 4px;
+			background: url(../../../public/img/ico-tick-alt.svg) no-repeat left 4px;
 		}
 	}
 }
@@ -518,7 +518,7 @@
       height: 44px;
       border: 1px solid $borderlight;
       padding: 10px 20px 10px 40px;
-      background: url(../img/ico-search.png) no-repeat 15px center;
+      background: url(../../../public/img/ico-search.png) no-repeat 15px center;
       border-radius: 2px;
       &:focus {
         border-color: $darkcolor;
@@ -1000,7 +1000,7 @@
   border: 1px solid $borderlight;
   color: $gray;
   padding: 10px 20px 10px 40px;
-  background: url(../img/ico-search.png) no-repeat 15px center;
+  background: url(../../../public/img/ico-search.png) no-repeat 15px center;
   border-radius: 2px;
   &:focus {
     border-color: $darkcolor;

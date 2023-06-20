@@ -1,7 +1,7 @@
 'use client'
 import React, { useEffect } from 'react';
 import Image from 'next/image'
-import Dropdown from '@/app/components/DropDown';
+import Dropdown from '@/components/DropDown';
 
 export default function OrderListing() {
   
