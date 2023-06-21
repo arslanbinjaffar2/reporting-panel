@@ -1128,3 +1128,18 @@ animation: widgetLoaderSpin 2s linear infinite;
 0% { transform: rotate(0deg); }
 100% { transform: rotate(360deg); }
 }
+.top-landing-filters{
+    background: #fff;
+    border-radius: 6px 6px 0 0;
+    // box-shadow: 0 0px 3px rgba(109, 109, 109, 0.16);
+    position: relative;
+    z-index: 99;
+}
+// .top-landing-filters .row {
+//   margin: 0 -5px;
+// }
+
+// .top-landing-filters .row.ebs-search-grid {
+//   padding: 0 16px 20px;
+//   margin: 0 -7px;
+// }

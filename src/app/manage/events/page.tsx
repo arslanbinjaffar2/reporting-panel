@@ -25,50 +25,7 @@ export default function Dashboard() {
   }
   return (
    <>
-    <header className="header">
-      <div className="container">
-        <div className="row bottom-header-elements">
-          <div className="col-8">
-          </div>
-          <div className="col-4 d-flex justify-content-end">
-            <ul className="main-navigation">
-              <li>Irfan Danish <i className="material-icons">expand_more</i>
-              <ul>
-                <li><a href="">My account</a></li>
-                <li><a href=""> Change password</a></li>
-                <li><a href="">Logout</a></li>
-              </ul>
-              </li>
-              <li>English <i className="material-icons">expand_more</i>
-              <ul>
-                <li><a href="">English</a></li>
-                <li><a href=""> Danish</a></li>
-              </ul>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </header>
-    <main className="main-section" role="main">
-      <div className="container">
-        <div className="wrapper-box">
-          <div className="container-box main-landing-page">
-            <div className="top-landing-page">
-              <div className="row d-flex">
-                <div className="col-4">
-                  <div className="logo">
-                    <a href="">
-                      <Image src={'/img/logo.svg'} alt="" width="200" height="29" className='logos' />
-                    </a>
-                  </div>
-                </div>
-                <div className="col-8">
-                  <div className="right-top-header">
-                    <button className="btn btn-default">Export Orders</button>
-                  </div>
-                </div>
-              </div>
+            <div className="top-landing-page shadow-none">
               <div className="row d-flex ebs-search-events align-items-center">
                 <div style={{padding: '0 22px'}} className="col-4">
                   <input type="text" className="ebs-search-area m-0 w-100" defaultValue="Search" />
@@ -284,10 +241,6 @@ export default function Dashboard() {
                   </div>
                 </div>
               </div>
-          </div>
-        </div>
-      </div>
-    </main>
    </>
   )
 }
