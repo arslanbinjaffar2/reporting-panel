@@ -59,7 +59,7 @@ export default function Dashboard() {
                 <div className="col-4">
                   <div className="logo">
                     <a href="">
-                      <Image src={require('@/app/assets/img/logo.svg')} alt="" width="200" height="29" className='logos' />
+                      <Image src={'/img/logo.svg'} alt="" width="200" height="29" className='logos' />
                     </a>
                   </div>
                 </div>
@@ -223,7 +223,7 @@ export default function Dashboard() {
                       </div>
                       <div className="col-7 d-flex justify-content-end align-items-center">
                         <button className="btn-full-screen">
-                          <Image src={require("@/app/assets/img/ico-fullscreen.svg")} alt="" width="27" height="28" />
+                          <Image src={"/img/ico-fullscreen.svg"} alt="" width="27" height="28" />
                         </button>
                         <div onClick={(e) => e.stopPropagation()} className="ebs-dropdown-area">
                           <button onClick={handleToggle} className="ebs-btn-dropdown btn-select">
@@ -255,7 +255,7 @@ export default function Dashboard() {
                     {[...Array(10)].map((item,k) => 
                     <div key={k} className="d-flex align-items-center ebs-table-content">
                       <div className="ebs-table-box ebs-box-1">
-                        <Image src={require('@/app/assets/img/logo-placeholder.png')} alt="" width={100} height={34} />
+                        <Image src={'/img/logo-placeholder.png'} alt="" width={100} height={34} />
                       </div>
                       <div style={{width: 210}}  className="ebs-table-box ebs-box-2"><p style={{fontWeight: 600, color: '#404242'}}>Parent event leadevent 2.0…</p></div>
                       <div style={{width: 170}}  className="ebs-table-box ebs-box-2"><p>30/09/23 - 02/10/23</p></div>
