@@ -2,23 +2,35 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
 import type { RootState } from '@/redux/store/store'
 import axios from 'axios'
-import { authHeader } from '@/helpers'
+import { authHeader, handleErrorResponse } from '@/helpers'
 import { AGENT_EVENTS_ENDPOINT, LOGIN_ENDPOINT } from '@/constants/endpoints'
 
 
 // Slice Thunks
 export const userEvents = createAsyncThunk(
   'users/Events',
-  async (data:any , { signal }) => {
+  async (data:any , { signal, rejectWithValue, dispatch }) => {
     const source = axios.CancelToken.source()
     signal.addEventListener('abort', () => {
       source.cancel()
     })
-    const response = await axios.post(`${AGENT_EVENTS_ENDPOINT}?page=${data.page}`,data, {
-      cancelToken: source.token,
-      headers: authHeader('GET'),
-    })
-    return response.data
+    try {
+      const response = await axios.post(`${AGENT_EVENTS_ENDPOINT}?page=${data.page}`,data, {
+        cancelToken: source.token,
+        headers: authHeader('GET'),
+      })
+      return response.data
+      
+    } catch (err:any) {
+      if (!err.response) {
+        throw err
+      }
+      if(err.response.status !== 200){
+        handleErrorResponse(err.response.status, dispatch);
+      }
+        // Return the known error for future handling
+      return rejectWithValue(err.response.status);
+    }
   }
 )
 

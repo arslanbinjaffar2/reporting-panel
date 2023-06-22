@@ -1,4 +1,5 @@
 // import { store } from '@/redux/store/store';
+import { removeAuthUser  } from '@/redux/store/slices/AuthSlice';
 
 export function handleResponse(response) {
     return response.text().then(text => {
@@ -25,4 +26,14 @@ export function handleThirdPartyResponse(response) {
         const data = text && JSON.parse(text);
         return data;
     });
+}
+
+export function handleErrorResponse(status, dispatch) {
+    if (status === 401) {
+        // localStorage.removeItem('agent');
+        dispatch(removeAuthUser());
+    } else if (status === 503) {
+        const error = (data && data.message) || response.statusText;
+    } else if (status !== 422) {
+    }
 }

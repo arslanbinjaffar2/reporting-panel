@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
 import type { RootState } from '@/redux/store/store'
 import axios from 'axios'
-import { authHeader, guestHeader } from '@/helpers'
+import { authHeader, guestHeader, handleErrorResponse } from '@/helpers'
 import { LOGIN_ENDPOINT, LOGOUT_ENDPOINT, PASSWORD_REQUEST_ENDPOINT, PASSWORD_RESET_ENDPOINT, PASSWORD_VERIFY_ENDPOINT } from '@/constants/endpoints'
 
 // Slice Thunks
@@ -24,16 +24,27 @@ export const loginUser = createAsyncThunk(
 // Slice Thunks
 export const logOutUser = createAsyncThunk(
   'users/logOut',
-  async (data:any , { signal }) => {
+  async (data:any , { signal, dispatch, rejectWithValue }) => {
     const source = axios.CancelToken.source()
     signal.addEventListener('abort', () => {
       source.cancel()
     })
-    const response = await axios.post(LOGOUT_ENDPOINT, data,{
-      cancelToken: source.token,
-      headers: authHeader('GET'),
-    })
-    return response.data
+    try {
+      const response = await axios.post(LOGOUT_ENDPOINT, data,{
+        cancelToken: source.token,
+        headers: authHeader('GET'),
+      })
+      return response.data
+    } catch (err:any) {
+      if (!err.response) {
+        throw err
+      }
+      if(err.response.status !== 200){
+        handleErrorResponse(err.response.status, dispatch);
+      }
+        // Return the known error for future handling
+      return rejectWithValue(err.response.status);
+    }
   }
 )
 
@@ -125,6 +136,11 @@ export const authUserSlice = createSlice({
       localStorage.setItem('agent', JSON.stringify(action.payload));
       state.user = action.payload;
     },
+    removeAuthUser: (state, action: PayloadAction<any>) => {
+      console.log('ddddd')
+      localStorage.removeItem('agent');
+      state.user = null;
+    },
     setRedirect: (state, action: PayloadAction<any>) => {
       state.redirect = action.payload;
     },
@@ -137,6 +153,10 @@ export const authUserSlice = createSlice({
     },
     setLoading: (state, action: PayloadAction<any>) => {
       state.loading = action.payload;
+    },
+    clearErrors: (state, action: PayloadAction<any>) => {
+      state.error = null;
+      state.errors = null;
     },
   },
   extraReducers: (builder) => {
@@ -157,8 +177,11 @@ export const authUserSlice = createSlice({
         localStorage.setItem('agent', JSON.stringify(res.data.agent));
         state.user = res.data.agent;
       }else{
-        state.user = null;
-        state.errors = res.message ? res.message : ['Something went wrong'];
+        if(Array.isArray(res.message)){
+          state.errors = res.message;
+        }else{
+          state.error = res.message;
+        }
       }
       state.loading = false;
     }),
@@ -266,8 +289,11 @@ export const authUserSlice = createSlice({
         state.error = null;
         state.successMessage = 'Password successfully updated';
       }else{
-        state.user = null;
-        state.errors = res.message ? res.message : ['Something went wrong'];
+        if(Array.isArray(res.message)){
+          state.errors = res.message;
+        }else{
+          state.error = res.message;
+        }
       }
       // state.loading = false;
     }),
@@ -280,7 +306,7 @@ export const authUserSlice = createSlice({
 })
 
 
-export const { setAuthUser, setRedirect, setForgetPasswordEmail, setForgetPasswordToken, setLoading } = authUserSlice.actions
+export const { setAuthUser, setRedirect, setForgetPasswordEmail, setForgetPasswordToken, setLoading, removeAuthUser, clearErrors } = authUserSlice.actions
 
 // Other code such as selectors can use the imported `RootState` type
 export const selectUser = (state: RootState) => state.authUser.user

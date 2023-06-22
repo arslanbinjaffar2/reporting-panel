@@ -3,37 +3,61 @@ import type { PayloadAction } from '@reduxjs/toolkit'
 import type { RootState } from '@/redux/store/store'
 import axios from 'axios'
 import { AGENT_EVENTS_ENDPOINT } from '@/constants/endpoints'
-import { authHeader } from '@/helpers'
+import { authHeader, handleErrorResponse } from '@/helpers'
 
 
 // Slice Thunks
 export const userEvent = createAsyncThunk(
   'users/Event',
-  async (data:any , { signal }) => {
+  async (data:any , { signal, dispatch, rejectWithValue }) => {
     const source = axios.CancelToken.source()
     signal.addEventListener('abort', () => {
       source.cancel()
     })
-    const response = await axios.post(`${AGENT_EVENTS_ENDPOINT}/${data.event_id}/data`,data, {
-      cancelToken: source.token,
-      headers: authHeader('GET'),
-    })
-    return response.data
+    try {
+      
+      const response = await axios.post(`${AGENT_EVENTS_ENDPOINT}/${data.event_id}/data`,data, {
+        cancelToken: source.token,
+        headers: authHeader('GET'),
+      })
+      return response.data
+    } catch (err:any) {
+      if (!err.response) {
+        throw err
+      }
+      if(err.response.status !== 200){
+        handleErrorResponse(err.response.status, dispatch);
+      }
+        // Return the known error for future handling
+      return rejectWithValue(err.response.status);
+    }
   }
 )
 
 export const userEventOrders = createAsyncThunk(
   'users/EventOrders',
-  async (data:any , { signal }) => {
+  async (data:any , { signal, dispatch, rejectWithValue }) => {
     const source = axios.CancelToken.source()
     signal.addEventListener('abort', () => {
       source.cancel()
     })
-    const response = await axios.post(`${AGENT_EVENTS_ENDPOINT}/${data.event_id}/orders`,data, {
-      cancelToken: source.token,
-      headers: authHeader('GET'),
-    })
-    return response.data
+    try {
+      const response = await axios.post(`${AGENT_EVENTS_ENDPOINT}/${data.event_id}/orders`,data, {
+        cancelToken: source.token,
+        headers: authHeader('GET'),
+      })
+      return response.data
+      
+    } catch (err:any) {
+      if (!err.response) {
+        throw err
+      }
+      if(err.response.status !== 200){
+        handleErrorResponse(err.response.status, dispatch);
+      }
+        // Return the known error for future handling
+      return rejectWithValue(err.response.status);
+    }
   }
 )
 

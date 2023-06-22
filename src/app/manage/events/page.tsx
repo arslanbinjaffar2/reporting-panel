@@ -1,10 +1,23 @@
 'use client'
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import Image from 'next/image'
 import Dropdown from '@/components/DropDown';
+import { useAppDispatch, useAppSelector } from '@/redux/hooks/hooks';
+import { userEvents } from '@/redux/store/slices/EventsSlice';
+import { AsyncThunkAction, Dispatch, AnyAction } from '@reduxjs/toolkit';
+import { RootState } from '@/redux/store/store';
 
 export default function Dashboard() {
-  
+  const dispatch = useAppDispatch();
+  const {events, loading, totalPages, currentPage} = useAppSelector((state: RootState) => state.events);
+
+  useEffect(() => {
+      const promise = dispatch(userEvents({}));
+      return () =>{
+          promise.abort();
+      }
+  }, []);
+
   useEffect(() => {
     document.body.addEventListener('click',handleBody,false)
     return () => {
@@ -244,3 +257,7 @@ export default function Dashboard() {
    </>
   )
 }
+function dispatch(arg0: AsyncThunkAction<any, any, { state?: unknown; dispatch?: Dispatch<AnyAction> | undefined; extra?: unknown; rejectValue?: unknown; serializedErrorType?: unknown; pendingMeta?: unknown; fulfilledMeta?: unknown; rejectedMeta?: unknown; }>) {
+  throw new Error('Function not implemented.');
+}
+

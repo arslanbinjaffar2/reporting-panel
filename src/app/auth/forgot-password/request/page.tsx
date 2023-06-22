@@ -23,16 +23,16 @@ export default function requestReset() {
         e.preventDefault();
         e.stopPropagation();
         if(email !== ''){
-          // dispatch(setForgetPasswordEmail(email));
-          // dispatch(forgotPasswordRequest({email}));
+          dispatch(setForgetPasswordEmail(email));
+          dispatch(forgotPasswordRequest({email}));
         }
     }
 
     useEffect(() => {
       if(redirect !== null) {
-        // dispatch(setRedirect(null));
-        // dispatch(setLoading(null));
-        // router.push(redirect);
+        dispatch(setRedirect(null));
+        dispatch(setLoading(null));
+        router.push(redirect);
       }
   }, [redirect]);
 
@@ -54,7 +54,7 @@ export default function requestReset() {
       <form role="" onSubmit={handleSubmit}>
       <div className="form-area-signup">
           <div className='form-row-box'>
-              <input className={email ? 'ieHack': ''} value={email} type="text" name="email" id="email" onChange={(e) => setEmail(e.target.value)}  />
+              <input className={email ? 'ieHack': ''} value={email} type="text" name="email" id="email" onChange={(e) => setEmail(e.target.value)} required  />
               <label className="title">Enter your email</label>
           </div>
           <div className="form-row-box button-panel">

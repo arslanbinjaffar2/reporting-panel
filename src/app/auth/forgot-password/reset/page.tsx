@@ -4,6 +4,7 @@ import Image from 'next/image'
 import { useAppDispatch, useAppSelector } from "@/redux/hooks/hooks";
 import { useRouter } from "next/navigation";
 import { RootState } from "@/redux/store/store";
+import { forgotPasswordReset, setLoading, setRedirect } from "@/redux/store/slices/AuthSlice";
 
 
 export default function Login() {
@@ -16,18 +17,18 @@ export default function Login() {
     const [render, setRender] = useState(false)
     
     useEffect(() => {
-        // if(forgetPasswordEmail !== null){
+        if(forgetPasswordEmail !== null){
             setRender(true);
-        // }else{
-        //     router.push('/auth/forgot-password/request');
-        // }
+        }else{
+            router.push('/auth/forgot-password/request');
+        }
     }, [])
 
     useEffect(() => {
         if(redirect !== null) {
-            // dispatch(setRedirect(null));
-            // dispatch(setLoading(null));
-            // router.push(redirect);
+            dispatch(setRedirect(null));
+            dispatch(setLoading(null));
+            router.push(redirect);
         }
     }, [redirect]);
 
@@ -35,7 +36,7 @@ export default function Login() {
         e.preventDefault();
         e.stopPropagation();
         if(password !== '' && passwordConfirmation !== '' && (password === passwordConfirmation)){
-            // dispatch(forgotPasswordReset({reset_code: forgetPasswordToken, email: forgetPasswordEmail, password: password, password_confirmation: passwordConfirmation}))
+            dispatch(forgotPasswordReset({reset_code: forgetPasswordToken, email: forgetPasswordEmail, password: password, password_confirmation: passwordConfirmation}))
         }
     }
   return (
@@ -45,11 +46,11 @@ export default function Login() {
       <form role="" onSubmit={handleSubmit}>
           <div className="form-area-signup">
               <div className='form-row-box'>
-                  <input className='' value={password} type="password" name="password" id="password" onChange={(e) => setPassword(e.target.value)}  />
+                  <input className='' value={password} type="password" name="password" id="password" onChange={(e) => setPassword(e.target.value)} required />
                   <label className="title">Enter new password</label>
               </div>
               <div className='form-row-box'>
-                  <input className='' value={passwordConfirmation} type="password" name="password_confirmation" id="password_confirmation" onChange={(e) => setPasswordConfirmation(e.target.value)}  />
+                  <input className='' value={passwordConfirmation} type="password" name="password_confirmation" id="password_confirmation" required onChange={(e) => setPasswordConfirmation(e.target.value)}  />
                   <label className="title">Confirm new password</label>
               </div>
               <div className="form-row-box button-panel">

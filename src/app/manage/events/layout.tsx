@@ -4,6 +4,7 @@ import { RootState } from '@/redux/store/store';
 import { usePathname, useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 import Image from 'next/image'
+import { logOutUser } from '@/redux/store/slices/AuthSlice';
 
 const languages = [{ id: 1, name: "English" }, { id: 2, name: "Danish" }];
 
@@ -20,7 +21,7 @@ export default function RootLayout({ children}: { children: React.ReactNode }) {
     const pathname = usePathname();
 
     useEffect(() => {
-        //  (user === null) ? router.push('auth/login') : null;
+         (user === null) ? router.push('auth/login') : null;
     }, [user]);
     
   return (

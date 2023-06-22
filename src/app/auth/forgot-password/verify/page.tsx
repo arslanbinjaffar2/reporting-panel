@@ -15,17 +15,17 @@ export default function verifyResetCode() {
     const [render, setRender] = useState(false)
     
     useEffect(() => {
-        // if(forgetPasswordEmail !== null){
+        if(forgetPasswordEmail !== null){
             setRender(true);
-        // }else{
-        //     router.push('/auth/forgot-password/request');
-        // }
+        }else{
+            router.push('/auth/forgot-password/request');
+        }
     }, [])
 
     useEffect(() => {
         if(redirect !== null) {
-            // dispatch(setRedirect(null));
-            // dispatch(setLoading(null));
+            dispatch(setRedirect(null));
+            dispatch(setLoading(null));
             router.push(redirect);
         }
     }, [redirect]);
@@ -33,7 +33,7 @@ export default function verifyResetCode() {
     const handleSubmit = (e:any) => {
         e.preventDefault();
         e.stopPropagation();
-        // dispatch(forgotPasswordVerify({token, email:forgetPasswordEmail}));
+        dispatch(forgotPasswordVerify({token, email:forgetPasswordEmail}));
     }
 
     if(!render){
@@ -57,7 +57,7 @@ export default function verifyResetCode() {
             <form role="" onSubmit={handleSubmit}>
                 <div className="form-area-signup">
                     <div className='form-row-box'>
-                        <input className='' value={token} type="text" name="token" id="token" onChange={(e) => setToken(e.target.value)}  />
+                        <input className='' value={token} type="text" name="token" id="token" onChange={(e) => setToken(e.target.value)} required  />
                         <label className="title">Enter reset code</label>
                     </div>
                     <div className="form-row-box button-panel">
