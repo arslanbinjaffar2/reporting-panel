@@ -154,7 +154,7 @@ export const authUserSlice = createSlice({
     setLoading: (state, action: PayloadAction<any>) => {
       state.loading = action.payload;
     },
-    clearErrors: (state, action: PayloadAction<any>) => {
+    clearErrors: (state) => {
       state.error = null;
       state.errors = null;
     },
