@@ -7,15 +7,42 @@ import { AGENT_EVENTS_ENDPOINT, LOGIN_ENDPOINT } from '@/constants/endpoints'
 
 
 // Slice Thunks
-export const userEvents = createAsyncThunk(
-  'users/Events',
+export const userEventsFilters = createAsyncThunk(
+  'users/EventsFilters',
   async (data:any , { signal, rejectWithValue, dispatch }) => {
     const source = axios.CancelToken.source()
     signal.addEventListener('abort', () => {
       source.cancel()
     })
     try {
-      const response = await axios.post(`${AGENT_EVENTS_ENDPOINT}?page=${data.page}`,data, {
+      const response = await axios.post(`${AGENT_EVENTS_ENDPOINT}/filters`,data, {
+        cancelToken: source.token,
+        headers: authHeader('GET'),
+      })
+      return response.data
+      
+    } catch (err:any) {
+      if (!err.response) {
+        throw err
+      }
+      if(err.response.status !== 200){
+        handleErrorResponse(err.response.status, dispatch);
+      }
+        // Return the known error for future handling
+      return rejectWithValue(err.response.status);
+    }
+  }
+)
+
+export const userEventsStats = createAsyncThunk(
+  'users/EventsStats',
+  async (data:any , { signal, rejectWithValue, dispatch }) => {
+    const source = axios.CancelToken.source()
+    signal.addEventListener('abort', () => {
+      source.cancel()
+    })
+    try {
+      const response = await axios.post(`${AGENT_EVENTS_ENDPOINT}/stats`,data, {
         cancelToken: source.token,
         headers: authHeader('GET'),
       })
@@ -41,6 +68,10 @@ interface EventsState {
   error:any,
   totalPages:number;
   currentPage:number;
+  event_countries:any,
+  office_countries:any,
+  currencies:any,
+  userEvetsStats:any,
 }
 
 
@@ -51,6 +82,10 @@ const initialState: EventsState = {
   error:null,
   totalPages:0,
   currentPage:1,
+  event_countries:[],
+  office_countries:[],
+  currencies:[],
+  userEvetsStats:null,
 }
 
 export const eventsSlice = createSlice({
@@ -70,22 +105,42 @@ export const eventsSlice = createSlice({
   },
   extraReducers: (builder) => {
     // Login thuckCases
-    builder.addCase(userEvents.pending, (state, action) => {
+    builder.addCase(userEventsStats.pending, (state, action) => {
       state.loading = true;
-      state.events = [];
+      state.userEvetsStats = [];
     }),
-    builder.addCase(userEvents.fulfilled, (state, action) => {
+    builder.addCase(userEventsStats.fulfilled, (state, action) => {
       let res = action.payload;
       if(res.success){
-        state.events = action.payload.data.events;
-        state.totalPages = action.payload.data.paginate.total_page;
-        state.currentPage = action.payload.data.paginate.current_page;
+        state.userEvetsStats = action.payload.data;
       }else{
           state.error = res.message;
       }
       state.loading = false;
     }),
-    builder.addCase(userEvents.rejected, (state, action) => {
+    builder.addCase(userEventsStats.rejected, (state, action) => {
+      console.log("rejected", action.payload);
+      state.loading = false;
+    })
+    // eventfilters
+    builder.addCase(userEventsFilters.pending, (state, action) => {
+      state.loading = true;
+      state.event_countries = [];
+      state.office_countries= [];
+      state.currencies= [];
+    }),
+    builder.addCase(userEventsFilters.fulfilled, (state, action) => {
+      let res = action.payload;
+      if(res.success){
+        state.event_countries = action.payload.data.event_countries;
+        state.office_countries= action.payload.data.office_countries;
+        state.currencies= action.payload.data.currencies;
+      }else{
+          state.error = res.message;
+      }
+      state.loading = false;
+    }),
+    builder.addCase(userEventsFilters.rejected, (state, action) => {
       console.log("rejected", action.payload);
       state.loading = false;
     })

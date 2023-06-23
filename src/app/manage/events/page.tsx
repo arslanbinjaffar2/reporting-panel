@@ -3,18 +3,64 @@ import React, { useEffect, useState } from 'react';
 import Image from 'next/image'
 import Dropdown from '@/components/DropDown';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks/hooks';
-import { userEvents } from '@/redux/store/slices/EventsSlice';
+import { userEventsStats, userEventsFilters } from '@/redux/store/slices/EventsSlice';
 import { AsyncThunkAction, Dispatch, AnyAction } from '@reduxjs/toolkit';
 import { RootState } from '@/redux/store/store';
+import { getSelectedLabel } from '@/helpers';
+
+const eventFilters = [
+  {id: 'active_future', name: "Active and future events"},
+  {id: 'active', name: "Active events"},
+  {id: 'future', name: "Future events"},
+  {id: 'expired', name: "Expired events"},
+  {id: 'name', name: "All events"}
+];
+const sortFilters = [
+  {id: 'name', name: "Event name"},
+  {id: 'organizer_name', name: "Organizer name"},
+  {id: 'start_date', name: "Start date"},
+  {id: 'end_date', name: "End date"}
+];
+const rangeFilters = [
+  { id: 'today', name: "Today" },
+  { id: 'thisw', name: "This week" },
+  { id: 'prevw', name: "Previous week" },
+  { id: 'thism', name: "This month" },
+  { id: 'prevm', name: "Previous month" },
+  { id: 'custom', name: "Custom range" },
+  { id: '-1', name: "All stats" },
+];
+
+let storedEventFilterData =
+    typeof window !== "undefined" && localStorage.getItem("eventFilterData");
+const storedEventFilters =
+    storedEventFilterData && storedEventFilterData !== undefined ? JSON.parse(storedEventFilterData) : null;
+
 
 export default function Dashboard() {
   const dispatch = useAppDispatch();
-  const {events, loading, totalPages, currentPage} = useAppSelector((state: RootState) => state.events);
+  const {events, loading, totalPages, currentPage, event_countries, office_countries, currencies} = useAppSelector((state: RootState) => state.events);
+  const [searchText, setSearchText] = useState('')
+  const [eventFilterData, setEventFilterData] = useState(storedEventFilters !== null ? storedEventFilters : {
+      sort_by:'name',
+      event_action:'name',
+      country:'57',
+      office_country_id:'57',
+      currency:'208',
+      range:'today',
+      start_date:'',
+      end_date:'',
+      searchText:'',
+      limit:10,
+      page:1,
+  });
 
   useEffect(() => {
-      const promise = dispatch(userEvents({}));
+      const promise1 = dispatch(userEventsFilters({}));
+      const promise2 = dispatch(userEventsStats({}));
       return () =>{
-          promise.abort();
+          promise1.abort();
+          promise2.abort();
       }
   }, []);
 
@@ -36,12 +82,83 @@ export default function Dashboard() {
     e.preventDefault();
     e.target.classList.toggle('ebs-active');
   }
+
+  const savefiltersToLocalStorage = (updatedEventFilters:any) => {
+      if(window !== undefined){
+        localStorage.setItem('eventFilterData', JSON.stringify(updatedEventFilters));
+      }
+  }
+
+  const handleSearchTextFilter = (e:any) => {
+    const {value} = e.target;
+    const eventFilterDataUpdate = eventFilterData;
+    eventFilterDataUpdate.search_text = value;
+    eventFilterDataUpdate['page'] = 1;
+    // Update the requestData state with the modified array
+    setEventFilterData(eventFilterDataUpdate);
+    savefiltersToLocalStorage(eventFilterDataUpdate);
+    dispatch(userEvents(eventFilterDataUpdate));
+  }
+
+  const handleSortByFilter = (e:any) => {
+    const eventFilterDataUpdate = eventFilterData;
+    eventFilterDataUpdate['sort_by'] = e.value;
+    eventFilterDataUpdate['page'] = 1;
+    setEventFilterData(eventFilterDataUpdate);
+    savefiltersToLocalStorage(eventFilterDataUpdate);
+    dispatch(userEvents(eventFilterDataUpdate));
+  }
+  
+  const handleEventActionFilter = (e:any) => {
+    const eventFilterDataUpdate = eventFilterData;
+    eventFilterDataUpdate['event_action'] = e.value;
+    eventFilterDataUpdate['page'] = 1;
+    setEventFilterData(eventFilterDataUpdate);
+    savefiltersToLocalStorage(eventFilterDataUpdate);
+    dispatch(userEvents(eventFilterDataUpdate));
+  }
+  
+  const handleCountryFilter = (e:any) => {
+    const eventFilterDataUpdate = eventFilterData;
+    eventFilterDataUpdate['country'] = e.value;
+    eventFilterDataUpdate['page'] = 1;
+    setEventFilterData(eventFilterDataUpdate);
+    savefiltersToLocalStorage(eventFilterDataUpdate);
+    dispatch(userEvents(eventFilterDataUpdate));
+  }
+  
+  const handleOfficeCountryFilter = (e:any) => {
+    const eventFilterDataUpdate = eventFilterData;
+    eventFilterDataUpdate['office_country_id'] = e.value;
+    eventFilterDataUpdate['page'] = 1;
+    setEventFilterData(eventFilterDataUpdate);
+    savefiltersToLocalStorage(eventFilterDataUpdate);
+    dispatch(userEvents(eventFilterDataUpdate));
+  }
+  
+  const handleCurrencyFilter = (e:any) => {
+    const eventFilterDataUpdate = eventFilterData;
+    eventFilterDataUpdate['currency'] = e.value;
+    eventFilterDataUpdate['page'] = 1;
+    setEventFilterData(eventFilterDataUpdate);
+    savefiltersToLocalStorage(eventFilterDataUpdate);
+    dispatch(userEvents(eventFilterDataUpdate));
+  }
+  const handleRangeFilter = (e:any) => {
+    const eventFilterDataUpdate = eventFilterData;
+    eventFilterDataUpdate['range'] = e.value;
+    eventFilterDataUpdate['page'] = 1;
+    setEventFilterData(eventFilterDataUpdate);
+    savefiltersToLocalStorage(eventFilterDataUpdate);
+    dispatch(userEvents(eventFilterDataUpdate));
+  }
+
   return (
    <>
             <div className="top-landing-page shadow-none">
               <div className="row d-flex ebs-search-events align-items-center">
                 <div style={{padding: '0 22px'}} className="col-4">
-                  <input type="text" className="ebs-search-area m-0 w-100" defaultValue="Search" />
+                  <input type="text" className="ebs-search-area m-0 w-100" defaultValue="Search" value={eventFilterData.search_text} onKeyUp={(e) => { e.key === 'Enter' ? handleSearchTextFilter(e): null}} onChange={(e)=>{setEventFilterData((prev:any)=> ({...prev, search_text:e.target.value}))}} />
                 </div>
                 <div style={{padding: '0 22px'}} className="col-8 d-flex justify-content-end">
                   <strong>10 events</strong>
@@ -52,13 +169,10 @@ export default function Dashboard() {
                   <label className="label-select-alt m-0 w-100">
                     <Dropdown 
                       label="Filter by"
-                      listitems={[
-                        { id: 'active_future', name: "Active and future events" },
-                        { id: 'active', name: "Active events" },
-                        { id: 'future', name: "Future events" },
-                        { id: 'expired', name: "Expired events" },
-                        { id: 'name', name: "All events" }
-                      ]}
+                      selected={eventFilterData.sort_by} 
+                      onChange={handleSortByFilter}
+                      selectedlabel={getSelectedLabel(sortFilters,eventFilterData.sort_by)}
+                      listitems={sortFilters}
                     />
                   </label>
                 </div>
@@ -66,69 +180,60 @@ export default function Dashboard() {
                   <label className="label-select-alt m-0 w-100">
                     <Dropdown 
                       label="Filter by"
-                      listitems={[
-                        { id: 'active_future', name: "Active and future events" },
-                        { id: 'active', name: "Active events" },
-                        { id: 'future', name: "Future events" },
-                        { id: 'expired', name: "Expired events" },
-                        { id: 'name', name: "All events" }
-                      ]}
+                      selected={eventFilterData.event_action} 
+                      onChange={handleEventActionFilter}
+                      selectedlabel={getSelectedLabel(eventFilters,eventFilterData.event_action)}
+                      listitems={eventFilters}
                     />
                   </label>
                 </div>
+                {event_countries?.length > 0 && 
+                  <div className="col">
+                    <label className="label-select-alt m-0 w-100">
+                      <Dropdown 
+                        label="Filter by"
+                        listitems={event_countries}
+                        selected={eventFilterData.country} 
+                        onChange={handleCountryFilter}
+                        selectedlabel={getSelectedLabel(event_countries,eventFilterData.country)}
+                      />
+                    </label>
+                  </div>
+                }
+                {office_countries?.length > 0 && 
+                  <div className="col">
+                  <label className="label-select-alt m-0 w-100">
+                    <Dropdown 
+                      label="Filter by"
+                      listitems={office_countries}
+                      selected={eventFilterData.office_country_id} 
+                      onChange={handleOfficeCountryFilter}
+                      selectedlabel={getSelectedLabel(office_countries,eventFilterData.office_country_id)}
+                    />
+                  </label>
+                </div>
+                }
+                {currencies?.length > 0 && 
+                  <div className="col">
+                  <label className="label-select-alt m-0 w-100">
+                    <Dropdown 
+                      label="Filter by"
+                      listitems={currencies}
+                      selected={eventFilterData.currency} 
+                      onChange={handleCurrencyFilter}
+                      selectedlabel={getSelectedLabel(currencies,eventFilterData.currency)}
+                    />
+                  </label>
+                </div>
+                }
                 <div className="col">
                   <label className="label-select-alt m-0 w-100">
                     <Dropdown 
                       label="Filter by"
-                      listitems={[
-                        { id: 'active_future', name: "Active and future events" },
-                        { id: 'active', name: "Active events" },
-                        { id: 'future', name: "Future events" },
-                        { id: 'expired', name: "Expired events" },
-                        { id: 'name', name: "All events" }
-                      ]}
-                    />
-                  </label>
-                </div>
-                <div className="col">
-                  <label className="label-select-alt m-0 w-100">
-                    <Dropdown 
-                      label="Filter by"
-                      listitems={[
-                        { id: 'active_future', name: "Active and future events" },
-                        { id: 'active', name: "Active events" },
-                        { id: 'future', name: "Future events" },
-                        { id: 'expired', name: "Expired events" },
-                        { id: 'name', name: "All events" }
-                      ]}
-                    />
-                  </label>
-                </div>
-                <div className="col">
-                  <label className="label-select-alt m-0 w-100">
-                    <Dropdown 
-                      label="Filter by"
-                      listitems={[
-                        { id: 'active_future', name: "Active and future events" },
-                        { id: 'active', name: "Active events" },
-                        { id: 'future', name: "Future events" },
-                        { id: 'expired', name: "Expired events" },
-                        { id: 'name', name: "All events" }
-                      ]}
-                    />
-                  </label>
-                </div>
-                <div className="col">
-                  <label className="label-select-alt m-0 w-100">
-                    <Dropdown 
-                      label="Filter by"
-                      listitems={[
-                        { id: 'active_future', name: "Active and future events" },
-                        { id: 'active', name: "Active events" },
-                        { id: 'future', name: "Future events" },
-                        { id: 'expired', name: "Expired events" },
-                        { id: 'name', name: "All events" }
-                      ]}
+                      listitems={rangeFilters}
+                      selected={eventFilterData.range} 
+                      onChange={handleRangeFilter}
+                      selectedlabel={getSelectedLabel(rangeFilters,eventFilterData.range)}
                     />
                   </label>
                 </div>
@@ -258,6 +363,10 @@ export default function Dashboard() {
   )
 }
 function dispatch(arg0: AsyncThunkAction<any, any, { state?: unknown; dispatch?: Dispatch<AnyAction> | undefined; extra?: unknown; rejectValue?: unknown; serializedErrorType?: unknown; pendingMeta?: unknown; fulfilledMeta?: unknown; rejectedMeta?: unknown; }>) {
+  throw new Error('Function not implemented.');
+}
+
+function userEvetsStats(arg0: {}): any {
   throw new Error('Function not implemented.');
 }
 

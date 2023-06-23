@@ -62,7 +62,7 @@ export default function Login() {
         <form onSubmit={handleSubmit}>
         <div className="form-area-signup">
             <div className='form-row-box'>
-                <input className={email ? 'ieHack': ''} value={email} type="text" name="email" id="email" onChange={(e) => setEmail(e.target.value)}  required/>
+                <input className={email ? 'ieHack': ''} value={email} type="email" name="email" id="email" onChange={(e) => setEmail(e.target.value)}  required/>
                 <label className="title">Enter your email</label>
             </div>
             <div className='form-row-box'>
