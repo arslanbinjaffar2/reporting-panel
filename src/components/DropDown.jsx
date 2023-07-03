@@ -63,13 +63,21 @@ class DropDown extends React.Component {
           key: 'select'
         })
         : false;
-    const style = {
-      control: base => ({
-        ...base,
-        border: 0,
-        boxShadow: 'none'
-      })
-    };
+        const style = {
+          option: (base, { data, isDisabled, isFocused, isSelected }) => ({
+              ...base,
+              backgroundColor: isSelected ? "#DD386A" : "",
+              ":hover": {
+                backgroundColor: "#E3708F",
+                color: '#fff'
+              },
+            }),
+          control: base => ({
+            ...base,
+            border: 0,
+            boxShadow: 'none'
+          })
+        };
     const Blanket = props => (
       <div
         className="blanket-wrapper"

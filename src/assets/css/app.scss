@@ -19,10 +19,6 @@
 	.logos {
 		margin-bottom: 30px;
 		max-width: 420px;
-		margin-left: 20px;
-	}
-	.text-block {
-		padding-left: 25px;
 	}
 
 	.illustration {
@@ -36,11 +32,12 @@
 		color: $darktext;
 		margin-bottom: 12px;
 		line-height: 1;
+    text-transform: uppercase;
 	}
 
 	p {
 		font-size: 14px;
-		color: $darktext;
+		color: $lightgray;
 		margin-bottom: 25px;
 	}
 
@@ -98,7 +95,7 @@
         }
       }
 			ul li a:hover {
-				background: $borderhover;
+				background: $color-primary-light;
 				color: $white;
 			}
     }
@@ -121,7 +118,7 @@
   }
   p {
     font-size: 14px;
-    color: $darktext;
+    color: $lightgray;
     margin-bottom: 22px;
   }
 }
@@ -137,13 +134,12 @@
       width: 100%;
       height: 50px;
       border-radius: 5px;
-      border: 1px solid $white;
+      border: 1px solid $border;
       padding: 10px 15px;
       color: $text;
       font-size: 14px;
-      &:focus,
-      &.ieHack {
-        border-color: $lightlink;
+      &:focus {
+        border-color: $color-primary-light;
       }
 
       &.ieHack {
@@ -176,7 +172,6 @@
       margin: 0;
       display: inline-block;
       line-height: 20px;
-      background: $white;
       padding: 0 4px;
       font-size: 14px;
       color: $text;
@@ -208,7 +203,7 @@
     i {
       vertical-align: bottom;
       margin-right: 5px;
-      color: $darkcolor;
+      color: $color-primary;
       position: relative;
       &::before {
         content: '';
@@ -219,14 +214,14 @@
         top: 2px;
         z-index: 1;
         border-radius: 2px;
-        // border: 2px solid $hover;
+        // border: 2px solid $color-primary;
 
       }
       &.check_box {
         &::before {
           font-family: 'Material Icons';
           content: '\e5ca';
-          background: $hover;
+          background: $color-primary;
           color: $white;
           font-size: 14px;
           line-height: 16px;
@@ -249,12 +244,12 @@
     margin-bottom: 20px;
     border: none;
     font-weight: 600;
-    background: $borderhover;
+    background: $color-primary;
     height: 50px;
     min-width: 204px;
     text-transform: uppercase;
     &:hover {
-      background: $lightlink;
+      background: $color-primary-light;
     }
   }
 }
@@ -353,7 +348,7 @@
     }
     &.isSelected {
       .btn-wrapper {
-        color: $hover;
+        color: $color-primary;
       }
       .btn-wrapper {
         padding-top: 0;
@@ -367,7 +362,7 @@
     }
     &.isOpen {
       .label-wrapper-select {
-        border-color: $darkcolor;
+        border-color: $color-primary-light;
       }
     }
     &.searchFalse {
@@ -433,12 +428,12 @@
         }
         &.active {
           a {
-             color: $darkcolor;
+             color: $color-primary-light;
              span.icons {
               svg {
                 path,
                 line {
-                  fill: $darkcolor;
+                  fill: $color-primary-light;
                   stroke: $white;
                 }
                .gray {
@@ -460,12 +455,12 @@
           font-weight: 600;
           cursor: pointer;
           &:hover {
-           color: $darkcolor;
+           color: $color-primary-light;
             span.icons {
               svg {
                 path,
                 line {
-                  fill: $darkcolor;
+                  fill: $color-primary-light;
                   stroke: $white;
                 }
                .gray {
@@ -476,12 +471,12 @@
             }
           }
           &.active {
-            color: $darkcolor;
+            color: $color-primary-light;
             span.icons {
               svg {
                 path,
                 line {
-                  fill: $darkcolor;
+                  fill: $color-primary-light;
                   stroke: $white;
                 }
                .gray {
@@ -521,7 +516,7 @@
       background: url(../../../public/img/ico-search.png) no-repeat 15px center;
       border-radius: 2px;
       &:focus {
-        border-color: $darkcolor;
+        border-color: $color-primary-light;
       }
     }
 
@@ -530,12 +525,11 @@
     padding: 10px 20px;
     padding-left: 15px;
     font-size: 14px;
-    background: $darktext;
     text-transform: uppercase;
     box-shadow: none;
     border-radius: 4px;
     &:hover {
-      background: $darkcolor;
+      background: $color-primary-light;
     }
     i {
       margin-right: 0px;
@@ -700,20 +694,19 @@
       padding-bottom: 5px;
     }
     .btn-wrapper {
-      padding-top: 8px;
       color: $black;
     }
   }
   &.isOpen {
     .label-wrapper-select {
-      border-color: $darkcolor;
+      border-color: $color-primary-light;
     }
   }
   &.isDisabled  {
       .label-wrapper-select {
       border-color: $border;
       .icon-right {
-        color: $darkcolor;
+        color: $color-primary-light;
         font-size: 15px;
       }
     }
@@ -806,6 +799,7 @@
         width: 18px;
         height: 18px;
         background: $lightheader;
+        color: $lightgray;
         border: none;
         padding: 0;
         border-radius: 3px;
@@ -818,7 +812,7 @@
         max-height: 220px;
         overflow: auto;
         scrollbar-width: thin;
-        scrollbar-color: #999 transparent;
+        scrollbar-color: $lightgray transparent;
         padding: 5px;
         h5 {
           font-size: 10px;
@@ -859,8 +853,8 @@
   }
   &.ebs-order-table {
     .ebs-table-header {
-      border-bottom: 1px solid $borderhover;
       margin-bottom: 10px;
+      border-bottom: 1px solid $color-primary;
     }
     .ebs-table-content {
       .ebs-table-box {
@@ -900,7 +894,7 @@
     gap: 5px;
     color: $gray;
     i {
-      color: $borderhover;
+      color: $color-primary;
     }
   }
   .ebs-ticket-information {
@@ -918,7 +912,7 @@
     min-height: 140px;
     border-radius: 2px;
     background: $white;
-    box-shadow: 0 4px 12px rgba($black, 0.16);
+    box-shadow: 0 4px 12px rgba($black, 0.06);
     &.ebs-bg-light {
       box-shadow: none;
       background: $lightheader;
@@ -926,6 +920,7 @@
 
     strong {
       font-weight: 600;
+      color: $innertext;
     }
     span {
       font-size: 12px;
@@ -935,7 +930,7 @@
     }
   }
   .ebs-time-counter {
-    border: 1px solid $borderhover;
+    border: 1px solid $color-primary;
     height: 100%;
     display: flex;
     align-items: center;
@@ -943,7 +938,7 @@
     text-align: center;
     padding: 15px;
     .ebs-border-left {
-      border-left: 1px solid $borderhover;
+      border-left: 1px solid $color-primary;
     }
     strong {
       font-size: 24px;
@@ -1003,7 +998,7 @@
   background: url(../../../public/img/ico-search.png) no-repeat 15px center;
   border-radius: 2px;
   &:focus {
-    border-color: $darkcolor;
+    border-color: $color-primary-light;
   }
 }
 .ebs-dropdown-area {
@@ -1062,7 +1057,7 @@
     .dropdown-item {
       padding: 8px 12px;
       border-radius: 0;
-      color: $darktext;
+      color: $text;
       font-weight: 400;
       font-size: 12px;
       background: transparent;
@@ -1077,7 +1072,8 @@
         font-size: 18px;
       }
       &:hover {
-        background: $lightheader;
+        background: $color-primary-light;
+        color: $white;
       }
     }
   }
@@ -1103,7 +1099,7 @@
       background: $lightheader;
     }
     &.ebs-active {
-      background: $borderhover;
+      background: $color-primary;
       color: $white;
     }
   }
@@ -1171,12 +1167,12 @@ animation: widgetLoaderSpin 2s linear infinite;
         font-size: 25px;
         font-weight: 700;
         margin-bottom: 5px;
-        color: $darkcolor;
+        color: $color-primary-light;
       }
       p {
         font-size: 18px;
         font-weight: 400;
-        color: $darkcolor;
+        color: $color-primary-light;
       }
     }
   }
@@ -1254,5 +1250,46 @@ animation: widgetLoaderSpin 2s linear infinite;
     -webkit-transform: rotate(360deg);
     -ms-transform: rotate(360deg);
     transform: rotate(360deg);
+  }
+}
+.ebs-pagination {
+  margin: 0;
+  padding-right: 5px;
+  li {
+    margin: 0 4px !important;
+    button {
+      min-width: 30px;
+      min-height: 30px;
+      border-radius: 4px;
+      background: $white;
+      border: 1px solid $color-primary-light;
+      padding: 4px;
+      text-align: center;
+      font-size: 12px;
+      color: $text;
+      .material-symbols-outlined {
+        vertical-align: top;
+        line-height: 18px;
+      }
+      &.ebs-prev-next {
+        background-color: $border;
+        border-color: $border;
+      }
+
+    }
+    &.active,&:hover {
+      button {
+        color: $white;
+        background: $color-primary-light;
+        border-color: $color-primary-light;
+      }
+    }
+    &.disabled {
+      button {
+        &.ebs-prev-next {
+          cursor: not-allowed;
+        }
+      }
+    }
   }
 }

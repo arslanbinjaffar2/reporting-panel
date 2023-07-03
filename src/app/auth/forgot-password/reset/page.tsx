@@ -1,5 +1,5 @@
 "use client"; // this is a client component
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import Image from 'next/image'
 import { useAppDispatch, useAppSelector } from "@/redux/hooks/hooks";
 import { useRouter } from "next/navigation";
@@ -9,7 +9,9 @@ import { forgotPasswordReset, setLoading, setRedirect } from "@/redux/store/slic
 
 export default function Login() {
   const [password, setPassword] = useState('');
-    const [passwordConfirmation, setPasswordConfirmation] = useState('');
+  const [passwordConfirmation, setPasswordConfirmation] = useState('');
+  const _password = useRef<any>(null);
+  const _passwordConfirmation = useRef<any>(null);
     
     const dispatch = useAppDispatch();
     const router = useRouter();
@@ -25,6 +27,8 @@ export default function Login() {
     }, [])
 
     useEffect(() => {
+        setPassword(_password.current?.value || '')
+        setPasswordConfirmation(_passwordConfirmation.current?.value || '')
         if(redirect !== null) {
             dispatch(setRedirect(null));
             dispatch(setLoading(null));
@@ -46,11 +50,11 @@ export default function Login() {
       <form role="" onSubmit={handleSubmit}>
           <div className="form-area-signup">
               <div className='form-row-box'>
-                  <input className='' value={password} type="password" name="password" id="password" onChange={(e) => setPassword(e.target.value)} required />
+                  <input ref={_password} className={password ? 'ieHack': ''} value={password} type="password" name="password" id="password" onChange={(e) => setPassword(e.target.value)} required />
                   <label className="title">Enter new password</label>
               </div>
               <div className='form-row-box'>
-                  <input className='' value={passwordConfirmation} type="password" name="password_confirmation" id="password_confirmation" required onChange={(e) => setPasswordConfirmation(e.target.value)}  />
+                  <input ref={_passwordConfirmation} className={passwordConfirmation ? 'ieHack': ''} value={passwordConfirmation} type="password" name="password_confirmation" id="password_confirmation" required onChange={(e) => setPasswordConfirmation(e.target.value)}  />
                   <label className="title">Confirm new password</label>
               </div>
               <div className="form-row-box button-panel">

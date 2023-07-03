@@ -1,5 +1,5 @@
 "use client"; // this is a client component
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import Image from 'next/image';
 import Illustration from '@/assets/img/illustration.png'
 import AlertMessage from "@/components/alerts/AlertMessage";
@@ -18,6 +18,7 @@ export default function requestReset() {
     const router = useRouter();
     const {loading, redirect, error, errors} = useAppSelector((state: RootState) => state.authUser);
     const [email, setEmail] = useState('');
+    const _email = useRef<any>(null);
 
     const handleSubmit = (e:any) => {
         e.preventDefault();
@@ -29,6 +30,7 @@ export default function requestReset() {
     }
 
     useEffect(() => {
+      setEmail(_email.current?.value || '')
       if(redirect !== null) {
         dispatch(setRedirect(null));
         dispatch(setLoading(null));
@@ -54,7 +56,7 @@ export default function requestReset() {
       <form role="" onSubmit={handleSubmit}>
       <div className="form-area-signup">
           <div className='form-row-box'>
-              <input className={email ? 'ieHack': ''} value={email} type="text" name="email" id="email" onChange={(e) => setEmail(e.target.value)} required  />
+              <input ref={_email} className={email ? 'ieHack': ''} value={email} type="text" name="email" id="email" onChange={(e) => setEmail(e.target.value)} required  />
               <label className="title">Enter your email</label>
           </div>
           <div className="form-row-box button-panel">

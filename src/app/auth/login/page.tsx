@@ -1,5 +1,5 @@
 "use client"; // this is a client component
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from 'next/image';
 import Link from "next/link";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks/hooks";
@@ -14,7 +14,8 @@ const languages = [{ id: 1, name: "English" }, { id: 2, name: "Danish" }];
 export default function Login() {
   const dispatch = useAppDispatch();
   const router = useRouter();
- 
+  const _email = useRef<any>(null);
+  const _password = useRef<any>(null);
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [passwordType, setpasswordType] = useState(true)
@@ -31,6 +32,8 @@ export default function Login() {
   }
 
   useEffect(() => {
+    setEmail(_email.current?.value || '')
+    setPassword(_password.current?.value || '')
     if(user && user.access_token) {
         router.push('/manage/events');
     }
@@ -62,14 +65,14 @@ export default function Login() {
         <form onSubmit={handleSubmit}>
         <div className="form-area-signup">
             <div className='form-row-box'>
-                <input className={email ? 'ieHack': ''} value={email} type="email" name="email" id="email" onChange={(e) => setEmail(e.target.value)}  required/>
+                <input ref={_email} className={email ? 'ieHack': ''} value={email} type="email" name="email" id="email" onChange={(e) => setEmail(e.target.value)}  required/>
                 <label className="title">Enter your email</label>
             </div>
             <div className='form-row-box'>
                 <span className="icon-eye">
                   <Image onClick={handleShowPass} src={`/img/${passwordType ? 'close-eye':'icon-eye'}.svg`} width="17" height="17" alt="" />
                 </span>
-                <input className={password ? 'ieHack': ''} type={passwordType ? 'password' : 'text'} value={password} id="password" onChange={(e) => setPassword(e.target.value)} required />
+                <input ref={_password} className={password ? 'ieHack': ''} type={passwordType ? 'password' : 'text'} value={password} id="password" onChange={(e) => setPassword(e.target.value)} required />
                 <label className="title">Password</label>
             </div>
             <div className="login-others clearfix">

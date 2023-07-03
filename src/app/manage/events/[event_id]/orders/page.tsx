@@ -2,6 +2,7 @@
 import React, { useEffect } from 'react';
 import Image from 'next/image'
 import Dropdown from '@/components/DropDown';
+import Pagination from '@/components/pagination';
 
 export default function OrderListing() {
   
@@ -23,6 +24,9 @@ export default function OrderListing() {
     e.preventDefault();
     e.target.classList.toggle('ebs-active');
   }
+  const handlePageChange = (page: number) => {
+    console.log('change event')
+  };
   return (
     <>
               {/* <div className="top-landing-page">
@@ -49,7 +53,7 @@ export default function OrderListing() {
                   </div>
                 </div>
               </div> */}
-              <div style={{ background: "#fff" }} className="main-data-table">
+              <div style={{ background: "#fff", borderRadius: '0 0 8px 8px' }} className="main-data-table">
               <div className="ebs-ticket-section">
                   <h4>Tickets</h4>
                   <div className="row d-flex">
@@ -57,7 +61,7 @@ export default function OrderListing() {
                       <div className="row">
                         <div className="col">
                           <div className="ebs-ticket-information ebs-bg-light">
-                            <strong>4</strong>
+                            <strong>f4</strong>
                             <span>LEFT</span>
                           </div>
                         </div>
@@ -130,22 +134,6 @@ export default function OrderListing() {
                             ]}
                           />
                         </label>
-                      </div>
-                      <div className="col-4 d-flex justify-content-end align-items-center">
-                        <button className="btn-full-screen">
-                          <Image src={"/img/ico-fullscreen.svg"} alt="" width="27" height="28" />
-                        </button>
-                        <div onClick={(e) => e.stopPropagation()} className="ebs-dropdown-area">
-                          <button onClick={handleToggle} className="ebs-btn-dropdown btn-select">
-                            2 <i className="material-symbols-outlined">expand_more</i>
-                          </button>
-                          <div className="ebs-dropdown-menu">
-                            <button className="dropdown-item">10</button>
-                            <button className="dropdown-item">20</button>
-                            <button className="dropdown-item">500</button>
-                            <button className="dropdown-item">1000</button>
-                          </div>
-                        </div>
                       </div>
                     </div>
                   </div>
@@ -220,6 +208,24 @@ export default function OrderListing() {
                       <div className="ebs-table-box ebs-box-4" style={{width: 150}}><p style={{fontWeight: 600, color: '#AB8D2E'}}>Pending</p></div>
                     </div>)}
                   </div>
+                  <div className='d-flex justify-content-end align-items-center pt-5 mb-4'>
+                      <Pagination
+                          currentPage={1}
+                          totalPages={5}
+                          onPageChange={handlePageChange}
+                      />
+                    <div style={{minWidth: 60}} onClick={(e) => e.stopPropagation()} className="ebs-dropdown-area">
+                        <button onClick={handleToggle} className="ebs-btn-dropdown btn-select">
+                          2 <i className="material-symbols-outlined">expand_more</i>
+                        </button>
+                        <div className="ebs-dropdown-menu">
+                          <button className="dropdown-item">10</button>
+                          <button className="dropdown-item">20</button>
+                          <button className="dropdown-item">500</button>
+                          <button className="dropdown-item">1000</button>
+                        </div>
+                      </div>
+                    </div>
                 </div>
               </div>
     </>

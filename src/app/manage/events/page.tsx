@@ -7,6 +7,7 @@ import { userEventsStats, userEventsFilters } from '@/redux/store/slices/EventsS
 import { AsyncThunkAction, Dispatch, AnyAction } from '@reduxjs/toolkit';
 import { RootState } from '@/redux/store/store';
 import { getSelectedLabel } from '@/helpers';
+import Pagination from '@/components/pagination';
 
 const eventFilters = [
   {id: 'active_future', name: "Active and future events"},
@@ -152,7 +153,9 @@ export default function Dashboard() {
     savefiltersToLocalStorage(eventFilterDataUpdate);
     dispatch(userEvents(eventFilterDataUpdate));
   }
-
+  const handlePageChange = (page: number) => {
+    console.log('change event')
+  };
   return (
    <>
             <div className="top-landing-page shadow-none">
@@ -291,29 +294,6 @@ export default function Dashboard() {
                   </div>
                 </div>
                 <div className="ebs-order-list-section">
-                  <div className="ebs-order-header">
-                    <div className="row">
-                      <div className="col-5 d-flex">
-                        <h4 className='m-0'>Reports list</h4>
-                      </div>
-                      <div className="col-7 d-flex justify-content-end align-items-center">
-                        <button className="btn-full-screen">
-                          <Image src={"/img/ico-fullscreen.svg"} alt="" width="27" height="28" />
-                        </button>
-                        <div onClick={(e) => e.stopPropagation()} className="ebs-dropdown-area">
-                          <button onClick={handleToggle} className="ebs-btn-dropdown btn-select">
-                            2 <i className="material-symbols-outlined">expand_more</i>
-                          </button>
-                          <div className="ebs-dropdown-menu">
-                            <button className="dropdown-item">10</button>
-                            <button className="dropdown-item">20</button>
-                            <button className="dropdown-item">500</button>
-                            <button className="dropdown-item">1000</button>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
                   <div className="ebs-data-table ebs-order-table">
                     <div className="d-flex align-items-center ebs-table-header">
                       <div className="ebs-table-box ebs-box-1"><strong>Event Logo</strong></div>
@@ -330,7 +310,7 @@ export default function Dashboard() {
                     {[...Array(10)].map((item,k) => 
                     <div key={k} className="d-flex align-items-center ebs-table-content">
                       <div className="ebs-table-box ebs-box-1">
-                        <Image src={'/img/logo-placeholder.png'} alt="" width={100} height={34} />
+                        <Image src={'/img/logo-placeholder.svg'} alt="" width={100} height={34} />
                       </div>
                       <div style={{width: 210}}  className="ebs-table-box ebs-box-2"><p style={{fontWeight: 600, color: '#404242'}}>Parent event leadevent 2.0…</p></div>
                       <div style={{width: 170}}  className="ebs-table-box ebs-box-2"><p>30/09/23 - 02/10/23</p></div>
@@ -356,6 +336,24 @@ export default function Dashboard() {
                         </ul>
                       </div>
                     </div>)}
+                    <div className='d-flex justify-content-end align-items-center pt-3'>
+                      <Pagination
+                          currentPage={1}
+                          totalPages={5}
+                          onPageChange={handlePageChange}
+                      />
+                    <div style={{minWidth: 60}} onClick={(e) => e.stopPropagation()} className="ebs-dropdown-area">
+                        <button onClick={handleToggle} className="ebs-btn-dropdown btn-select">
+                          2 <i className="material-symbols-outlined">expand_more</i>
+                        </button>
+                        <div className="ebs-dropdown-menu">
+                          <button className="dropdown-item">10</button>
+                          <button className="dropdown-item">20</button>
+                          <button className="dropdown-item">500</button>
+                          <button className="dropdown-item">1000</button>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>

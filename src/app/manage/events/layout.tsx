@@ -79,7 +79,7 @@ export default function RootLayout({ children}: { children: React.ReactNode }) {
     </header> 
     <main className="main-section" role="main">
         <div className="container">
-            <div className="wrapper-box">
+            <div style={{borderRadius: '0 0 8px 8px'}} className="wrapper-box">
                 <div className="container-box main-landing-page" style={{position:'relative'}}>
                 <div className="top-landing-page">
                 <div className="row d-flex">
@@ -89,8 +89,8 @@ export default function RootLayout({ children}: { children: React.ReactNode }) {
                         <Image
                           src={"/img/logo.svg"}
                           alt=""
-                          width="200"
-                          height="29"
+                          width="150"
+                          height="32"
                           className="logos"
                         />
                       </a>

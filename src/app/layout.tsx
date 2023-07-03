@@ -1,3 +1,4 @@
+import '/public/fonts/fonts.css';
 import '@/assets/css/app.scss'
 import { Providers } from "@/redux/providers/provider";
 

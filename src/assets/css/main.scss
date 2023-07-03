@@ -42,7 +42,7 @@ textarea {
   resize: none;
 }
 html {
-  background: $lightgray;
+  background: $white;
   display: flex;
   flex-direction: column;
 }
@@ -50,7 +50,7 @@ body {
   font-family: $defaultFont !important;
   font-size: 14px;
   color: $black;
-  background: linear-gradient(0deg, $lightgray calc(100% - 250px), $borderhover 250px) no-repeat !important;
+  background: linear-gradient(0deg, $white calc(100% - 250px), $color-primary 250px) no-repeat !important;
   background-attachment: fixed;
   overflow-x: hidden;
   display: flex;
@@ -153,8 +153,8 @@ html,body {
 .main-navigation ul li a:hover,
 .main-navigation ul li a.active  {
   text-decoration: none;
-  color: $darkcolor;
-  background: $lightbackground;
+  color: $white;
+  background: $color-primary-light;
 }
 .signup-wrapper {
   background: $white;
@@ -174,7 +174,7 @@ html,body {
     }
     .main-navigation {
       > li > a {
-        color: $lightlink;
+        color: $color-primary-light;
         white-space: nowrap;
         margin-right: 20px;
         i {
@@ -203,7 +203,7 @@ html,body {
       width: 185px;
       height: 185px;
       border-radius: 100%;
-      border: 24px solid #1B9D89;
+      border: 24px solid $color-secondary;
       display: block;
       position: absolute;
       left: -80PX;
@@ -216,7 +216,7 @@ html,body {
       width: 185px;
       height: 185px;
       border-radius: 100%;
-      border: 24px solid #22B7D7;
+      border: 24px solid $color-secondary;
       display: block;
       position: absolute;
       right: -70px;
@@ -234,7 +234,7 @@ html,body {
         width: 120px;
         height: 120px;
         border-radius: 100%;
-        background: #F58520;
+        background: $color-secondary;
         position: absolute;
         left: -40px;
         z-index: -1;
@@ -279,14 +279,14 @@ select {
 }
 
 .btn {
-  background: $hover;
+  background: $color-primary;
   color: $white;
   font-weight: 600;
   font-size: 14px;
   border-radius: 5px;
   padding: 12px 30px;
   &:hover {
-    background: $darkcolor;
+    background: $color-primary-light;
     color: $white;  
   }
   &.disabled {
@@ -307,7 +307,7 @@ select {
   box-shadow: none !important;
 }
 .link,a {
-   color: $link;
+   color: $color-primary;
 }
 
 h1,h2,h3,h4,h5,h5 {

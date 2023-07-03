@@ -20,7 +20,7 @@ export default function RootLayout({ children}: { children: React.ReactNode }) {
               <div className="row">
                 <div className="col-6">
                   <div className="left-signup">
-                    <Image src={'/img/logo.svg'} alt="" width="200" height="29" className='logos' />
+                    <Image src={'/img/logo.svg'} alt="" width="150" height="32" className='logos' />
                     <div className="text-block">
                       <h4>Welcome to Reporting Portal</h4>
                       <p>Streamline your reporting process with ease and efficiency</p>
