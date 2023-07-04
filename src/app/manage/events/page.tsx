@@ -8,6 +8,7 @@ import { AsyncThunkAction, Dispatch, AnyAction } from '@reduxjs/toolkit';
 import { RootState } from '@/redux/store/store';
 import { getSelectedLabel } from '@/helpers';
 import Pagination from '@/components/pagination';
+import { userEventOrders } from '@/redux/store/slices/EventSlice';
 
 const eventFilters = [
   {id: 'active_future', name: "Active and future events"},
@@ -40,7 +41,7 @@ const storedEventFilters =
 
 export default function Dashboard() {
   const dispatch = useAppDispatch();
-  const {events, loading, totalPages, currentPage, event_countries, office_countries, currencies} = useAppSelector((state: RootState) => state.events);
+  const {events, loading, totalPages, currentPage, event_countries, office_countries, currencies, allEventsStats} = useAppSelector((state: RootState) => state.events);
   const [searchText, setSearchText] = useState('')
   const [eventFilterData, setEventFilterData] = useState(storedEventFilters !== null ? storedEventFilters : {
       sort_by:'name',
@@ -98,7 +99,7 @@ export default function Dashboard() {
     // Update the requestData state with the modified array
     setEventFilterData(eventFilterDataUpdate);
     savefiltersToLocalStorage(eventFilterDataUpdate);
-    dispatch(userEvents(eventFilterDataUpdate));
+    dispatch(userEventOrders(eventFilterDataUpdate));
   }
 
   const handleSortByFilter = (e:any) => {
@@ -107,7 +108,7 @@ export default function Dashboard() {
     eventFilterDataUpdate['page'] = 1;
     setEventFilterData(eventFilterDataUpdate);
     savefiltersToLocalStorage(eventFilterDataUpdate);
-    dispatch(userEvents(eventFilterDataUpdate));
+    dispatch(userEventOrders(eventFilterDataUpdate));
   }
   
   const handleEventActionFilter = (e:any) => {
@@ -116,7 +117,7 @@ export default function Dashboard() {
     eventFilterDataUpdate['page'] = 1;
     setEventFilterData(eventFilterDataUpdate);
     savefiltersToLocalStorage(eventFilterDataUpdate);
-    dispatch(userEvents(eventFilterDataUpdate));
+    dispatch(userEventOrders(eventFilterDataUpdate));
   }
   
   const handleCountryFilter = (e:any) => {
@@ -125,7 +126,7 @@ export default function Dashboard() {
     eventFilterDataUpdate['page'] = 1;
     setEventFilterData(eventFilterDataUpdate);
     savefiltersToLocalStorage(eventFilterDataUpdate);
-    dispatch(userEvents(eventFilterDataUpdate));
+    dispatch(userEventOrders(eventFilterDataUpdate));
   }
   
   const handleOfficeCountryFilter = (e:any) => {
@@ -134,7 +135,7 @@ export default function Dashboard() {
     eventFilterDataUpdate['page'] = 1;
     setEventFilterData(eventFilterDataUpdate);
     savefiltersToLocalStorage(eventFilterDataUpdate);
-    dispatch(userEvents(eventFilterDataUpdate));
+    dispatch(userEventOrders(eventFilterDataUpdate));
   }
   
   const handleCurrencyFilter = (e:any) => {
@@ -143,7 +144,7 @@ export default function Dashboard() {
     eventFilterDataUpdate['page'] = 1;
     setEventFilterData(eventFilterDataUpdate);
     savefiltersToLocalStorage(eventFilterDataUpdate);
-    dispatch(userEvents(eventFilterDataUpdate));
+    dispatch(userEventOrders(eventFilterDataUpdate));
   }
   const handleRangeFilter = (e:any) => {
     const eventFilterDataUpdate = eventFilterData;
@@ -151,7 +152,7 @@ export default function Dashboard() {
     eventFilterDataUpdate['page'] = 1;
     setEventFilterData(eventFilterDataUpdate);
     savefiltersToLocalStorage(eventFilterDataUpdate);
-    dispatch(userEvents(eventFilterDataUpdate));
+    dispatch(userEventOrders(eventFilterDataUpdate));
   }
   const handlePageChange = (page: number) => {
     console.log('change event')
@@ -250,19 +251,19 @@ export default function Dashboard() {
                       <div className="row">
                         <div className="col">
                           <div className="ebs-ticket-information">
-                            <strong>4</strong>
+                            <strong>{allEventsStats !== null && allEventsStats.tickets_left  > 0 ? allEventsStats.tickets_left : 0}</strong>
                             <span>LEFT</span>
                           </div>
                         </div>
                         <div className="col">
                           <div className="ebs-ticket-information">
-                            <strong>33</strong>
+                            <strong>{allEventsStats !== null && allEventsStats.total_sold_tickets  > 0 ? allEventsStats.total_sold_tickets : 0}</strong>
                             <span>sold</span>
                           </div>
                         </div>
                         <div className="col">
                           <div className="ebs-ticket-information">
-                            <strong>34</strong>
+                            <strong>{allEventsStats !== null && allEventsStats.total_tickets  > 0 ? allEventsStats.total_tickets : 0}</strong>
                             <span>total</span>
                           </div>
                         </div>
@@ -274,13 +275,13 @@ export default function Dashboard() {
                         <div className="ebs-time-counter d-flex align-items-center">
                           <div className="col-5">
                             <div className="p-1">
-                              <strong>0,00 DKK</strong>
+                              <strong>{allEventsStats !== null &&  allEventsStats?.range_reporting_stats?.total_range_revenue_text }</strong>
                               <span>Revenue</span>
                             </div>
                           </div>
                           <div className="col-7">
                             <div className="ebs-border-left p-1">
-                              <strong>18854.98 DKK</strong>
+                              <strong>{allEventsStats !== null && allEventsStats.total_revenue_text }</strong>
                               <span>Total Revenue</span>
                             </div>
                           </div>
@@ -360,11 +361,5 @@ export default function Dashboard() {
    </>
   )
 }
-function dispatch(arg0: AsyncThunkAction<any, any, { state?: unknown; dispatch?: Dispatch<AnyAction> | undefined; extra?: unknown; rejectValue?: unknown; serializedErrorType?: unknown; pendingMeta?: unknown; fulfilledMeta?: unknown; rejectedMeta?: unknown; }>) {
-  throw new Error('Function not implemented.');
-}
 
-function userEvetsStats(arg0: {}): any {
-  throw new Error('Function not implemented.');
-}
 
