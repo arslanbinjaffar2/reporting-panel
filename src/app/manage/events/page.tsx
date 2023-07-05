@@ -8,7 +8,7 @@ import { AsyncThunkAction, Dispatch, AnyAction } from '@reduxjs/toolkit';
 import { RootState } from '@/redux/store/store';
 import { getSelectedLabel } from '@/helpers';
 import Pagination from '@/components/pagination';
-import { userEventOrders } from '@/redux/store/slices/EventSlice';
+import Loader from '@/components/Loader';
 
 const eventFilters = [
   {id: 'active_future', name: "Active and future events"},
@@ -43,23 +43,24 @@ export default function Dashboard() {
   const dispatch = useAppDispatch();
   const {events, loading, totalPages, currentPage, event_countries, office_countries, currencies, allEventsStats} = useAppSelector((state: RootState) => state.events);
   const [searchText, setSearchText] = useState('')
+  const [limit, setLimit] = useState(storedEventFilters !== null ? storedEventFilters.limit : 10);
   const [eventFilterData, setEventFilterData] = useState(storedEventFilters !== null ? storedEventFilters : {
-      sort_by:'name',
-      event_action:'name',
-      country:'57',
-      office_country_id:'57',
-      currency:'208',
-      range:'today',
+      sort_by:'',
+      event_action:'',
+      country:0,
+      office_country_id:0,
+      currency:208,
+      range:'',
       start_date:'',
       end_date:'',
-      searchText:'',
+      searchTextEvents:'',
       limit:10,
       page:1,
   });
 
   useEffect(() => {
       const promise1 = dispatch(userEventsFilters({}));
-      const promise2 = dispatch(userEventsStats({}));
+      const promise2 = dispatch(userEventsStats(eventFilterData));
       return () =>{
           promise1.abort();
           promise2.abort();
@@ -94,12 +95,12 @@ export default function Dashboard() {
   const handleSearchTextFilter = (e:any) => {
     const {value} = e.target;
     const eventFilterDataUpdate = eventFilterData;
-    eventFilterDataUpdate.search_text = value;
+    eventFilterDataUpdate.searchTextEvents = value;
     eventFilterDataUpdate['page'] = 1;
     // Update the requestData state with the modified array
     setEventFilterData(eventFilterDataUpdate);
     savefiltersToLocalStorage(eventFilterDataUpdate);
-    dispatch(userEventOrders(eventFilterDataUpdate));
+    dispatch(userEventsStats(eventFilterDataUpdate));
   }
 
   const handleSortByFilter = (e:any) => {
@@ -108,7 +109,7 @@ export default function Dashboard() {
     eventFilterDataUpdate['page'] = 1;
     setEventFilterData(eventFilterDataUpdate);
     savefiltersToLocalStorage(eventFilterDataUpdate);
-    dispatch(userEventOrders(eventFilterDataUpdate));
+    dispatch(userEventsStats(eventFilterDataUpdate));
   }
   
   const handleEventActionFilter = (e:any) => {
@@ -117,7 +118,7 @@ export default function Dashboard() {
     eventFilterDataUpdate['page'] = 1;
     setEventFilterData(eventFilterDataUpdate);
     savefiltersToLocalStorage(eventFilterDataUpdate);
-    dispatch(userEventOrders(eventFilterDataUpdate));
+    dispatch(userEventsStats(eventFilterDataUpdate));
   }
   
   const handleCountryFilter = (e:any) => {
@@ -126,7 +127,7 @@ export default function Dashboard() {
     eventFilterDataUpdate['page'] = 1;
     setEventFilterData(eventFilterDataUpdate);
     savefiltersToLocalStorage(eventFilterDataUpdate);
-    dispatch(userEventOrders(eventFilterDataUpdate));
+    dispatch(userEventsStats(eventFilterDataUpdate));
   }
   
   const handleOfficeCountryFilter = (e:any) => {
@@ -135,7 +136,7 @@ export default function Dashboard() {
     eventFilterDataUpdate['page'] = 1;
     setEventFilterData(eventFilterDataUpdate);
     savefiltersToLocalStorage(eventFilterDataUpdate);
-    dispatch(userEventOrders(eventFilterDataUpdate));
+    dispatch(userEventsStats(eventFilterDataUpdate));
   }
   
   const handleCurrencyFilter = (e:any) => {
@@ -144,7 +145,7 @@ export default function Dashboard() {
     eventFilterDataUpdate['page'] = 1;
     setEventFilterData(eventFilterDataUpdate);
     savefiltersToLocalStorage(eventFilterDataUpdate);
-    dispatch(userEventOrders(eventFilterDataUpdate));
+    dispatch(userEventsStats(eventFilterDataUpdate));
   }
   const handleRangeFilter = (e:any) => {
     const eventFilterDataUpdate = eventFilterData;
@@ -152,20 +153,36 @@ export default function Dashboard() {
     eventFilterDataUpdate['page'] = 1;
     setEventFilterData(eventFilterDataUpdate);
     savefiltersToLocalStorage(eventFilterDataUpdate);
-    dispatch(userEventOrders(eventFilterDataUpdate));
+    dispatch(userEventsStats(eventFilterDataUpdate));
   }
+  const handleLimitChange = (e:any, value:any) => {
+    setLimit(value); 
+    handleToggle(e);
+    const eventFilterDataUpdate = eventFilterData;
+    eventFilterDataUpdate['limit'] = value;
+    eventFilterDataUpdate['page'] = 1;
+    setEventFilterData(eventFilterDataUpdate);
+    savefiltersToLocalStorage(eventFilterDataUpdate);
+    dispatch(userEventsStats(eventFilterDataUpdate));
+  }
+
   const handlePageChange = (page: number) => {
-    console.log('change event')
+    const eventFilterDataUpdate = eventFilterData;
+    eventFilterDataUpdate['page'] = page;
+    setEventFilterData(eventFilterDataUpdate);
+    savefiltersToLocalStorage(eventFilterDataUpdate);
+    dispatch(userEventsStats(eventFilterDataUpdate));
   };
+
   return (
    <>
             <div className="top-landing-page shadow-none">
               <div className="row d-flex ebs-search-events align-items-center">
                 <div style={{padding: '0 22px'}} className="col-4">
-                  <input type="text" className="ebs-search-area m-0 w-100" defaultValue="Search" value={eventFilterData.search_text} onKeyUp={(e) => { e.key === 'Enter' ? handleSearchTextFilter(e): null}} onChange={(e)=>{setEventFilterData((prev:any)=> ({...prev, search_text:e.target.value}))}} />
+                  <input type="text" className="ebs-search-area m-0 w-100" placeholder='Search' value={eventFilterData.search_text} onKeyUp={(e) => { e.key === 'Enter' ? handleSearchTextFilter(e): null}} onChange={(e)=>{setEventFilterData((prev:any)=> ({...prev, search_text:e.target.value}))}} />
                 </div>
                 <div style={{padding: '0 22px'}} className="col-8 d-flex justify-content-end">
-                  <strong>10 events</strong>
+                  <strong>{events.length > 0 ? events.length : 0} events</strong>
                 </div>
               </div>
               <div className="row d-flex ebs-search-grid">
@@ -295,7 +312,7 @@ export default function Dashboard() {
                   </div>
                 </div>
                 <div className="ebs-order-list-section">
-                  <div className="ebs-data-table ebs-order-table">
+                  <div className="ebs-data-table ebs-order-table position-relative">
                     <div className="d-flex align-items-center ebs-table-header">
                       <div className="ebs-table-box ebs-box-1"><strong>Event Logo</strong></div>
                       <div style={{width: 210}}  className="ebs-table-box ebs-box-2"><strong>Event Name</strong></div>
@@ -308,19 +325,21 @@ export default function Dashboard() {
                       <div className="ebs-table-box ebs-box-4" style={{paddingRight: 0}}><strong>Total Revenue</strong></div>
                       <div className="ebs-table-box ebs-box-1" style={{width: 80}}  />
                     </div>
-                    {[...Array(10)].map((item,k) => 
+                    {events.length > 0 && !loading  ? events.map((event,k) => 
                     <div key={k} className="d-flex align-items-center ebs-table-content">
                       <div className="ebs-table-box ebs-box-1">
-                        <Image src={'/img/logo-placeholder.svg'} alt="" width={100} height={34} />
+                        <Image 
+                        src={event.header_logo ? (`${process.env.serverImageHost + '/assets/event/branding/' + event.header_logo}`) : '/img/logo-placeholder.svg'}
+                        alt={event.name} width={100} height={34} />
                       </div>
-                      <div style={{width: 210}}  className="ebs-table-box ebs-box-2"><p style={{fontWeight: 600, color: '#404242'}}>Parent event leadevent 2.0…</p></div>
+                      <div style={{width: 210}}  className="ebs-table-box ebs-box-2"><p style={{fontWeight: 600, color: '#404242'}}>{event.name}</p></div>
                       <div style={{width: 170}}  className="ebs-table-box ebs-box-2"><p>30/09/23 - 02/10/23</p></div>
-                      <div style={{width: 140}}  className="ebs-table-box ebs-box-1"><p>Mr Creig</p></div>
-                      <div style={{width: 140}} className="ebs-table-box ebs-box-4"><p>{k}</p></div>
-                      <div className="ebs-table-box ebs-box-4"><p>1</p></div>
-                      <div className="ebs-table-box ebs-box-4"><p>52315 DKK</p></div>
-                      <div className="ebs-table-box ebs-box-1" ><p>0,00 DKK</p></div>
-                      <div className="ebs-table-box ebs-box-4" style={{paddingRight: 0}}><p>43128 Dkk</p></div>
+                      <div style={{width: 140}}  className="ebs-table-box ebs-box-1"><p>{event.owner}</p></div>
+                      <div style={{width: 140}} className="ebs-table-box ebs-box-4"><p>{event?.reporting_data.waiting_tickets}</p></div>
+                      <div className="ebs-table-box ebs-box-4"><p>{event?.reporting_data.sold_tickets}</p></div>
+                      <div className="ebs-table-box ebs-box-4"><p>{event?.reporting_data.total_tickets}</p></div>
+                      <div className="ebs-table-box ebs-box-1" ><p>{event?.reporting_data.total_revenue_text}</p></div>
+                      <div className="ebs-table-box ebs-box-4" style={{paddingRight: 0}}><p>{event?.reporting_data.total_revenue_text}</p></div>
                       <div style={{width: 80}} className="ebs-table-box ebs-box-1 d-flex justify-content-end">
                         <ul className='d-flex ebs-panel-list m-0 p-0'>
                           <li>
@@ -336,22 +355,27 @@ export default function Dashboard() {
                           </li>
                         </ul>
                       </div>
-                    </div>)}
+                    </div>) : 
+                      loading ? 
+                      <div style={{minHeight:'250px'}}>
+                        <Loader className={''} fixed={''}/> 
+                      </div>
+                      : "No data available"
+                    }
                     <div className='d-flex justify-content-end align-items-center pt-3'>
                       <Pagination
-                          currentPage={1}
-                          totalPages={5}
+                          currentPage={currentPage}
+                          totalPages={totalPages}
                           onPageChange={handlePageChange}
                       />
                     <div style={{minWidth: 60}} onClick={(e) => e.stopPropagation()} className="ebs-dropdown-area">
                         <button onClick={handleToggle} className="ebs-btn-dropdown btn-select">
-                          2 <i className="material-symbols-outlined">expand_more</i>
+                          {limit} <i className="material-symbols-outlined">expand_more</i>
                         </button>
                         <div className="ebs-dropdown-menu">
-                          <button className="dropdown-item">10</button>
-                          <button className="dropdown-item">20</button>
-                          <button className="dropdown-item">500</button>
-                          <button className="dropdown-item">1000</button>
+                          {[2, 10, 20, 50, 100, 500].map((i, k)=>(
+                            <button key={k} className="dropdown-item" onClick={(e)=> { handleLimitChange(e, i) }}>{i}</button>
+                          ))}
                         </div>
                       </div>
                     </div>

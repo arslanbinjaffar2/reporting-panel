@@ -42,34 +42,7 @@ export const userEventsStats = createAsyncThunk(
       source.cancel()
     })
     try {
-      const response = await axios.post(`${AGENT_EVENTS_ENDPOINT}/stats`,data, {
-        cancelToken: source.token,
-        headers: authHeader('GET'),
-      })
-      return response.data
-      
-    } catch (err:any) {
-      if (!err.response) {
-        throw err
-      }
-      if(err.response.status !== 200){
-        handleErrorResponse(err.response.status, dispatch);
-      }
-        // Return the known error for future handling
-      return rejectWithValue(err.response.status);
-    }
-  }
-)
-
-export const userEvents = createAsyncThunk(
-  'users/EventsStats',
-  async (data:any , { signal, rejectWithValue, dispatch }) => {
-    const source = axios.CancelToken.source()
-    signal.addEventListener('abort', () => {
-      source.cancel()
-    })
-    try {
-      const response = await axios.post(`${AGENT_EVENTS_ENDPOINT}/stats`,data, {
+      const response = await axios.post(`${AGENT_EVENTS_ENDPOINT}`,data, {
         cancelToken: source.token,
         headers: authHeader('GET'),
       })
@@ -135,11 +108,15 @@ export const eventsSlice = createSlice({
     builder.addCase(userEventsStats.pending, (state, action) => {
       state.loading = true;
       state.allEventsStats = [];
+      state.events = [];
     }),
     builder.addCase(userEventsStats.fulfilled, (state, action) => {
       let res = action.payload;
       if(res.success){
-        state.allEventsStats = action.payload.data;
+        state.allEventsStats = action.payload.data.events.stats;
+        state.events = action.payload.data.events.data;
+        state.currentPage = action.payload.data.events.current_page;
+        state.totalPages = action.payload.data.events.last_page;
       }else{
           state.error = res.message;
       }
