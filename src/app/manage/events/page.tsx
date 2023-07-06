@@ -43,7 +43,7 @@ const storedEventFilters =
 
 export default function Dashboard() {
   const dispatch = useAppDispatch();
-  const {events, loading, totalPages, currentPage, event_countries, office_countries, currencies, allEventsStats} = useAppSelector((state: RootState) => state.events);
+  const {events, loading, totalPages, currentPage, event_countries, office_countries, currencies, allEventsStats, totalevents} = useAppSelector((state: RootState) => state.events);
   const [searchText, setSearchText] = useState('')
   const [limit, setLimit] = useState(storedEventFilters !== null ? storedEventFilters.limit : 10);
   const [eventFilterData, setEventFilterData] = useState(storedEventFilters !== null ? storedEventFilters : {
@@ -184,7 +184,7 @@ export default function Dashboard() {
                   <input type="text" className="ebs-search-area m-0 w-100" placeholder='Search' value={eventFilterData.search_text} onKeyUp={(e) => { e.key === 'Enter' ? handleSearchTextFilter(e): null}} onChange={(e)=>{setEventFilterData((prev:any)=> ({...prev, search_text:e.target.value}))}} />
                 </div>
                 <div style={{padding: '0 22px'}} className="col-8 d-flex justify-content-end">
-                  <strong>{events.length > 0 ? events.length : 0} events</strong>
+                  <strong>{totalevents} events</strong>
                 </div>
               </div>
               <div className="row d-flex ebs-search-grid">
@@ -341,7 +341,7 @@ export default function Dashboard() {
                               <div style={{width: 140}} className="ebs-table-box ebs-box-4"><p>{event?.reporting_data.waiting_tickets}</p></div>
                               <div className="ebs-table-box ebs-box-4"><p>{event?.reporting_data.sold_tickets}</p></div>
                               <div className="ebs-table-box ebs-box-4"><p>{event?.reporting_data.total_tickets}</p></div>
-                              <div className="ebs-table-box ebs-box-1" ><p>{event?.reporting_data.total_revenue_text}</p></div>
+                              <div className="ebs-table-box ebs-box-1" ><p>{event?.reporting_data.total_range_revenue_text}</p></div>
                               <div className="ebs-table-box ebs-box-4" style={{paddingRight: 0}}><p>{event?.reporting_data.total_revenue_text}</p></div>
                               <div style={{width: 80}} className="ebs-table-box ebs-box-1 d-flex justify-content-end">
                                 <ul className='d-flex ebs-panel-list m-0 p-0'>

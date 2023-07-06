@@ -67,6 +67,7 @@ interface EventsState {
   loading:boolean,
   error:any,
   totalPages:number;
+  totalevents:number;
   currentPage:number;
   event_countries:any,
   office_countries:any,
@@ -81,6 +82,7 @@ const initialState: EventsState = {
   loading:false,
   error:null,
   totalPages:0,
+  totalevents:0,
   currentPage:1,
   event_countries:[],
   office_countries:[],
@@ -117,6 +119,7 @@ export const eventsSlice = createSlice({
         state.events = action.payload.data.events.data;
         state.currentPage = action.payload.data.events.current_page;
         state.totalPages = action.payload.data.events.last_page;
+        state.totalevents = action.payload.data.events.total;
       }else{
           state.error = res.message;
       }
