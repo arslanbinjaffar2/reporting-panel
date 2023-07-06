@@ -9,6 +9,7 @@ import { RootState } from '@/redux/store/store';
 import { getSelectedLabel } from '@/helpers';
 import Pagination from '@/components/pagination';
 import Loader from '@/components/Loader';
+import moment from 'moment';
 
 const eventFilters = [
   {id: 'active_future', name: "Active and future events"},
@@ -329,11 +330,11 @@ export default function Dashboard() {
                     <div key={k} className="d-flex align-items-center ebs-table-content">
                       <div className="ebs-table-box ebs-box-1">
                         <Image 
-                        src={event.header_logo ? (`${process.env.serverImageHost + '/assets/event/branding/' + event.header_logo}`) : '/img/logo-placeholder.svg'}
+                        src={event.header_logo ? (`${process.env.serverImageHost + '/assets/event/branding/' + event.header_logo}`) : `${process.env.serverImageHost + '/_admin_assets/images/eventbuizz_logo.png'}`}
                         alt={event.name} width={100} height={34} />
                       </div>
                       <div style={{width: 210}}  className="ebs-table-box ebs-box-2"><p style={{fontWeight: 600, color: '#404242'}}>{event.name}</p></div>
-                      <div style={{width: 170}}  className="ebs-table-box ebs-box-2"><p>30/09/23 - 02/10/23</p></div>
+                      <div style={{width: 170}}  className="ebs-table-box ebs-box-2"><p>{moment(event.start_date).format('L')} - {moment(event.end_date).format('L')}</p></div>
                       <div style={{width: 140}}  className="ebs-table-box ebs-box-1"><p>{event.owner}</p></div>
                       <div style={{width: 140}} className="ebs-table-box ebs-box-4"><p>{event?.reporting_data.waiting_tickets}</p></div>
                       <div className="ebs-table-box ebs-box-4"><p>{event?.reporting_data.sold_tickets}</p></div>
