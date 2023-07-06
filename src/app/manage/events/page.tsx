@@ -270,6 +270,12 @@ export default function Dashboard() {
                       <div className="row">
                         <div className="col">
                           <div className="ebs-ticket-information">
+                            <strong>{allEventsStats !== null && allEventsStats.waiting_list_attendees  > 0 ? allEventsStats.waiting_list_attendees : 0}</strong>
+                            <span>WAITING</span>
+                          </div>
+                        </div>
+                        <div className="col">
+                          <div className="ebs-ticket-information">
                             <strong>{allEventsStats !== null && allEventsStats.tickets_left  > 0 ? allEventsStats.tickets_left : 0}</strong>
                             <span>LEFT</span>
                           </div>
