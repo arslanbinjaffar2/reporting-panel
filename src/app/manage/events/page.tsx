@@ -10,6 +10,7 @@ import { getSelectedLabel } from '@/helpers';
 import Pagination from '@/components/pagination';
 import Loader from '@/components/Loader';
 import moment from 'moment';
+import Link from 'next/link';
 
 const eventFilters = [
   {id: 'active_future', name: "Active and future events"},
@@ -47,7 +48,7 @@ export default function Dashboard() {
   const [limit, setLimit] = useState(storedEventFilters !== null ? storedEventFilters.limit : 10);
   const [eventFilterData, setEventFilterData] = useState(storedEventFilters !== null ? storedEventFilters : {
       sort_by:'',
-      event_action:'',
+      event_action:'active_future',
       country:0,
       office_country_id:0,
       currency:208,
@@ -190,7 +191,7 @@ export default function Dashboard() {
                 <div className="col">
                   <label className="label-select-alt m-0 w-100">
                     <Dropdown 
-                      label="Filter by"
+                      label="Sort by"
                       selected={eventFilterData.sort_by} 
                       onChange={handleSortByFilter}
                       selectedlabel={getSelectedLabel(sortFilters,eventFilterData.sort_by)}
@@ -251,7 +252,7 @@ export default function Dashboard() {
                 <div className="col">
                   <label className="label-select-alt m-0 w-100">
                     <Dropdown 
-                      label="Filter by"
+                      label="Range"
                       listitems={rangeFilters}
                       selected={eventFilterData.range} 
                       onChange={handleRangeFilter}
@@ -312,7 +313,7 @@ export default function Dashboard() {
                     </div>
                   </div>
                 </div>
-                <div className="ebs-order-list-section">
+                <div className="ebs-order-list-section" >
                   <div className="ebs-data-table ebs-order-table position-relative">
                     <div className="d-flex align-items-center ebs-table-header">
                       <div className="ebs-table-box ebs-box-1"><strong>Event Logo</strong></div>
@@ -326,43 +327,49 @@ export default function Dashboard() {
                       <div className="ebs-table-box ebs-box-4" style={{paddingRight: 0}}><strong>Total Revenue</strong></div>
                       <div className="ebs-table-box ebs-box-1" style={{width: 80}}  />
                     </div>
-                    {events.length > 0 && !loading  ? events.map((event,k) => 
-                    <div key={k} className="d-flex align-items-center ebs-table-content">
-                      <div className="ebs-table-box ebs-box-1">
-                        <Image 
-                        src={event.header_logo ? (`${process.env.serverImageHost + '/assets/event/branding/' + event.header_logo}`) : `${process.env.serverImageHost + '/_admin_assets/images/eventbuizz_logo.png'}`}
-                        alt={event.name} width={100} height={34} />
-                      </div>
-                      <div style={{width: 210}}  className="ebs-table-box ebs-box-2"><p style={{fontWeight: 600, color: '#404242'}}>{event.name}</p></div>
-                      <div style={{width: 170}}  className="ebs-table-box ebs-box-2"><p>{moment(event.start_date).format('L')} - {moment(event.end_date).format('L')}</p></div>
-                      <div style={{width: 140}}  className="ebs-table-box ebs-box-1"><p>{event.owner}</p></div>
-                      <div style={{width: 140}} className="ebs-table-box ebs-box-4"><p>{event?.reporting_data.waiting_tickets}</p></div>
-                      <div className="ebs-table-box ebs-box-4"><p>{event?.reporting_data.sold_tickets}</p></div>
-                      <div className="ebs-table-box ebs-box-4"><p>{event?.reporting_data.total_tickets}</p></div>
-                      <div className="ebs-table-box ebs-box-1" ><p>{event?.reporting_data.total_revenue_text}</p></div>
-                      <div className="ebs-table-box ebs-box-4" style={{paddingRight: 0}}><p>{event?.reporting_data.total_revenue_text}</p></div>
-                      <div style={{width: 80}} className="ebs-table-box ebs-box-1 d-flex justify-content-end">
-                        <ul className='d-flex ebs-panel-list m-0 p-0'>
-                          <li>
-                            <div onClick={(e) => e.stopPropagation()} className="ebs-dropdown-area">
-                              <button onClick={handleToggle} className='ebs-btn-panel ebs-btn-dropdown'>
-                                <i className="material-icons">more_horiz</i>
-                              </button>
-                              <div style={{minWidth: 130}} className="ebs-dropdown-menu">
-                                <button className="dropdown-item">View details</button>
-                                <button className="dropdown-item">Export orders</button>
+                    <div style={{minHeight:"calc(100vh - 720px)"}}>
+                        {events.length > 0 && !loading  ? events.map((event,k) => 
+                            <div key={k} className="d-flex align-items-center ebs-table-content" >
+                              <div className="ebs-table-box ebs-box-1">
+                                <Image 
+                                src={event.header_logo ? (`${process.env.serverImageHost + '/assets/event/branding/' + event.header_logo}`) : `${process.env.serverImageHost + '/_admin_assets/images/eventbuizz_logo.png'}`}
+                                alt={event.name} width={100} height={34} />
+                              </div>
+                              <div style={{width: 210}}  className="ebs-table-box ebs-box-2"><p style={{fontWeight: 600, color: '#404242'}}>{event.name}</p></div>
+                              <div style={{width: 170}}  className="ebs-table-box ebs-box-2"><p>{moment(event.start_date).format('L')} - {moment(event.end_date).format('L')}</p></div>
+                              <div style={{width: 140}}  className="ebs-table-box ebs-box-1"><p>{event.owner}</p></div>
+                              <div style={{width: 140}} className="ebs-table-box ebs-box-4"><p>{event?.reporting_data.waiting_tickets}</p></div>
+                              <div className="ebs-table-box ebs-box-4"><p>{event?.reporting_data.sold_tickets}</p></div>
+                              <div className="ebs-table-box ebs-box-4"><p>{event?.reporting_data.total_tickets}</p></div>
+                              <div className="ebs-table-box ebs-box-1" ><p>{event?.reporting_data.total_revenue_text}</p></div>
+                              <div className="ebs-table-box ebs-box-4" style={{paddingRight: 0}}><p>{event?.reporting_data.total_revenue_text}</p></div>
+                              <div style={{width: 80}} className="ebs-table-box ebs-box-1 d-flex justify-content-end">
+                                <ul className='d-flex ebs-panel-list m-0 p-0'>
+                                  <li>
+                                    <div onClick={(e) => e.stopPropagation()} className="ebs-dropdown-area">
+                                      <button onClick={handleToggle} className='ebs-btn-panel ebs-btn-dropdown'>
+                                        <i className="material-icons">more_horiz</i>
+                                      </button>
+                                      <div style={{minWidth: 130}} className="ebs-dropdown-menu">
+                                        <Link href={'/manage/events/'+event.id +'/orders'} className="dropdown-item">View details</Link>
+                                        <button className="dropdown-item">Export orders</button>
+                                      </div>
+                                    </div>
+                                  </li>
+                                </ul>
                               </div>
                             </div>
-                          </li>
-                        </ul>
-                      </div>
-                    </div>) : 
-                      loading ? 
-                      <div style={{minHeight:'250px'}}>
-                        <Loader className={''} fixed={''}/> 
-                      </div>
-                      : "No data available"
-                    }
+                        ) : 
+                          loading ? 
+                          <div>
+                            <Loader className={''} fixed={''}/> 
+                          </div>
+                          : 
+                          <div className='position-absolute w-100 h-100  text-center d-flex justify-content-center align-items-center' >
+                            <p className='fs-1 fst-italic'>No data available</p>
+                          </div>
+                        }
+                    </div>
                     <div className='d-flex justify-content-end align-items-center pt-3'>
                       <Pagination
                           currentPage={currentPage}
