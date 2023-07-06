@@ -57,7 +57,7 @@ export default function verifyResetCode() {
             <form role="" onSubmit={handleSubmit}>
                 <div className="form-area-signup">
                     <div className='form-row-box'>
-                        <input className='' value={token} type="text" name="token" id="token" onChange={(e) => setToken(e.target.value)} required  />
+                        <input pattern="^[0-9]+$" maxLength={6} className={token ? 'ieHack' : '' } value={token} type="text" name="token" id="token" onChange={(e) => setToken(e.target.value)} required  />
                         <label className="title">Enter reset code</label>
                     </div>
                     <div className="form-row-box button-panel">
