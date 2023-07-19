@@ -7,8 +7,8 @@ import { authHeader, handleErrorResponse } from '@/helpers'
 
 
 // Slice Thunks
-export const userEvent = createAsyncThunk(
-  'users/Event',
+export const userEventStatsAndOrders = createAsyncThunk(
+  'users/EventStatsAndOrders',
   async (data:any , { signal, dispatch, rejectWithValue }) => {
     const source = axios.CancelToken.source()
     signal.addEventListener('abort', () => {
@@ -16,7 +16,7 @@ export const userEvent = createAsyncThunk(
     })
     try {
       
-      const response = await axios.post(`${AGENT_EVENTS_ENDPOINT}/${data.event_id}/data`,data, {
+      const response = await axios.post(`${AGENT_EVENTS_ENDPOINT}/${data.event_id}/statsAndOrders`,data, {
         cancelToken: source.token,
         headers: authHeader('GET'),
       })
@@ -34,49 +34,23 @@ export const userEvent = createAsyncThunk(
   }
 )
 
-export const userEventOrders = createAsyncThunk(
-  'users/EventOrders',
-  async (data:any , { signal, dispatch, rejectWithValue }) => {
-    const source = axios.CancelToken.source()
-    signal.addEventListener('abort', () => {
-      source.cancel()
-    })
-    try {
-      const response = await axios.post(`${AGENT_EVENTS_ENDPOINT}/${data.event_id}/orders`,data, {
-        cancelToken: source.token,
-        headers: authHeader('GET'),
-      })
-      return response.data
-      
-    } catch (err:any) {
-      if (!err.response) {
-        throw err
-      }
-      if(err.response.status !== 200){
-        handleErrorResponse(err.response.status, dispatch);
-      }
-        // Return the known error for future handling
-      return rejectWithValue(err.response.status);
-    }
-  }
-)
 
 // Define a type for the slice state
 interface EventState {
-  event:any,
+  event:any
+  event_stats:any,
   event_orders:any
   loading:boolean,
-  fetching_orders:boolean,
   error:any,
 }
 
 
 // Define the initial state using that type
 const initialState: EventState = {
-  event: null,
+  event:null,
+  event_stats: null,
   event_orders: null,
   loading:true,
-  fetching_orders:true,
   error:null,
 }
 
@@ -86,7 +60,7 @@ export const eventSlice = createSlice({
   initialState,
   reducers: {
     setEvent: (state, action: PayloadAction<any>) => {
-      state.event = action.payload;
+      state.event_stats = action.payload;
     },
     setLoading: (state, action: PayloadAction<boolean>) => {
       state.loading = action.payload;
@@ -94,40 +68,26 @@ export const eventSlice = createSlice({
   },
   extraReducers: (builder) => {
     // Login thuckCases
-    builder.addCase(userEvent.pending, (state, action) => {
+    builder.addCase(userEventStatsAndOrders.pending, (state, action) => {
       state.loading = true;
       state.event = null;
-    }),
-    builder.addCase(userEvent.fulfilled, (state, action) => {
-      let res = action.payload;
-      if(res.success){
-        state.event = action.payload.data;
-      }else{
-          state.error = res.message;
-      }
-      state.loading = false;
-    }),
-    builder.addCase(userEvent.rejected, (state, action) => {
-      console.log("rejected", action.payload);
-      state.loading = false;
-    }),
-    // Login thuckCases
-    builder.addCase(userEventOrders.pending, (state, action) => {
-      state.fetching_orders = true;
+      state.event_stats = null;
       state.event_orders = null;
     }),
-    builder.addCase(userEventOrders.fulfilled, (state, action) => {
+    builder.addCase(userEventStatsAndOrders.fulfilled, (state, action) => {
       let res = action.payload;
       if(res.success){
-        state.event_orders = action.payload.data;
+        state.event = action.payload.data.event;
+        state.event_orders = action.payload.data.data;
+        state.event_stats = action.payload.data.event_stats;
       }else{
           state.error = res.message;
       }
-      state.fetching_orders = false;
+      state.loading = false;
     }),
-    builder.addCase(userEventOrders.rejected, (state, action) => {
+    builder.addCase(userEventStatsAndOrders.rejected, (state, action) => {
       console.log("rejected", action.payload);
-      state.fetching_orders = false;
+      state.loading = false;
     })
   },
 })

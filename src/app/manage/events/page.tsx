@@ -214,7 +214,7 @@ export default function Dashboard() {
                   <div className="col">
                     <label className="label-select-alt m-0 w-100">
                       <Dropdown 
-                        label="Filter by"
+                        label="Select country"
                         listitems={event_countries}
                         selected={eventFilterData.country} 
                         onChange={handleCountryFilter}
@@ -227,7 +227,7 @@ export default function Dashboard() {
                   <div className="col">
                   <label className="label-select-alt m-0 w-100">
                     <Dropdown 
-                      label="Filter by"
+                      label="Select Office"
                       listitems={office_countries}
                       selected={eventFilterData.office_country_id} 
                       onChange={handleOfficeCountryFilter}
@@ -240,7 +240,7 @@ export default function Dashboard() {
                   <div className="col">
                   <label className="label-select-alt m-0 w-100">
                     <Dropdown 
-                      label="Filter by"
+                      label="Select currency"
                       listitems={currencies}
                       selected={eventFilterData.currency} 
                       onChange={handleCurrencyFilter}

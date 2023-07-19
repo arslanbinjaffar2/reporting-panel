@@ -11,7 +11,7 @@ const languages = [{ id: 1, name: "English" }, { id: 2, name: "Danish" }];
 export default function RootLayout({ children}: { children: React.ReactNode }) {
     const router = useRouter();
     const {user} = useAppSelector((state: RootState) => state.authUser);
-    const {event} = useAppSelector((state: RootState) => state.event);
+    const { event } = useAppSelector((state: RootState) => state.event);
     const dispatch = useAppDispatch();
     const pathname = usePathname();
 

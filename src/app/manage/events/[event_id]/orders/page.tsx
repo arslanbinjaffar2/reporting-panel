@@ -3,9 +3,21 @@ import React, { useEffect } from 'react';
 import Image from 'next/image'
 import Dropdown from '@/components/DropDown';
 import Pagination from '@/components/pagination';
+import { useAppDispatch, useAppSelector } from '@/redux/hooks/hooks';
+import { userEventStatsAndOrders } from '@/redux/store/slices/EventSlice';
+import { RootState } from '@/redux/store/store';
 
-export default function OrderListing() {
+export default function OrderListing({ params }: { params: { event_id: string } }) {
+  const dispatch = useAppDispatch();
+  const {event_orders, event_stats} = useAppSelector((state: RootState) => state.event);
   
+  useEffect(() => {
+    const promise1 = dispatch(userEventStatsAndOrders({event_id:params.event_id}));
+    return () =>{
+        promise1.abort();
+    }
+  }, []);
+
   useEffect(() => {
     document.body.addEventListener('click',handleBody,false)
     return () => {
@@ -231,3 +243,7 @@ export default function OrderListing() {
     </>
   );
 }
+function dispatch(arg0: any) {
+  throw new Error('Function not implemented.');
+}
+
