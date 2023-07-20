@@ -42,6 +42,8 @@ interface EventState {
   event_orders:any
   loading:boolean,
   error:any,
+  totalPages:number,
+  currentPage:number,
 }
 
 
@@ -52,6 +54,8 @@ const initialState: EventState = {
   event_orders: null,
   loading:true,
   error:null,
+  totalPages:0,
+  currentPage:1,
 }
 
 export const eventSlice = createSlice({
@@ -70,14 +74,15 @@ export const eventSlice = createSlice({
     // Login thuckCases
     builder.addCase(userEventStatsAndOrders.pending, (state, action) => {
       state.loading = true;
-      state.event = null;
-      state.event_stats = null;
       state.event_orders = null;
     }),
     builder.addCase(userEventStatsAndOrders.fulfilled, (state, action) => {
       let res = action.payload;
       if(res.success){
         state.event = action.payload.data.event;
+        state.event_orders = action.payload.data.data;
+        state.totalPages = action.payload.data.data.last_page;
+        state.currentPage = action.payload.data.data.current_page;
         state.event_orders = action.payload.data.data;
         state.event_stats = action.payload.data.event_stats;
       }else{
