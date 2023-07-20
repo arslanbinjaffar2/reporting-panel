@@ -104,6 +104,7 @@ export const eventsSlice = createSlice({
     setCurrentPage: (state, action: PayloadAction<number>) => {
       state.currentPage = action.payload;
     },
+    
   },
   extraReducers: (builder) => {
     // Login thuckCases

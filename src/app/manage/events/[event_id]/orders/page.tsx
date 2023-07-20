@@ -4,7 +4,7 @@ import Image from 'next/image'
 import Dropdown from '@/components/DropDown';
 import Pagination from '@/components/pagination';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks/hooks';
-import { userEventStatsAndOrders } from '@/redux/store/slices/EventSlice';
+import { userEventStatsAndOrders, clearAllState } from '@/redux/store/slices/EventSlice';
 import { RootState } from '@/redux/store/store';
 import moment from 'moment';
 import { getSelectedLabel } from '@/helpers';
@@ -29,14 +29,14 @@ const fieldFilters = [
 ];
 
 let storedOrderFilterData =
-    typeof window !== "undefined" && localStorage.getItem("OrderFilterData");
+    typeof window !== "undefined" && localStorage.getItem("orderFilterData");
 const storedOrderFilters =
     storedOrderFilterData && storedOrderFilterData !== undefined ? JSON.parse(storedOrderFilterData) : null;
 
 export default function OrderListing({ params }: { params: { event_id: string } }) {
   const dispatch = useAppDispatch();
   const {event_orders, event_stats, totalPages, currentPage} = useAppSelector((state: RootState) => state.event);
-  const [searchText, setSearchText] = useState('')
+  
   const [limit, setLimit] = useState(storedOrderFilters !== null ? storedOrderFilters.limit : 10);
   const [orderFilterData, setOrderFilterData] = useState(storedOrderFilters !== null ? storedOrderFilters : {
       field:'',
@@ -52,6 +52,7 @@ export default function OrderListing({ params }: { params: { event_id: string } 
     const promise1 = dispatch(userEventStatsAndOrders({event_id:params.event_id, ...orderFilterData}));
     return () =>{
         promise1.abort();
+        dispatch(clearAllState());
     }
   }, []);
 
@@ -309,8 +310,5 @@ export default function OrderListing({ params }: { params: { event_id: string } 
               </div>
     </>
   );
-}
-function dispatch(arg0: any) {
-  throw new Error('Function not implemented.');
 }
 

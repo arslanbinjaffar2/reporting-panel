@@ -69,6 +69,15 @@ export const eventSlice = createSlice({
     setLoading: (state, action: PayloadAction<boolean>) => {
       state.loading = action.payload;
     },
+    clearAllState:(state) => {
+      state.event=null;
+      state.event_stats= null;
+      state.event_orders= null;
+      state.loading=true;
+      state.error=null;
+      state.totalPages=0;
+      state.currentPage=1;
+    },
   },
   extraReducers: (builder) => {
     // Login thuckCases
@@ -98,7 +107,7 @@ export const eventSlice = createSlice({
 })
 
 
-export const { setEvent, setLoading } = eventSlice.actions
+export const { setEvent, setLoading, clearAllState } = eventSlice.actions
 
 // Other code such as selectors can use the imported `RootState` type
 export const selectEvent = (state: RootState) => state.event
