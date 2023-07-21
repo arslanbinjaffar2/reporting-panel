@@ -2,9 +2,14 @@
 import { useAppDispatch, useAppSelector } from '@/redux/hooks/hooks';
 import { RootState } from '@/redux/store/store';
 import { usePathname, useRouter } from 'next/navigation';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import Image from 'next/image'
 import { logOutUser } from '@/redux/store/slices/AuthSlice';
+import axios from 'axios';
+import { authHeader } from '@/helpers';
+import moment from 'moment';
+import { AGENT_ENDPOINT } from '@/constants/endpoints';
+import FullPageLoader from '@/components/FullPageLoader';
 
 const languages = [{ id: 1, name: "English" }, { id: 2, name: "Danish" }];
 
@@ -14,10 +19,53 @@ export default function RootLayout({ children}: { children: React.ReactNode }) {
     const { event } = useAppSelector((state: RootState) => state.event);
     const dispatch = useAppDispatch();
     const pathname = usePathname();
-
+    const [downloading, setDownloading] = useState(false);
     useEffect(() => {
          (user === null) ? router.push('auth/login') : null;
     }, [user]);
+
+    const exportAllEventOrders = () =>{
+      setDownloading(true);
+      let storedEventFilterData = typeof window !== "undefined" ? localStorage.getItem("eventFilterData") : null;
+      const storedEventFilters = (storedEventFilterData && storedEventFilterData !== undefined) ? JSON.parse(storedEventFilterData) : {};
+      axios.post(`${AGENT_ENDPOINT}/export-orders`, storedEventFilters, {
+        headers: authHeader('GET'),
+        responseType: 'blob'
+      }).then((res)=>{
+        let url = window.URL.createObjectURL(res.data);
+        let a = document.createElement('a');
+        a.href = url;
+        a.download = 'Orders-' + moment().valueOf() + '.xlsx';
+        a.click();
+        setDownloading(false);
+      })
+      .catch((err)=>{
+        console.log(err);
+        setDownloading(false);
+      });
+    }
+
+    const exportEventOrders = (event_id:string) =>{
+      setDownloading(true);
+      let storedOrderFilterData =
+      typeof window !== "undefined" && localStorage.getItem("orderFilterData");
+      const storedOrderFilters = storedOrderFilterData && storedOrderFilterData !== undefined ? JSON.parse(storedOrderFilterData) : null;
+      axios.post(`${AGENT_ENDPOINT}/export-event-orders/${event_id}`, storedOrderFilters, {
+        headers: authHeader('GET'),
+        responseType: 'blob'
+      }).then((res)=>{
+        let url = window.URL.createObjectURL(res.data);
+        let a = document.createElement('a');
+        a.href = url;
+        a.download = 'Orders-' + moment().valueOf() + '.xlsx';
+        a.click();
+        setDownloading(false);
+      })
+      .catch((err)=>{
+        console.log(err);
+        setDownloading(false);
+      });
+    }
     
   return (
     <>
@@ -93,7 +141,13 @@ export default function RootLayout({ children}: { children: React.ReactNode }) {
                   </div>
                   <div className="col-8">
                     <div className="right-top-header">
-                      <button className="btn btn-default">
+                      <button className="btn btn-default" onClick={(e)=>{
+                          if(pathname !== "/manage/events"){
+                            exportEventOrders(pathname.split('/')[3]);
+                          }else{
+                            exportAllEventOrders();
+                          }
+                        }}>
                         Export Orders
                       </button>
                     </div>
@@ -105,6 +159,7 @@ export default function RootLayout({ children}: { children: React.ReactNode }) {
             </div>
         </div>
     </main>
+      {downloading ? <FullPageLoader className={''} fixed={''}/> : null}
     </>
   )
 }
