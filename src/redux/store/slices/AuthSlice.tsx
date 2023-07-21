@@ -203,6 +203,8 @@ export const authUserSlice = createSlice({
     }),
     builder.addCase(logOutUser.fulfilled, (state, action) => {
       state.loading = false;
+      state.error = null;
+      state.errors=null;
       localStorage.removeItem('agent');
     }),
     builder.addCase(logOutUser.rejected, (state, action) => {

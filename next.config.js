@@ -21,12 +21,21 @@ const nextConfig = {
               port: '',
           },
           {
+              protocol: 'https',
+              hostname: 'my.eventbuizz.com',
+              port: '',
+          },
+          {
               protocol: 'http',
               hostname: 'localhost',
               port: '8200',
           },
       ],
-      domains: ['https://stage.eventbuizz.com', 'http:/localhost:8200']
+      domains: [
+        'https://stage.eventbuizz.com',
+        'https://my.eventbuizz.com',
+        'http:/localhost:8200'
+      ]
   },
 }
 

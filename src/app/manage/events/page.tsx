@@ -6,11 +6,14 @@ import { useAppDispatch, useAppSelector } from '@/redux/hooks/hooks';
 import { userEventsStats, userEventsFilters } from '@/redux/store/slices/EventsSlice';
 import { AsyncThunkAction, Dispatch, AnyAction } from '@reduxjs/toolkit';
 import { RootState } from '@/redux/store/store';
-import { getSelectedLabel } from '@/helpers';
+import { authHeader, getSelectedLabel } from '@/helpers';
 import Pagination from '@/components/pagination';
 import Loader from '@/components/Loader';
 import moment from 'moment';
 import Link from 'next/link';
+import axios from 'axios';
+import { AGENT_ENDPOINT } from '@/constants/endpoints';
+import FullPageLoader from '@/components/FullPageLoader';
 
 const eventFilters = [
   {id: 'active_future', name: "Active and future events"},
@@ -46,6 +49,7 @@ export default function Dashboard() {
   const {events, loading, totalPages, currentPage, event_countries, office_countries, currencies, allEventsStats, totalevents} = useAppSelector((state: RootState) => state.events);
   const [searchText, setSearchText] = useState('')
   const [limit, setLimit] = useState(storedEventFilters !== null ? storedEventFilters.limit : 10);
+  const [downloading, setDownloading] = useState(false);
   const [eventFilterData, setEventFilterData] = useState(storedEventFilters !== null ? storedEventFilters : {
       sort_by:'',
       event_action:'active_future',
@@ -176,6 +180,28 @@ export default function Dashboard() {
     dispatch(userEventsStats(eventFilterDataUpdate));
   };
 
+  const exportEventOrders = (event_id:string) =>{
+    setDownloading(true);
+    let storedOrderFilterData =
+    typeof window !== "undefined" && localStorage.getItem("orderFilterData");
+    const storedOrderFilters = storedOrderFilterData && storedOrderFilterData !== undefined ? JSON.parse(storedOrderFilterData) : null;
+    axios.post(`${AGENT_ENDPOINT}/export-event-orders/${event_id}`, storedOrderFilters, {
+      headers: authHeader('GET'),
+      responseType: 'blob'
+    }).then((res)=>{
+      let url = window.URL.createObjectURL(res.data);
+      let a = document.createElement('a');
+      a.href = url;
+      a.download = 'Orders-' + moment().valueOf() + '.xlsx';
+      a.click();
+      setDownloading(false);
+    })
+    .catch((err)=>{
+      console.log(err);
+      setDownloading(false);
+    });
+  }
+
   return (
    <>
             <div className="top-landing-page shadow-none">
@@ -274,24 +300,24 @@ export default function Dashboard() {
                             <span>WAITING</span>
                           </div>
                         </div>
-                        <div className="col">
+                        {/* <div className="col">
                           <div className="ebs-ticket-information">
                             <strong>{allEventsStats !== null && allEventsStats.tickets_left  > 0 ? allEventsStats.tickets_left : 0}</strong>
                             <span>LEFT</span>
                           </div>
-                        </div>
+                        </div> */}
                         <div className="col">
                           <div className="ebs-ticket-information">
                             <strong>{allEventsStats !== null && allEventsStats.total_sold_tickets  > 0 ? allEventsStats.total_sold_tickets : 0}</strong>
                             <span>sold</span>
                           </div>
                         </div>
-                        <div className="col">
+                        {/* <div className="col">
                           <div className="ebs-ticket-information">
                             <strong>{allEventsStats !== null && allEventsStats.total_tickets  > 0 ? allEventsStats.total_tickets : 0}</strong>
                             <span>total</span>
                           </div>
-                        </div>
+                        </div> */}
                       </div>
                     </div>
                     <div className="col-6">
@@ -328,7 +354,7 @@ export default function Dashboard() {
                       <div style={{width: 140}}  className="ebs-table-box ebs-box-1"><strong>Organized by</strong></div>
                       <div style={{width: 140}}  className="ebs-table-box ebs-box-4"><strong>Tickets Waiting</strong></div>
                       <div className="ebs-table-box ebs-box-4"><strong>Sold Tickets</strong></div>
-                      <div className="ebs-table-box ebs-box-4"><strong>Total Tickets</strong></div>
+                      {/* <div className="ebs-table-box ebs-box-4"><strong>Total Tickets</strong></div> */}
                       <div className="ebs-table-box ebs-box-1"><strong>Revenue</strong></div>
                       <div className="ebs-table-box ebs-box-4" style={{paddingRight: 0}}><strong>Total Revenue</strong></div>
                       <div className="ebs-table-box ebs-box-1" style={{width: 80}}  />
@@ -346,7 +372,7 @@ export default function Dashboard() {
                               <div style={{width: 140}}  className="ebs-table-box ebs-box-1"><p>{event.owner}</p></div>
                               <div style={{width: 140}} className="ebs-table-box ebs-box-4"><p>{event?.reporting_data.waiting_tickets}</p></div>
                               <div className="ebs-table-box ebs-box-4"><p>{event?.reporting_data.sold_tickets}</p></div>
-                              <div className="ebs-table-box ebs-box-4"><p>{event?.reporting_data.total_tickets}</p></div>
+                              {/* <div className="ebs-table-box ebs-box-4"><p>{event?.reporting_data.total_tickets}</p></div> */}
                               <div className="ebs-table-box ebs-box-1" ><p>{event?.reporting_data.total_range_revenue_text}</p></div>
                               <div className="ebs-table-box ebs-box-4" style={{paddingRight: 0}}><p>{event?.reporting_data.total_revenue_text}</p></div>
                               <div style={{width: 80}} className="ebs-table-box ebs-box-1 d-flex justify-content-end">
@@ -358,7 +384,7 @@ export default function Dashboard() {
                                       </button>
                                       <div style={{minWidth: 130}} className="ebs-dropdown-menu">
                                         <Link href={'/manage/events/'+event.id +'/orders'} className="dropdown-item">View details</Link>
-                                        <button className="dropdown-item">Export orders</button>
+                                        <button className="dropdown-item" onClick={(e)=>{ exportEventOrders(event.id) }}>Export orders</button>
                                       </div>
                                     </div>
                                   </li>
@@ -396,6 +422,8 @@ export default function Dashboard() {
                   </div>
                 </div>
               </div>
+      {downloading ? <FullPageLoader className={''} fixed={''}/> : null}
+
    </>
   )
 }
