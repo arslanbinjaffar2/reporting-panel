@@ -122,7 +122,7 @@ export default function RootLayout({ children}: { children: React.ReactNode }) {
     </header> 
     <main className="main-section" role="main">
         <div className="container">
-            <div style={{borderRadius: '0 0 8px 8px'}} className="wrapper-box">
+            <div style={{borderRadius: '8px'}} className="wrapper-box">
                 <div className="container-box main-landing-page" style={{position:'relative'}}>
                 <div className="top-landing-page">
                 <div className="row d-flex">

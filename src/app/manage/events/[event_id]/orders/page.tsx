@@ -36,7 +36,8 @@ const storedOrderFilters =
 export default function OrderListing({ params }: { params: { event_id: string } }) {
   const dispatch = useAppDispatch();
   const {event_orders, event_stats, totalPages, currentPage} = useAppSelector((state: RootState) => state.event);
-  
+  const [sortCol, setSortCol] = useState(storedOrderFilters!== null ? storedOrderFilters.sortCol : 'order_number');
+  const [sort, setSort] = useState(storedOrderFilters!== null ? storedOrderFilters.sort : 'desc');
   const [limit, setLimit] = useState(storedOrderFilters !== null ? storedOrderFilters.limit : 10);
   const [orderFilterData, setOrderFilterData] = useState(storedOrderFilters !== null ? storedOrderFilters : {
       field:'',
@@ -128,6 +129,16 @@ export default function OrderListing({ params }: { params: { event_id: string } 
     dispatch(userEventStatsAndOrders({event_id:params.event_id, ...orderFilterDataUpdate}));
   };
 
+  const handleSortChange = (sort:string, sortCol: string) => {
+    setSort(sort);
+    setSortCol(sortCol);
+    const orderFilterDataUpdate = orderFilterData;
+    orderFilterDataUpdate['sort'] = sort;
+    orderFilterDataUpdate['sort_col'] = sortCol;
+    setOrderFilterData(orderFilterDataUpdate);
+    savefiltersToLocalStorage(orderFilterDataUpdate);
+    dispatch(userEventStatsAndOrders({event_id:params.event_id, ...orderFilterDataUpdate}));
+  };
 
 
 
@@ -238,15 +249,57 @@ export default function OrderListing({ params }: { params: { event_id: string } 
                   </div>
                   <div className="ebs-data-table ebs-order-table position-relative">
                     <div className="d-flex align-items-center ebs-table-header">
-                      <div className="ebs-table-box ebs-box-1"><strong>Order #</strong></div>
-                      <div className="ebs-table-box ebs-box-1"><strong>Date <i className="material-icons">unfold_more</i></strong></div>
-                      <div className="ebs-table-box ebs-box-2"><strong>Name</strong></div>
-                      <div className="ebs-table-box ebs-box-2"><strong>Email</strong></div>
-                      <div style={{width: 150}} className="ebs-table-box ebs-box-2"><strong>Job Title</strong></div>
-                      <div className="ebs-table-box ebs-box-4"><strong>Company</strong></div>
-                      <div className="ebs-table-box ebs-box-4"><strong>Amount</strong></div>
-                      <div className="ebs-table-box ebs-box-4"><strong>Sales Agent</strong></div>
-                      <div className="ebs-table-box ebs-box-4" style={{width: 150}}><strong>Payment STATus</strong></div>
+                      <div className="ebs-table-box ebs-box-1">
+                        <strong>
+                          Order #
+                          <span className='d-flex flex-column'>
+                            <em className={`material-symbols-outlined ${sort === 'asc' && sortCol === 'order_number' ? 'fw-bolder' : 'cursor-pointer'}`} onClick={()=>{handleSortChange('asc', 'order_number')}}>keyboard_arrow_up</em> 
+                            <em className={`material-symbols-outlined ${sort === 'desc' && sortCol === 'order_number' ? 'fw-bolder' : 'cursor-pointer'}`} onClick={()=>{handleSortChange('desc', 'order_number')}}>keyboard_arrow_down</em>
+                          </span>
+                        </strong>
+                      </div>
+                      <div className="ebs-table-box ebs-box-1"><strong>Date 
+                      <span className='d-flex flex-column'>
+                      <em className={`material-symbols-outlined ${sort === 'asc' && sortCol === 'order_date' ? 'fw-bolder' : 'cursor-pointer'}`} onClick={()=>{handleSortChange('asc', 'order_date')}}>keyboard_arrow_up</em> 
+                      <em className={`material-symbols-outlined ${sort === 'desc' && sortCol === 'order_date' ? 'fw-bolder' : 'cursor-pointer'}`} onClick={()=>{handleSortChange('desc', 'order_date')}}>keyboard_arrow_down</em>
+                    </span>
+                      </strong></div>
+                      <div className="ebs-table-box ebs-box-2"><strong>Name
+                      <span className='d-flex flex-column'>
+                      <em className={`material-symbols-outlined ${sort === 'asc' && sortCol === 'name' ? 'fw-bolder' : 'cursor-pointer'}`} onClick={()=>{handleSortChange('asc', 'name')}}>keyboard_arrow_up</em> 
+                      <em className={`material-symbols-outlined ${sort === 'desc' && sortCol === 'name' ? 'fw-bolder' : 'cursor-pointer'}`} onClick={()=>{handleSortChange('desc', 'name')}}>keyboard_arrow_down</em>
+                    </span>
+                      </strong></div>
+                      <div className="ebs-table-box ebs-box-2"><strong>Email
+                      <span className='d-flex flex-column'>
+                      <em className={`material-symbols-outlined ${sort === 'asc' && sortCol === 'email' ? 'fw-bolder' : 'cursor-pointer'}`} onClick={()=>{handleSortChange('asc', 'email')}}>keyboard_arrow_up</em> 
+                      <em className={`material-symbols-outlined ${sort === 'desc' && sortCol === 'email' ? 'fw-bolder' : 'cursor-pointer'}`} onClick={()=>{handleSortChange('desc', 'email')}}>keyboard_arrow_down</em>
+                    </span>
+                      </strong></div>
+                      <div style={{width: 150}} className="ebs-table-box ebs-box-2"><strong>Job Title
+                      <span className='d-flex flex-column'>
+                      <em className={`material-symbols-outlined ${sort === 'asc' && sortCol === 'job_title' ? 'fw-bolder' : 'cursor-pointer'}`} onClick={()=>{handleSortChange('asc', 'job_title')}}>keyboard_arrow_up</em> 
+                      <em className={`material-symbols-outlined ${sort === 'desc' && sortCol === 'job_title' ? 'fw-bolder' : 'cursor-pointer'}`} onClick={()=>{handleSortChange('desc', 'job_title')}}>keyboard_arrow_down</em>
+                    </span>  
+                      </strong></div>
+                      <div className="ebs-table-box ebs-box-4"><strong>Company
+                      <span className='d-flex flex-column'>
+                      <em className={`material-symbols-outlined ${sort === 'asc' && sortCol === 'company' ? 'fw-bolder' : 'cursor-pointer'}`} onClick={()=>{handleSortChange('asc', 'company')}}>keyboard_arrow_up</em> 
+                      <em className={`material-symbols-outlined ${sort === 'desc' && sortCol === 'company' ? 'fw-bolder' : 'cursor-pointer'}`} onClick={()=>{handleSortChange('desc', 'company')}}>keyboard_arrow_down</em>
+                    </span>
+                      </strong></div>
+                      <div className="ebs-table-box ebs-box-4"><strong>Amount
+                      <span className='d-flex flex-column'>
+                      <em className={`material-symbols-outlined ${sort === 'asc' && sortCol === 'amount' ? 'fw-bolder' : 'cursor-pointer'}`} onClick={()=>{handleSortChange('asc', 'amount')}}>keyboard_arrow_up</em> 
+                      <em className={`material-symbols-outlined ${sort === 'desc' && sortCol === 'amount' ? 'fw-bolder' : 'cursor-pointer'}`} onClick={()=>{handleSortChange('desc', 'amount')}}>keyboard_arrow_down</em>
+                    </span></strong></div>
+                      <div className="ebs-table-box ebs-box-4"><strong>Sales Agent
+                      <span className='d-flex flex-column'>
+                      <em className={`material-symbols-outlined ${sort === 'asc' && sortCol === 'sales_agent' ? 'fw-bolder' : 'cursor-pointer'}`} onClick={()=>{handleSortChange('asc', 'sales_agent')}}>keyboard_arrow_up</em> 
+                      <em className={`material-symbols-outlined ${sort === 'desc' && sortCol === 'sales_agent' ? 'fw-bolder' : 'cursor-pointer'}`} onClick={()=>{handleSortChange('desc', 'sales_agent')}}>keyboard_arrow_down</em>
+                    </span>
+                      </strong></div>
+                      <div className="ebs-table-box ebs-box-4" style={{width: 150}}><strong>Payment Status</strong></div>
                     </div>
                     <div style={{minHeight:"calc(100vh - 720px)"}}>
                       {event_orders !== null ? event_orders.data.length > 0 ? event_orders.data.map((order:any,k:number) => 
@@ -282,8 +335,13 @@ export default function OrderListing({ params }: { params: { event_id: string } 
                         <div className="ebs-table-box ebs-box-4"><p>{order?.sales_agent_name}</p></div>
                         <div className="ebs-table-box ebs-box-4" style={{width: 150}}><p style={{fontWeight: 600, color: '#AB8D2E'}}>{order.is_payment_received == 1 ? 'Received' : 'Pending'}</p></div>
                       </div>) : (
-                        <div className='position-absolute w-100 h-100  text-center d-flex justify-content-center align-items-center' >
-                        <p className='fs-1 fst-italic'>No data available</p>
+                        <div style={{minHeight: '335px', backgroundColor: '#fff', borderRadius: '8px'}} className='d-flex align-items-center justify-content-center h-100 w-100'>
+                        <div className="text-center">
+                          <Image
+                              src={'/no_record_found.svg'} alt="" width="100" height="100"
+                          />
+                          <p className='pt-3 m-0'>No data available</p>
+                        </div>
                       </div>
                       ) : <div>
                       <Loader className={''} fixed={''}/> 
