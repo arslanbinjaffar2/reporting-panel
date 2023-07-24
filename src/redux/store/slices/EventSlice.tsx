@@ -33,6 +33,32 @@ export const userEventStatsAndOrders = createAsyncThunk(
     }
   }
 )
+export const userEventFormBasedStats = createAsyncThunk(
+  'users/EventFormBasedStats',
+  async (data:any , { signal, dispatch, rejectWithValue }) => {
+    const source = axios.CancelToken.source()
+    signal.addEventListener('abort', () => {
+      source.cancel()
+    })
+    try {
+      
+      const response = await axios.post(`${AGENT_EVENTS_ENDPOINT}/${data.event_id}/formBaseStats`,data, {
+        cancelToken: source.token,
+        headers: authHeader('GET'),
+      })
+      return response.data
+    } catch (err:any) {
+      if (!err.response) {
+        throw err
+      }
+      if(err.response.status !== 200){
+        handleErrorResponse(err.response.status, dispatch);
+      }
+        // Return the known error for future handling
+      return rejectWithValue(err.response.status);
+    }
+  }
+)
 
 
 // Define a type for the slice state
@@ -44,6 +70,7 @@ interface EventState {
   error:any,
   totalPages:number,
   currentPage:number,
+  form_stats:any,
 }
 
 
@@ -56,6 +83,7 @@ const initialState: EventState = {
   error:null,
   totalPages:0,
   currentPage:1,
+  form_stats:null,
 }
 
 export const eventSlice = createSlice({
@@ -100,6 +128,21 @@ export const eventSlice = createSlice({
       state.loading = false;
     }),
     builder.addCase(userEventStatsAndOrders.rejected, (state, action) => {
+      console.log("rejected", action.payload);
+      state.loading = false;
+    }),
+    builder.addCase(userEventFormBasedStats.pending, (state, action) => {
+      state.form_stats = null;
+    }),
+    builder.addCase(userEventFormBasedStats.fulfilled, (state, action) => {
+      let res = action.payload;
+      if(res.success){
+        state.form_stats = res.data;
+      }else{
+          state.error = res.message;
+      }
+    }),
+    builder.addCase(userEventFormBasedStats.rejected, (state, action) => {
       console.log("rejected", action.payload);
       state.loading = false;
     })

@@ -4,12 +4,13 @@ import Image from 'next/image'
 import Dropdown from '@/components/DropDown';
 import Pagination from '@/components/pagination';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks/hooks';
-import { userEventStatsAndOrders, clearAllState } from '@/redux/store/slices/EventSlice';
+import { userEventStatsAndOrders, clearAllState, userEventFormBasedStats } from '@/redux/store/slices/EventSlice';
 import { RootState } from '@/redux/store/store';
 import moment from 'moment';
 import { getSelectedLabel } from '@/helpers';
 import Loader from '@/components/Loader';
 import DateTime from '@/components/DateTimePicker';
+import TicketDetail from '@/components/TicketDetail';
 
 const rangeFilters = [
   { id: 'today', name: "Today" },
@@ -36,25 +37,30 @@ const storedOrderFilters =
 
 export default function OrderListing({ params }: { params: { event_id: string } }) {
   const dispatch = useAppDispatch();
-  const {event_orders, event_stats, totalPages, currentPage} = useAppSelector((state: RootState) => state.event);
+  const {event_orders, event_stats, totalPages, currentPage, form_stats, event} = useAppSelector((state: RootState) => state.event);
   const [sortCol, setSortCol] = useState(storedOrderFilters!== null ? storedOrderFilters.sortCol : 'order_number');
   const [sort, setSort] = useState(storedOrderFilters!== null ? storedOrderFilters.sort : 'desc');
   const [showCustomRange, setShowCustomRange] = useState(storedOrderFilters !== null && storedOrderFilters.range === 'custom' ? true : false);
   const [limit, setLimit] = useState(storedOrderFilters !== null ? storedOrderFilters.limit : 10);
+  const [toggle, setToggle] = useState(false)
   const [orderFilterData, setOrderFilterData] = useState(storedOrderFilters !== null ? storedOrderFilters : {
       field:'',
       range:'',
       start_date:'',
       end_date:'',
       searchText:'',
+      sort:'order_number',
+      sort_col:'desc',
       limit:10,
       page:1,
   });
 
   useEffect(() => {
     const promise1 = dispatch(userEventStatsAndOrders({event_id:params.event_id, ...orderFilterData}));
+    const promise2 = dispatch(userEventFormBasedStats({event_id:params.event_id, ...orderFilterData}));
     return () =>{
         promise1.abort();
+        promise2.abort();
         dispatch(clearAllState());
     }
   }, []);
@@ -171,7 +177,9 @@ export default function OrderListing({ params }: { params: { event_id: string } 
     }
   };
 
-
+  const handlePopup = (e:any) => {
+    setToggle(false);
+  }
 
   return (
     <>
@@ -205,7 +213,11 @@ export default function OrderListing({ params }: { params: { event_id: string } 
                   <div className="row d-flex">
                     <div className="col-6">
                       <div className="row">
-                        
+                        {event?.registration_form_id === 1 && <div className="col">
+                          <div className="ebs-ticket-information ebs-bg-light">
+                              <button onClick={() => setToggle(true)} className='btn'><em className="material-symbols-outlined">local_activity</em></button>
+                          </div>
+                        </div>}
                         {event_stats !== null && event_stats?.event_stats?.total_tickets != 0 ? <div className="col">
                           <div className="ebs-ticket-information ebs-bg-light">
                             <strong>{event_stats?.event_tickets_left}</strong>
@@ -251,6 +263,7 @@ export default function OrderListing({ params }: { params: { event_id: string } 
                     </div>
                   </div>
                 </div>
+                {toggle && <TicketDetail handleClose={handlePopup} event_id={params.event_id} form_stats={form_stats} />}
                 <div className="ebs-order-list-section">
                   <div className="ebs-order-header">
                     <h4>Orders List</h4>
