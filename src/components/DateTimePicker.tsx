@@ -38,7 +38,7 @@ const MyDTPicker: FC<any> = (props: Props): ReactElement => {
   const renderInput = (props: any) => {
     return (
       <div className="DayPickerInput">
-        <label className={`label-input ${props.timeOnly ? 'ebs-time-icon' : ''}`}>
+        <label className={`label-input  ebs-time-icon`}>
           <span>{props.placeholder}{props.required && <em className="req">*</em>}</span>
           <input readOnly {...props} placeholder=' ' />
         </label>
@@ -46,7 +46,7 @@ const MyDTPicker: FC<any> = (props: Props): ReactElement => {
     );
   }
 
-  return <Datetime locale={props?.locale !== undefined ? props?.locale : 'en'} initialValue={props.initialValue} ref={textInput} renderView={(mode, renderDefault) => renderView(mode, renderDefault, props.showtime,props.showdate)} initialViewMode={props.showdate ? 'days' : 'time'} closeOnSelect={props.showtime ? false : true} onChange={props.onChange} value={props.value} timeFormat={props.showtime} dateFormat={props.showdate} inputProps={{ placeholder: props.placeholder, required: props.required, timeOnly: props.showtime && !props.showdate }} renderInput={renderInput} />;
+  return <Datetime locale={props?.locale !== undefined ? props?.locale : 'en'} initialValue={props.initialValue} ref={textInput} renderView={(mode, renderDefault) => renderView(mode, renderDefault, props.showtime,props.showdate)} initialViewMode={props.showdate ? 'days' : 'time'} closeOnSelect={props.showtime ? false : true} onChange={props.onChange} value={props.value} timeFormat={props.showtime} dateFormat={props.showdate} inputProps={{ placeholder: props.placeholder, required: props.required }} renderInput={renderInput} />;
 };
 
 type DateTimeProps = {
