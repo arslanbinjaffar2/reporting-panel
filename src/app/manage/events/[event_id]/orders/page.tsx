@@ -9,6 +9,7 @@ import { RootState } from '@/redux/store/store';
 import moment from 'moment';
 import { getSelectedLabel } from '@/helpers';
 import Loader from '@/components/Loader';
+import DateTime from '@/components/DateTimePicker';
 
 const rangeFilters = [
   { id: 'today', name: "Today" },
@@ -38,6 +39,7 @@ export default function OrderListing({ params }: { params: { event_id: string } 
   const {event_orders, event_stats, totalPages, currentPage} = useAppSelector((state: RootState) => state.event);
   const [sortCol, setSortCol] = useState(storedOrderFilters!== null ? storedOrderFilters.sortCol : 'order_number');
   const [sort, setSort] = useState(storedOrderFilters!== null ? storedOrderFilters.sort : 'desc');
+  const [showCustomRange, setShowCustomRange] = useState(storedOrderFilters !== null && storedOrderFilters.range === 'custom' ? true : false);
   const [limit, setLimit] = useState(storedOrderFilters !== null ? storedOrderFilters.limit : 10);
   const [orderFilterData, setOrderFilterData] = useState(storedOrderFilters !== null ? storedOrderFilters : {
       field:'',
@@ -96,9 +98,18 @@ export default function OrderListing({ params }: { params: { event_id: string } 
     const orderFilterDataUpdate = orderFilterData;
     orderFilterDataUpdate['range'] = e.value;
     orderFilterDataUpdate['page'] = 1;
+    if(e.value !== 'custom'){
+      orderFilterDataUpdate['start_date'] = '';
+      orderFilterDataUpdate['end_date'] = '';
+    }
     setOrderFilterData(orderFilterDataUpdate);
     savefiltersToLocalStorage(orderFilterDataUpdate);
-    dispatch(userEventStatsAndOrders({event_id:params.event_id, ...orderFilterDataUpdate}));
+    if(e.value !== 'custom'){
+      setShowCustomRange(false);
+      dispatch(userEventStatsAndOrders({event_id:params.event_id, ...orderFilterDataUpdate}));
+    }else{
+        setShowCustomRange(true);
+    }
   }
   
   const handleFieldFilter = (e:any) => {
@@ -138,6 +149,26 @@ export default function OrderListing({ params }: { params: { event_id: string } 
     setOrderFilterData(orderFilterDataUpdate);
     savefiltersToLocalStorage(orderFilterDataUpdate);
     dispatch(userEventStatsAndOrders({event_id:params.event_id, ...orderFilterDataUpdate}));
+  };
+
+  const handleStartDateChange = (date: any) => {
+    const orderFilterDataUpdate = orderFilterData;
+    orderFilterDataUpdate['start_date'] = date;
+    setOrderFilterData(orderFilterDataUpdate);
+    savefiltersToLocalStorage(orderFilterDataUpdate);
+    if(orderFilterDataUpdate.end_date !== ''){
+      dispatch(userEventStatsAndOrders({event_id:params.event_id, ...orderFilterDataUpdate}));
+    }
+  };
+  
+  const handleEndDateChange = (date: any) => {
+    const orderFilterDataUpdate = orderFilterData;
+    orderFilterDataUpdate['end_date'] = date;
+    setOrderFilterData(orderFilterDataUpdate);
+    savefiltersToLocalStorage(orderFilterDataUpdate);
+    if(orderFilterDataUpdate.start_date !== ''){
+      dispatch(userEventStatsAndOrders({event_id:params.event_id, ...orderFilterDataUpdate}));
+    }
   };
 
 
@@ -244,8 +275,33 @@ export default function OrderListing({ params }: { params: { event_id: string } 
                             selectedlabel={getSelectedLabel(rangeFilters,orderFilterData.range)}
                           />
                         </label>
+                        
                       </div>
                     </div>
+                    {showCustomRange && <div className='row mt-3'>
+                      <div className='col-4 d-flex'>
+                      
+                          <label className="label-select-alt m-0 w-100">
+                            <DateTime
+                              showtime={false}
+                              showdate={'MM/DD/YYYY'}
+                              label="Start date"
+                              value={orderFilterData.start_date}
+                              onChange={handleStartDateChange}
+                            />
+                          </label>
+                          <label className="label-select-alt m-0 w-100">
+                          <DateTime
+                            showtime={false}
+                            showdate={'MM/DD/YYYY'}
+                            label="End date"
+                            value={orderFilterData.end_date}
+                            onChange={handleEndDateChange}
+                          />
+                          </label>
+                        
+                      </div>
+                    </div>}
                   </div>
                   <div className="ebs-data-table ebs-order-table position-relative">
                     <div className="d-flex align-items-center ebs-table-header">
@@ -360,7 +416,7 @@ export default function OrderListing({ params }: { params: { event_id: string } 
                           {limit}<i className="material-symbols-outlined">expand_more</i>
                         </button>
                         <div className="ebs-dropdown-menu">
-                          {[2, 10, 20, 50, 100, 500].map((l)=>(<button key={l} className="dropdown-item" onClick={(e)=> { handleLimitChange(e, l) }}>{l}</button>))}
+                          {[10, 20, 50, 100, 500].map((l)=>(<button key={l} className="dropdown-item" onClick={(e)=> { handleLimitChange(e, l) }}>{l}</button>))}
                         </div>
                       </div>
                     </div>

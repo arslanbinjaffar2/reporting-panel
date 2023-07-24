@@ -14,6 +14,7 @@ import Link from 'next/link';
 import axios from 'axios';
 import { AGENT_ENDPOINT } from '@/constants/endpoints';
 import FullPageLoader from '@/components/FullPageLoader';
+import DateTime from '@/components/DateTimePicker';
 
 const eventFilters = [
   {id: 'active_future', name: "Active and future events"},
@@ -47,7 +48,7 @@ const storedEventFilters =
 export default function Dashboard() {
   const dispatch = useAppDispatch();
   const {events, loading, totalPages, currentPage, event_countries, office_countries, currencies, allEventsStats, totalevents} = useAppSelector((state: RootState) => state.events);
-  const [searchText, setSearchText] = useState('')
+  const [showCustomRange, setShowCustomRange] = useState(storedEventFilters !== null && storedEventFilters.range === 'custom' ? true : false);
   const [limit, setLimit] = useState(storedEventFilters !== null ? storedEventFilters.limit : 10);
   const [downloading, setDownloading] = useState(false);
   const [eventFilterData, setEventFilterData] = useState(storedEventFilters !== null ? storedEventFilters : {
@@ -157,9 +158,18 @@ export default function Dashboard() {
     const eventFilterDataUpdate = eventFilterData;
     eventFilterDataUpdate['range'] = e.value;
     eventFilterDataUpdate['page'] = 1;
+    if(e.value !== 'custom'){
+      eventFilterDataUpdate['start_date'] = '';
+      eventFilterDataUpdate['end_date'] = '';
+    }
     setEventFilterData(eventFilterDataUpdate);
     savefiltersToLocalStorage(eventFilterDataUpdate);
-    dispatch(userEventsStats(eventFilterDataUpdate));
+    if(e.value !== 'custom'){
+      setShowCustomRange(false);
+      dispatch(userEventsStats(eventFilterDataUpdate));
+    }else{
+        setShowCustomRange(true);
+    }
   }
   const handleLimitChange = (e:any, value:any) => {
     setLimit(value); 
@@ -178,6 +188,26 @@ export default function Dashboard() {
     setEventFilterData(eventFilterDataUpdate);
     savefiltersToLocalStorage(eventFilterDataUpdate);
     dispatch(userEventsStats(eventFilterDataUpdate));
+  };
+  
+  const handleStartDateChange = (date: any) => {
+    const eventFilterDataUpdate = eventFilterData;
+    eventFilterDataUpdate['start_date'] = date;
+    setEventFilterData(eventFilterDataUpdate);
+    savefiltersToLocalStorage(eventFilterDataUpdate);
+    if(eventFilterDataUpdate.end_date !== ''){
+      dispatch(userEventsStats(eventFilterDataUpdate));
+    }
+  };
+  
+  const handleEndDateChange = (date: any) => {
+    const eventFilterDataUpdate = eventFilterData;
+    eventFilterDataUpdate['end_date'] = date;
+    setEventFilterData(eventFilterDataUpdate);
+    savefiltersToLocalStorage(eventFilterDataUpdate);
+    if(eventFilterDataUpdate.start_date !== ''){
+      dispatch(userEventsStats(eventFilterDataUpdate));
+    }
   };
 
   const exportEventOrders = (event_id:string) =>{
@@ -286,7 +316,32 @@ export default function Dashboard() {
                     />
                   </label>
                 </div>
+                
               </div>
+              {showCustomRange && <div className='row  d-flex ebs-search-grid'> 
+              <div className="col-2">
+                  <label className="label-select-alt m-0 w-100">
+                  <DateTime
+                    showtime={false}
+                    showdate={'MM/DD/YYYY'}
+                    label="Start date"
+                    value={eventFilterData.start_date}
+                    onChange={handleStartDateChange}
+                  />
+                  </label>
+                </div>
+              <div className="col-2">
+                  <label className="label-select-alt m-0 w-100">
+                  <DateTime
+                    showtime={false}
+                    showdate={'MM/DD/YYYY'}
+                    label="End date"
+                    value={eventFilterData.end_date}
+                    onChange={handleEndDateChange}
+                  />
+                  </label>
+                </div>
+              </div>}
             </div>
             <div className="main-data-table">
                 <div className="ebs-ticket-section">
@@ -420,7 +475,7 @@ export default function Dashboard() {
                           {limit} <i className="material-symbols-outlined">expand_more</i>
                         </button>
                         <div className="ebs-dropdown-menu">
-                          {[2, 10, 20, 50, 100, 500].map((i, k)=>(
+                          {[ 10, 20, 50, 100, 500].map((i, k)=>(
                             <button key={k} className="dropdown-item" onClick={(e)=> { handleLimitChange(e, i) }}>{i}</button>
                           ))}
                         </div>
