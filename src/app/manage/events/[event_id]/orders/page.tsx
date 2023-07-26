@@ -368,7 +368,12 @@ export default function OrderListing({ params }: { params: { event_id: string } 
                       <em className={`material-symbols-outlined ${sort === 'desc' && sortCol === 'sales_agent' ? 'fw-bolder' : 'cursor-pointer'}`} onClick={()=>{handleSortChange('desc', 'sales_agent')}}>keyboard_arrow_down</em>
                     </span>
                       </strong></div>
-                      <div className="ebs-table-box ebs-box-4" style={{width: 150}}><strong>Payment Status</strong></div>
+                      <div className="ebs-table-box ebs-box-4" style={{width: 150}}><strong>Payment Status
+                      <span className='d-flex flex-column'>
+                      <em className={`material-symbols-outlined ${sort === 'asc' && sortCol === 'payment_status' ? 'fw-bolder' : 'cursor-pointer'}`} onClick={()=>{handleSortChange('asc', 'payment_status')}}>keyboard_arrow_up</em> 
+                      <em className={`material-symbols-outlined ${sort === 'desc' && sortCol === 'payment_status' ? 'fw-bolder' : 'cursor-pointer'}`} onClick={()=>{handleSortChange('desc', 'payment_status')}}>keyboard_arrow_down</em>
+                    </span>
+                        </strong></div>
                     </div>
                     <div style={{minHeight:"calc(100vh - 720px)"}}>
                       {event_orders !== null ? event_orders.data.length > 0 ? event_orders.data.map((order:any,k:number) => 
