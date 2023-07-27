@@ -407,7 +407,7 @@ export default function OrderListing({ params }: { params: { event_id: string } 
                         <div className="ebs-table-box ebs-box-4"><p>{order?.order_attendee?.detail?.company_name}</p></div>
                         <div className="ebs-table-box ebs-box-4"><p>{order?.reporting_panel_total_text}</p></div>
                         <div className="ebs-table-box ebs-box-4"><p>{order?.sales_agent_name}</p></div>
-                        <div className="ebs-table-box ebs-box-4" style={{width: 150}}><p style={{fontWeight: 600, color: '#AB8D2E'}}>{order.is_payment_received == 1 ? 'Received' : 'Pending'}</p></div>
+                        <div className="ebs-table-box ebs-box-4" style={{width: 150}}><p style={{fontWeight: 600, color: order.is_payment_received == 1 ? '#60A259' : '#AB8D2E'}}>{order.is_payment_received == 1 ? 'Received' : 'Pending'}</p></div>
                       </div>) : (
                         <div style={{minHeight: '335px', backgroundColor: '#fff', borderRadius: '8px'}} className='d-flex align-items-center justify-content-center h-100 w-100'>
                         <div className="text-center">
