@@ -13,7 +13,7 @@ import ErrorMessage from "@/components/alerts/ErrorMessage";
 const languages = [{ id: 1, name: "English" }, { id: 2, name: "Danish" }];
 
 
-export default function requestReset() {
+export default function requestReset({params:{locale}}:{params:{locale:string}}) {
     const dispatch = useAppDispatch();
     const router = useRouter();
     const {loading, redirect, error, errors} = useAppSelector((state: RootState) => state.authUser);
@@ -34,7 +34,7 @@ export default function requestReset() {
       if(redirect !== null) {
         dispatch(setRedirect(null));
         dispatch(setLoading(null));
-        router.push(redirect);
+        router.push(`/${locale}/${redirect}`);
       }
   }, [redirect]);
 

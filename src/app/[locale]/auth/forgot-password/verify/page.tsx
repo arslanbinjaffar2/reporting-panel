@@ -7,7 +7,7 @@ import { RootState } from "@/redux/store/store";
 import { forgotPasswordVerify, setForgetPasswordToken, setLoading, setRedirect } from "@/redux/store/slices/AuthSlice";
 import ErrorMessage from "@/components/alerts/ErrorMessage";
 
-export default function verifyResetCode() {
+export default function verifyResetCode({params:{locale}}:{params:{locale:string}}) {
     const dispatch = useAppDispatch();
     const router = useRouter();
     const {loading, redirect, error, errors, forgetPasswordEmail } = useAppSelector((state: RootState) => state.authUser);
@@ -18,7 +18,7 @@ export default function verifyResetCode() {
         if(forgetPasswordEmail !== null){
             setRender(true);
         }else{
-            router.push('/auth/forgot-password/request');
+            router.push(`/${locale}/auth/forgot-password/request`);
         }
     }, [])
 
@@ -26,7 +26,7 @@ export default function verifyResetCode() {
         if(redirect !== null) {
             dispatch(setRedirect(null));
             dispatch(setLoading(null));
-            router.push(redirect);
+            router.push(`/${locale}/${redirect}`);
         }
     }, [redirect]);
 

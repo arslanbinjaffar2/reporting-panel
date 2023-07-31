@@ -7,15 +7,14 @@ export const metadata = {
   description: 'Reporting portal - Eventbuizz',
 }
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode
-}) {
+export default async function RootLayout({ children, params: {locale}}: { children: React.ReactNode, params: {locale:string} }) {
+  
   return (
-    <html lang="en">
+    <html>
       <body>
-        <Providers>{children}</Providers>
+          <Providers>
+            {children}
+          </Providers>
       </body>
     </html>
   )

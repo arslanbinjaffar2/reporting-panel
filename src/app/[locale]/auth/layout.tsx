@@ -1,8 +1,12 @@
+'use client';
 import '@/assets/css/app.scss'
 import Image from 'next/image';
 import Loading from './loading';
+import { useTransition } from 'react';
+import { usePathname, useRouter } from 'next/navigation';
+import { useLocale, useTranslations } from 'next-intl';
 
-const languages = [{ id: 1, name: "English" }, { id: 2, name: "Danish" }];
+const languages = [{ id: 1, name: "English",  locale:'en' }, { id: 2, name: "Danish",  locale:'da' }];
 
 export const metadata = {
   title: 'Reporting portal - Eventbuizz',
@@ -10,6 +14,22 @@ export const metadata = {
 }
 
 export default function RootLayout({ children}: { children: React.ReactNode }) {
+  
+  const t = useTranslations('auth_layout');
+    const [isPending, startTransition] = useTransition();
+    const router = useRouter();
+    const pathname = usePathname();
+    const locale = useLocale();
+    function onLanguageChange(value:string) {
+        console.log(`/${value}${pathname}`, 'selectchange');
+
+        let replaceUrl = value === 'en' ? pathname.replace('/da', '/en') :  `/${value}${pathname}`;
+
+        startTransition(() => {
+          router.replace(replaceUrl);
+        });
+    }
+  
   return (
    
 <div className="signup-wrapper">
@@ -22,13 +42,13 @@ export default function RootLayout({ children}: { children: React.ReactNode }) {
                   <div className="left-signup">
                     <Image src={'/img/logo.svg'} alt="" width="150" height="32" className='logos' />
                     <div className="text-block">
-                      <h4>Welcome to Reporting Portal</h4>
-                      <p>Streamline your reporting process with ease and efficiency</p>
+                      <h4>{t('title')}</h4>
+                      <p>{t('subtitle')}</p>
                       <ul>
-                        <li>Customization following easy steps</li>
-                        <li>Sales forecasting and analytics</li>
-                        <li>User management features, including access controls and user authentication.</li>
-                        <li>Feel safe with our step by step navigation</li>
+                          <li>{t('feature_one')}</li>
+                          <li>{t('feature_two')}</li>
+                          <li>{t('feature_three')}</li>
+                          <li>{t('feature_four')}</li>
                       </ul>
                     </div>
                     <Image src={'/img/illustration.png'} alt="" width="300" height="220" className='illustration' />
@@ -46,7 +66,7 @@ export default function RootLayout({ children}: { children: React.ReactNode }) {
                               {languages.map((value, key) => {
                                   return (
                                       <li key={key}>
-                                          <a>{value.name}</a>
+                                          <a onClick={(e)=>{e.preventDefault(); onLanguageChange(value.locale)}} >{value.name}</a>
                                       </li>
                                   );
                               })}

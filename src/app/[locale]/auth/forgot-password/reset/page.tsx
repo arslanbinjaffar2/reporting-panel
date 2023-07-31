@@ -7,7 +7,7 @@ import { RootState } from "@/redux/store/store";
 import { forgotPasswordReset, setLoading, setRedirect } from "@/redux/store/slices/AuthSlice";
 
 
-export default function Login() {
+export default function Login({params:{locale}}:{params:{locale:string}}) {
   const [password, setPassword] = useState('');
   const [passwordConfirmation, setPasswordConfirmation] = useState('');
   const _password = useRef<any>(null);
@@ -22,7 +22,7 @@ export default function Login() {
         if(forgetPasswordEmail !== null){
             setRender(true);
         }else{
-            router.push('/auth/forgot-password/request');
+            router.push(`/${locale}/auth/forgot-password/request`);
         }
     }, [])
 
@@ -32,7 +32,7 @@ export default function Login() {
         if(redirect !== null) {
             dispatch(setRedirect(null));
             dispatch(setLoading(null));
-            router.push(redirect);
+            router.push(`/${locale}/${redirect}`);
         }
     }, [redirect]);
 

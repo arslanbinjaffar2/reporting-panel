@@ -19,6 +19,7 @@
     "eslint-config-next": "13.2.3",
     "moment": "^2.29.4",
     "next": "13.2.3",
+    "next-intl": "^2.19.0",
     "react": "18.2.0",
     "react-countdown": "^2.3.5",
     "react-datetime": "^3.2.0",

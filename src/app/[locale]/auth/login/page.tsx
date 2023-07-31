@@ -8,10 +8,12 @@ import { loginUser } from "@/redux/store/slices/AuthSlice";
 import ErrorMessage from "@/components/alerts/ErrorMessage";
 import SuccessAlert from "@/components/alerts/SuccessMessage";
 import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 
-const languages = [{ id: 1, name: "English" }, { id: 2, name: "Danish" }];
 
-export default function Login() {
+export default function Login({params:{locale}}:{params:{locale:string}}) {
+  const t = useTranslations('auth_login');
+    const et = useTranslations('messages');
   const dispatch = useAppDispatch();
   const router = useRouter();
   const _email = useRef<any>(null);
@@ -35,7 +37,7 @@ export default function Login() {
     setEmail(_email.current?.value || '')
     setPassword(_password.current?.value || '')
     if(user && user.access_token) {
-        router.push('/manage/events');
+        router.push(`/${locale}/manage/events`);
     }
   }, [user]);
 
@@ -45,42 +47,42 @@ export default function Login() {
   } 
   return (
     <>
-        <h2>Sign in</h2>
+        <h2>{t('page_title')}</h2>
         <p></p>
         {errors && errors.length > 0 && <ErrorMessage 
                     icon= {"info"}
-                    title= {"Invalid data"}
+                    title= {et('errors.invalid_data')}
                     errors= {errors}
                 />}
                 {error && <ErrorMessage 
                     icon= {"info"}
-                    title= {"Sorry! Something went wrong"}
+                    title= {et('errors.someting_went_wrong')}
                     error= {error}
                 />}
                 {successMessage && <SuccessAlert 
                     icon= {"check"}
-                    title= {"Success"}
+                    title= {et('password_changed')}
                     message= {successMessage}
                 />}
         <form onSubmit={handleSubmit}>
         <div className="form-area-signup">
             <div className='form-row-box'>
                 <input ref={_email} className={email ? 'ieHack': ''} value={email} type="email" name="email" id="email" onChange={(e) => setEmail(e.target.value)}  required/>
-                <label className="title">Enter your email</label>
+                <label className="title">{t('email_label')}</label>
             </div>
             <div className='form-row-box'>
                 <span className="icon-eye">
                   <Image onClick={handleShowPass} src={`/img/${passwordType ? 'close-eye':'icon-eye'}.svg`} width="17" height="17" alt="" />
                 </span>
                 <input ref={_password} className={password ? 'ieHack': ''} type={passwordType ? 'password' : 'text'} value={password} id="password" onChange={(e) => setPassword(e.target.value)} required />
-                <label className="title">Password</label>
+                <label className="title">{t('password_label')}</label>
             </div>
             <div className="login-others clearfix">
               <label onClick={() => setRemember(!remember)} ><i className={`material-icons`}>{remember ? 'check_box' : 'check_box_outline_blank'}</i>Remember me</label>
-                <Link href="/auth/forgot-password/request">Forgot Password?</Link>
+                <Link href={`/${locale}/auth/forgot-password/request`}>{t('forgot_password_label')}</Link>
             </div>
             <div className="form-row-box button-panel">
-                <button className="btn btn-primary" disabled={loading}>{loading ? 'Processing...' :"Sign in"}</button>
+                <button className="btn btn-primary" disabled={loading}>{loading ? t('signin_button_processing_label') : t('signin_button_label')}</button>
             </div>
           </div>
         </form>
