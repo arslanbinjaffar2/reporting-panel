@@ -112,7 +112,7 @@ let authInfo =
 const initialUser =
     authInfo && authInfo !== undefined ? JSON.parse(authInfo) : null;
 
-console.log(authInfo);
+// console.log(authInfo);
 
 // Define the initial state using that type
 const initialState: AuthState = {
