@@ -277,6 +277,7 @@ export default function Dashboard({params:{locale}}:{params:{locale:string}}) {
                       selected={eventFilterData.sort_by} 
                       onChange={handleSortByFilter}
                       selectedlabel={getSelectedLabel(sortFilters,eventFilterData.sort_by)}
+                      searchLabel={t('search')}
                       listitems={sortFilters}
                     />
                   </label>
@@ -288,6 +289,8 @@ export default function Dashboard({params:{locale}}:{params:{locale:string}}) {
                       selected={eventFilterData.event_action} 
                       onChange={handleEventActionFilter}
                       selectedlabel={getSelectedLabel(eventFilters,eventFilterData.event_action)}
+                      searchLabel={t('search')}
+
                       listitems={eventFilters}
                     />
                   </label>
@@ -296,10 +299,11 @@ export default function Dashboard({params:{locale}}:{params:{locale:string}}) {
                   <div className="col">
                     <label className="label-select-alt m-0 w-100">
                       <Dropdown 
-                        label="Select country"
+                        label={t('country_filter_label')}
                         listitems={[{ id: '', name: t('country_filter_label') },...event_countries]}
                         selected={eventFilterData.country} 
                         onChange={handleCountryFilter}
+                      searchLabel={t('search')}
                         selectedlabel={getSelectedLabel(event_countries,eventFilterData.country)}
                       />
                     </label>
@@ -309,10 +313,11 @@ export default function Dashboard({params:{locale}}:{params:{locale:string}}) {
                   <div className="col">
                   <label className="label-select-alt m-0 w-100">
                     <Dropdown 
-                      label="Select Office"
+                      label={t('office_filter_label')}
                       listitems={[{ id: '', name: t('office_filter_label') }, ...office_countries]}
                       selected={eventFilterData.office_country_id} 
                       onChange={handleOfficeCountryFilter}
+                      searchLabel={t('search')}
                       selectedlabel={getSelectedLabel(office_countries,eventFilterData.office_country_id)}
                     />
                   </label>
@@ -326,6 +331,7 @@ export default function Dashboard({params:{locale}}:{params:{locale:string}}) {
                       listitems={currencies}
                       selected={eventFilterData.currency} 
                       onChange={handleCurrencyFilter}
+                      searchLabel={t('search')}
                       selectedlabel={getSelectedLabel(currencies,eventFilterData.currency)}
                     />
                   </label>
@@ -338,6 +344,7 @@ export default function Dashboard({params:{locale}}:{params:{locale:string}}) {
                       listitems={rangeFilters}
                       selected={eventFilterData.range} 
                       onChange={handleRangeFilter}
+                      searchLabel={t('search')}
                       selectedlabel={getSelectedLabel(rangeFilters,eventFilterData.range)}
                     />
                   </label>

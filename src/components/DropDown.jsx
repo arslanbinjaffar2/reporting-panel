@@ -20,7 +20,7 @@ class DropDown extends React.Component {
     }
   }
   render() {
-    const { label, selected, required, onChange, className, selectedlabel } = this.props;
+    const { label, selected, required, onChange, className, selectedlabel, searchLabel } = this.props;
     let {listitems } = this.props;
   
     const { isOpen } = this.state;
@@ -155,7 +155,7 @@ class DropDown extends React.Component {
                 onChange={onChange}
                 options={options}
                 promptTextCreator={false}
-                placeholder="Search"
+                placeholder={searchLabel ? searchLabel : "Search"}
                 styles={style}
                 controlShouldRenderValue={false}
                 isClearable={false}
@@ -222,7 +222,7 @@ class DropDown extends React.Component {
                 onChange={onChange}
                 options={options}
                 promptTextCreator={false}
-                placeholder="Search"
+                placeholder={searchLabel ? searchLabel : "Search"}
                 styles={style}
                 controlShouldRenderValue={isMulti ? true : false}
                 hideSelectedOptions={false}

@@ -44,8 +44,8 @@
     },
     "manage-events-page":{
         "no_data_available":"Ingen data er tilgængelig",
-        "view_details":"View details",
-        "export_orders":"Export orders",
+        "view_details":"Se detaljer",
+        "export_orders":"Eksport ordrer",
         "event_table":{
             "event_logo":"Event Logo",
             "event_name":"Event navn ", 
@@ -96,8 +96,10 @@
         "tickets_vat_label":"Alle priser er eksklusiv moms."
     },
     "manage-orders-page":{
-        "tickets_label":"Tickets",
+        "tickets_label":"Billetter",
         "no_data_available":"Ingen data er tilgængelig",
+        "range_filter_label":"Vælg Område",
+        "field_filter_label":"Vælg felt",
         "stats_sold_tickets":"solgt",
         "stats_total_revenue":"Total Indtægter",
         "stats_revenue":"Indtægter",
@@ -120,9 +122,11 @@
             "attendee_email":"Email",
             "company":"Virksomhed",
             "job_title":"Jobtitel",
-            "amount":"Amount",
-            "sales_agent":"Sales Agent",
-            "payment_status":"Betalingsstatus"
+            "amount":"Beløb",
+            "sales_agent":"Sælger",
+            "payment_status":"Betalingsstatus",
+            "payment_received":"Modtaget",
+            "payment_pending":"Verserende"
         },
         "range_filters":{
             "today": "I dag",

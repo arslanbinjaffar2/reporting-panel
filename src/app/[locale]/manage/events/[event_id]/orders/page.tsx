@@ -294,19 +294,21 @@ export default function OrderListing({ params }: { params: { locale:string, even
                         <input style={{ width: "410px" }} type="text" className="ebs-search-area" placeholder={t('search')} value={orderFilterData.searchText} onKeyUp={(e) => { e.key === 'Enter' ? handleSearchTextFilter(e): null}} onChange={(e)=>{setOrderFilterData((prev:any)=> ({...prev, searchText:e.target.value}))}} />
                         <label style={{ width: "210px" }} className="label-select-alt">
                           <Dropdown
-                            label="Select field"
+                            label={t('field_filter_label')}
                             listitems={fieldFilters}
                             selected={orderFilterData.field} 
                             onChange={handleFieldFilter}
+                            searchLabel={t('search')}
                             selectedlabel={getSelectedLabel(fieldFilters,orderFilterData.field)}
                           />
                         </label>
                         <label style={{ width: "210px" }} className="label-select-alt">
                           <Dropdown
-                            label="Select Range"
+                            label={t('range_filter_label')}
                             listitems={rangeFilters}
                             selected={orderFilterData.range} 
                             onChange={handleRangeFilter}
+                            searchLabel={t('search')}
                             selectedlabel={getSelectedLabel(rangeFilters,orderFilterData.range)}
                           />
                         </label>
