@@ -2,8 +2,11 @@
 import moment from 'moment';
 import React, { useEffect, useState } from 'react'
 import Countdown from './CountDownSmall';
+import { useTranslations } from 'next-intl';
 
 const TicketDetail = ({handleClose, form_stats }: any) => {
+  const t = useTranslations('manage-orders-page');
+
   const _container = React.useRef<any>();
   const [searchQuery, setSearchQuery] = useState('');
   const [filteredFormStats, setFilteredFormStats] = useState(form_stats);
@@ -26,15 +29,15 @@ const TicketDetail = ({handleClose, form_stats }: any) => {
             <div className="modal-body">
               <div className="d-flex align-items-center">
                 <h3 className='d-flex align-items-center' style={{marginRight: 'auto'}}> <span className='material-symbols-outlined pr-2' onClick={() => handleClose('close')}>arrow_back</span>Tickets Detail</h3>
-                <input style={{marginRight: 0}} type="text" className="ebs-search-area" placeholder={'Search'} value={searchQuery} onChange={(e)=> setSearchQuery(e.target.value)} />
+                <input style={{marginRight: 0}} type="text" className="ebs-search-area" placeholder={t('search')} value={searchQuery} onChange={(e)=> setSearchQuery(e.target.value)} />
               </div>
               <div className="ebs-grid-ticket-wrapper">
                 <div className="d-flex ebs-grid-ticket-row ebs-grid-ticket-header">
-                  <div className="ebs-box-1"><strong>Form </strong></div>
-                  <div className="ebs-box-2"><strong>Tickets sold</strong></div>
-                  <div className="ebs-box-2"><strong>Tickets left</strong></div>
-                  <div className="ebs-box-2"><strong>Total tickets</strong></div>
-                  <div className="ebs-box-2 text-center"><strong>Time left</strong></div>
+                <div className="ebs-box-1"><strong>{t('tickets_detail_table.form')} </strong></div>
+                  <div className="ebs-box-2"><strong>{t('tickets_detail_table.tickets_sold')}</strong></div>
+                  <div className="ebs-box-2"><strong>{t('tickets_detail_table.tickets_left')}</strong></div>
+                  <div className="ebs-box-2"><strong>{t('tickets_detail_table.total_tickets')}</strong></div>
+                  <div className="ebs-box-2 text-center"><strong>{t('tickets_detail_table.time_left')}</strong></div>
                 </div>
                 <div style={{maxHeight: _container?.current?.offsetHeight - 300}} className="ebs-grid-ticket-scroll">
                   {filteredFormStats.length > 0 && filteredFormStats.map((item:any, i:any) => <div key={i} className="d-flex ebs-grid-ticket-row">
