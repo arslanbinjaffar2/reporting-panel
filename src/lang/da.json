@@ -40,7 +40,7 @@
     },
     "manage-events-layout":{
         "return_to_list_label":"Tillage til listen",
-        "export_orders":"EXPORT ORDERS"
+        "export_orders":"EKSPORT ORDRER"
     },
     "manage-events-page":{
         "no_data_available":"Ingen data er tilgængelig",
