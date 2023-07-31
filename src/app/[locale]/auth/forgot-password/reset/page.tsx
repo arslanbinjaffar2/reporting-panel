@@ -5,9 +5,13 @@ import { useAppDispatch, useAppSelector } from "@/redux/hooks/hooks";
 import { useRouter } from "next/navigation";
 import { RootState } from "@/redux/store/store";
 import { forgotPasswordReset, setLoading, setRedirect } from "@/redux/store/slices/AuthSlice";
+import { useTranslations } from "next-intl";
 
 
 export default function Login({params:{locale}}:{params:{locale:string}}) {
+  const t = useTranslations('auth_forgot_password_reset');
+  const et = useTranslations('messages');
+
   const [password, setPassword] = useState('');
   const [passwordConfirmation, setPasswordConfirmation] = useState('');
   const _password = useRef<any>(null);
@@ -45,20 +49,20 @@ export default function Login({params:{locale}}:{params:{locale:string}}) {
     }
   return (
     <>
-      <h2>Reset password</h2>
-      <p>Enter new password and confirm new password to reset password.</p>
+      <h2>{t('page_title')}</h2>
+      <p>{t('page_subtitle')}</p>
       <form role="" onSubmit={handleSubmit}>
           <div className="form-area-signup">
               <div className='form-row-box'>
                   <input ref={_password} className={password ? 'ieHack': ''} value={password} type="password" name="password" id="password" onChange={(e) => setPassword(e.target.value)} required />
-                  <label className="title">Enter new password</label>
+                  <label className="title">{t('new_password_label')}</label>
               </div>
               <div className='form-row-box'>
                   <input ref={_passwordConfirmation} className={passwordConfirmation ? 'ieHack': ''} value={passwordConfirmation} type="password" name="password_confirmation" id="password_confirmation" required onChange={(e) => setPasswordConfirmation(e.target.value)}  />
-                  <label className="title">Confirm new password</label>
+                  <label className="title">{t('confirm_password_label')}</label>
               </div>
               <div className="form-row-box button-panel">
-                  <button className="btn btn-primary" disabled={loading} type='submit'>{loading ? "Sending..." : "RESET PASSWORD"}</button>
+                  <button className="btn btn-primary" disabled={loading} type='submit'>{loading ? t('reset_button_reseting_label') : t('reset_button_label')}</button>
               </div>
           </div>
       </form>

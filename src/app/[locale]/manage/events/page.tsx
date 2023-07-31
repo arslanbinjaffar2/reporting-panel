@@ -1,10 +1,9 @@
 'use client'
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import Image from 'next/image'
 import Dropdown from '@/components/DropDown';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks/hooks';
 import { userEventsStats, userEventsFilters } from '@/redux/store/slices/EventsSlice';
-import { AsyncThunkAction, Dispatch, AnyAction } from '@reduxjs/toolkit';
 import { RootState } from '@/redux/store/store';
 import { authHeader, getSelectedLabel } from '@/helpers';
 import Pagination from '@/components/pagination';
@@ -15,29 +14,30 @@ import axios from 'axios';
 import { AGENT_ENDPOINT } from '@/constants/endpoints';
 import FullPageLoader from '@/components/FullPageLoader';
 import DateTime from '@/components/DateTimePicker';
+import { useTranslations } from 'next-intl';
 
-const eventFilters = [
-  {id: 'active_future', name: "Active and future events"},
-  {id: 'active', name: "Active events"},
-  {id: 'future', name: "Future events"},
-  {id: 'expired', name: "Expired events"},
-  {id: 'name', name: "All events"}
-];
-const sortFilters = [
-  {id: 'name', name: "Event name"},
-  {id: 'organizer_name', name: "Organizer name"},
-  {id: 'start_date', name: "Start date"},
-  {id: 'end_date', name: "End date"}
-];
-const rangeFilters = [
-  { id: 'today', name: "Today" },
-  { id: 'thisw', name: "This week" },
-  { id: 'prevw', name: "Previous week" },
-  { id: 'thism', name: "This month" },
-  { id: 'prevm', name: "Previous month" },
-  { id: 'custom', name: "Custom range" },
-  { id: '-1', name: "All stats" },
-];
+// const eventFilters = [
+//   {id: 'active_future', name: "Active and future events"},
+//   {id: 'active', name: "Active events"},
+//   {id: 'future', name: "Future events"},
+//   {id: 'expired', name: "Expired events"},
+//   {id: 'name', name: "All events"}
+// ];
+// const sortFilters = [
+//   {id: 'name', name: "Event name"},
+//   {id: 'organizer_name', name: "Organizer name"},
+//   {id: 'start_date', name: "Start date"},
+//   {id: 'end_date', name: "End date"}
+// ];
+// const rangeFilters = [
+//   { id: 'today', name: "Today" },
+//   { id: 'thisw', name: "This week" },
+//   { id: 'prevw', name: "Previous week" },
+//   { id: 'thism', name: "This month" },
+//   { id: 'prevm', name: "Previous month" },
+//   { id: 'custom', name: "Custom range" },
+//   { id: '-1', name: "All stats" },
+// ];
 
 let storedEventFilterData =
     typeof window !== "undefined" && localStorage.getItem("eventFilterData");
@@ -45,7 +45,8 @@ const storedEventFilters =
     storedEventFilterData && storedEventFilterData !== undefined ? JSON.parse(storedEventFilterData) : null;
 
 
-export default function Dashboard() {
+export default function Dashboard({params:{locale}}:{params:{locale:string}}) {
+  const t = useTranslations('manage-events-page');
   const dispatch = useAppDispatch();
   const {events, loading, totalPages, currentPage, event_countries, office_countries, currencies, allEventsStats, totalevents} = useAppSelector((state: RootState) => state.events);
   const [showCustomRange, setShowCustomRange] = useState(storedEventFilters !== null && storedEventFilters.range === 'custom' ? true : false);
@@ -98,6 +99,31 @@ export default function Dashboard() {
         localStorage.setItem('eventFilterData', JSON.stringify(updatedEventFilters));
       }
   }
+
+  const eventFilters = useMemo(() => [
+    {id: 'active_future', name: t('event_filters.active_future')},
+    {id: 'active', name: t('event_filters.active')},
+    {id: 'future', name: t('event_filters.future')},
+    {id: 'expired', name: t('event_filters.expired')},
+    {id: 'name', name: t('event_filters.name')}
+  ], [locale])
+
+  const sortFilters = useMemo(() => [
+      {id: 'name', name: t('sort_filters.name')},
+      {id: 'organizer_name', name: t('sort_filters.organizer_name')},
+      {id: 'start_date', name: t('sort_filters.start_date')},
+      {id: 'end_date', name: t('sort_filters.end_date')}
+  ], [locale])
+  
+  const rangeFilters = useMemo(() => [
+    { id: 'today', name: t('range_filters.today') },
+    { id: 'thisw', name: t('range_filters.thisw') },
+    { id: 'prevw', name: t('range_filters.prevw') },
+    { id: 'thism', name: t('range_filters.thism') },
+    { id: 'prevm', name: t('range_filters.prevm') },
+    { id: 'custom', name: t('range_filters.custom') },
+    { id: '-1', name: t('range_filters.-1') },
+  ], [locale])
 
   const handleSearchTextFilter = (e:any) => {
     const {value} = e.target;
@@ -237,7 +263,7 @@ export default function Dashboard() {
             <div className="top-landing-page shadow-none">
               <div className="row d-flex ebs-search-events align-items-center">
                 <div style={{padding: '0 22px'}} className="col-4">
-                  <input type="text" className="ebs-search-area m-0 w-100" placeholder='Search' value={eventFilterData.search_text} onKeyUp={(e) => { e.key === 'Enter' ? handleSearchTextFilter(e): null}} onChange={(e)=>{setEventFilterData((prev:any)=> ({...prev, search_text:e.target.value}))}} />
+                  <input type="text" className="ebs-search-area m-0 w-100" placeholder={t('search')} value={eventFilterData.search_text} onKeyUp={(e) => { e.key === 'Enter' ? handleSearchTextFilter(e): null}} onChange={(e)=>{setEventFilterData((prev:any)=> ({...prev, search_text:e.target.value}))}} />
                 </div>
                 <div style={{padding: '0 22px'}} className="col-8 d-flex justify-content-end">
                   <strong>{totalevents} events</strong>
@@ -247,7 +273,7 @@ export default function Dashboard() {
                 <div className="col">
                   <label className="label-select-alt m-0 w-100">
                     <Dropdown 
-                      label="Sort by"
+                      label={t('sort_filter_label')}
                       selected={eventFilterData.sort_by} 
                       onChange={handleSortByFilter}
                       selectedlabel={getSelectedLabel(sortFilters,eventFilterData.sort_by)}
@@ -258,7 +284,7 @@ export default function Dashboard() {
                 <div className="col">
                   <label className="label-select-alt m-0 w-100">
                     <Dropdown 
-                      label="Filter by"
+                      label={t('event_filter_label')}
                       selected={eventFilterData.event_action} 
                       onChange={handleEventActionFilter}
                       selectedlabel={getSelectedLabel(eventFilters,eventFilterData.event_action)}
@@ -271,7 +297,7 @@ export default function Dashboard() {
                     <label className="label-select-alt m-0 w-100">
                       <Dropdown 
                         label="Select country"
-                        listitems={[{ id: '', name: "Select country" },...event_countries]}
+                        listitems={[{ id: '', name: t('country_filter_label') },...event_countries]}
                         selected={eventFilterData.country} 
                         onChange={handleCountryFilter}
                         selectedlabel={getSelectedLabel(event_countries,eventFilterData.country)}
@@ -284,7 +310,7 @@ export default function Dashboard() {
                   <label className="label-select-alt m-0 w-100">
                     <Dropdown 
                       label="Select Office"
-                      listitems={[{ id: '', name: "Select Office" }, ...office_countries]}
+                      listitems={[{ id: '', name: t('office_filter_label') }, ...office_countries]}
                       selected={eventFilterData.office_country_id} 
                       onChange={handleOfficeCountryFilter}
                       selectedlabel={getSelectedLabel(office_countries,eventFilterData.office_country_id)}
@@ -308,7 +334,7 @@ export default function Dashboard() {
                 <div className="col">
                   <label className="label-select-alt m-0 w-100">
                     <Dropdown 
-                      label="Range"
+                      label={t('range_filter_label')}
                       listitems={rangeFilters}
                       selected={eventFilterData.range} 
                       onChange={handleRangeFilter}
@@ -345,14 +371,14 @@ export default function Dashboard() {
             </div>
             <div className="main-data-table">
                 <div className="ebs-ticket-section">
-                  <h4>Tickets</h4>
+                  <h4>{t('tickets')}</h4>
                   <div className="row d-flex">
                     <div className="col-6">
                       <div className="row">
                         <div className="col">
                           <div className="ebs-ticket-information">
                             <strong>{allEventsStats !== null && allEventsStats.waiting_list_attendees  > 0 ? allEventsStats.waiting_list_attendees : 0}</strong>
-                            <span>WAITING</span>
+                            <span>{t('tickets_waiting_label')}</span>
                           </div>
                         </div>
                         {/* <div className="col">
@@ -364,7 +390,7 @@ export default function Dashboard() {
                         <div className="col">
                           <div className="ebs-ticket-information">
                             <strong>{allEventsStats !== null && allEventsStats.total_sold_tickets  > 0 ? allEventsStats.total_sold_tickets : 0}</strong>
-                            <span>sold</span>
+                            <span>{t('tickets_sold_label')}</span>
                           </div>
                         </div>
                         {/* <div className="col">
@@ -382,19 +408,19 @@ export default function Dashboard() {
                           <div className="col-5">
                             <div className="p-1">
                               <strong>{allEventsStats !== null &&  allEventsStats?.range_reporting_stats?.total_range_revenue_text }</strong>
-                              <span>Revenue</span>
+                              <span>{t('tickets_revenue_label')}</span>
                             </div>
                           </div>
                           <div className="col-7">
                             <div className="ebs-border-left p-1">
                               <strong>{allEventsStats !== null && allEventsStats.total_revenue_text }</strong>
-                              <span>Total Revenue</span>
+                              <span>{t('tickets_total_revenue_label')}</span>
                             </div>
                           </div>
                         </div>
                       </div>
                       <div className="col-4">
-                        <p className='m-0 ebs-info-vat'><i className="material-symbols-outlined">info</i>All prices are excluding VAT.</p>
+                        <p className='m-0 ebs-info-vat'><i className="material-symbols-outlined">info</i>{t('tickets_vat_label')}</p>
                       </div>
                      </div>
                     </div>
@@ -403,15 +429,15 @@ export default function Dashboard() {
                 <div className="ebs-order-list-section" >
                   <div className="ebs-data-table ebs-order-table position-relative">
                     <div className="d-flex align-items-center ebs-table-header">
-                      <div className="ebs-table-box ebs-box-1"><strong>Event Logo</strong></div>
-                      <div style={{width: 210}}  className="ebs-table-box ebs-box-2"><strong>Event Name</strong></div>
-                      <div style={{width: 170}}  className="ebs-table-box ebs-box-2"><strong>Event Date</strong></div>
-                      <div style={{width: 140}}  className="ebs-table-box ebs-box-1"><strong>Organized by</strong></div>
+                      <div className="ebs-table-box ebs-box-1"><strong>{t('event_table.event_logo')}</strong></div>
+                      <div style={{width: 210}}  className="ebs-table-box ebs-box-2"><strong>{t('event_table.event_name')}</strong></div>
+                      <div style={{width: 170}}  className="ebs-table-box ebs-box-2"><strong>{t('event_table.event_date')}</strong></div>
+                      <div style={{width: 140}}  className="ebs-table-box ebs-box-1"><strong>{t('event_table.organized_by')}</strong></div>
                       <div style={{width: 140}}  className="ebs-table-box ebs-box-4"><strong>Tickets Waiting</strong></div>
-                      <div className="ebs-table-box ebs-box-4"><strong>Sold Tickets</strong></div>
+                      <div className="ebs-table-box ebs-box-4"><strong>{t('event_table.sold_tickets')}</strong></div>
                       {/* <div className="ebs-table-box ebs-box-4"><strong>Total Tickets</strong></div> */}
-                      <div className="ebs-table-box ebs-box-1"><strong>Revenue</strong></div>
-                      <div className="ebs-table-box ebs-box-4" style={{paddingRight: 0}}><strong>Total Revenue</strong></div>
+                      <div className="ebs-table-box ebs-box-1"><strong>{t('event_table.revenue')}</strong></div>
+                      <div className="ebs-table-box ebs-box-4" style={{paddingRight: 0}}><strong>{t('event_table.total_revenue')}</strong></div>
                       <div className="ebs-table-box ebs-box-1" style={{width: 80}}  />
                     </div>
                     <div style={{minHeight:"calc(100vh - 720px)"}}>
@@ -439,8 +465,8 @@ export default function Dashboard() {
                                           <i className="material-icons">more_horiz</i>
                                         </button>
                                         <div style={{minWidth: 130}} className="ebs-dropdown-menu">
-                                          <Link href={'/manage/events/'+event.id +'/orders'} className="dropdown-item">View details</Link>
-                                          <button className="dropdown-item" onClick={(e)=>{ exportEventOrders(event.id) }}>Export orders</button>
+                                          <Link href={'/manage/events/'+event.id +'/orders'} className="dropdown-item">{t('view_details')}</Link>
+                                          <button className="dropdown-item" onClick={(e)=>{ exportEventOrders(event.id) }}>{t('export_orders')}</button>
                                         </div>
                                       </div>
                                     </li>
@@ -459,7 +485,7 @@ export default function Dashboard() {
                               <Image
                                   src={'/no_record_found.svg'} alt="" width="100" height="100"
                               />
-                              <p className='pt-3 m-0'>No data available</p>
+                              <p className='pt-3 m-0'>{t('no_data_available')}</p>
                             </div>
                           </div>
                         }

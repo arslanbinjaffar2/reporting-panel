@@ -23,7 +23,7 @@ export default function RootLayout({ children}: { children: React.ReactNode }) {
     function onLanguageChange(value:string) {
         console.log(`/${value}${pathname}`, 'selectchange');
 
-        let replaceUrl = value === 'en' ? pathname.replace('/da', '/en') :  `/${value}${pathname}`;
+        let replaceUrl = value === 'en' ? pathname.replace('/da', '/en') : pathname.includes('/da') ? `${pathname}` : `/${value}${pathname}`;
 
         startTransition(() => {
           router.replace(replaceUrl);
@@ -60,7 +60,7 @@ export default function RootLayout({ children}: { children: React.ReactNode }) {
                       <li>
                           <a href="#!">
                             <i className="icons"><Image src={'/img/ico-globe.svg'} alt="" width="16" height="16" /></i>
-                            <span id="language-switch">English</span><i className="material-icons">keyboard_arrow_down</i>
+                            <span id="language-switch">{locale === 'da' ? 'Danish' : 'English'}</span><i className="material-icons">keyboard_arrow_down</i>
                           </a>
                           <ul>
                               {languages.map((value, key) => {

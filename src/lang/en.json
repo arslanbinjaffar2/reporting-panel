@@ -35,14 +35,17 @@
         "page_subtitle":"Enter new password and confirm new password to reset password.",
         "new_password_label":"Enter new password",
         "confirm_password_label":"Confirm new password",
-        "reset_button_label":"RESET",
+        "reset_button_label":"RESET PASSWORD",
         "reset_button_reseting_label":"RESETING..."
     },
     "manage-events-layout":{
-        "return_to_list_label":"Return to list"
+        "return_to_list_label":"Return to list",
+        "export_orders":"EXPORT ORDERS"
     },
     "manage-events-page":{
         "no_data_available":"No data available",
+        "view_details":"View details",
+        "export_orders":"Export orders",
         "event_table":{
             "event_logo":"Event Logo",
             "event_name":"Event Name ",
@@ -53,7 +56,9 @@
             "sold_tickets":"Sold Tickets",
             "total_tickets":"Total Tickets",
             "my_sold_tickets":"My Sold Tickets",
-            "my_revenue":"My Revenue"
+            "my_revenue":"My Revenue",
+            "revenue":"Revenue",
+            "total_revenue":"Total Revenue"
         },
         "event_filters":{
             "active_future":"Active and future events",
@@ -68,21 +73,37 @@
              "start_date": "Start date",
              "end_date": "End date"
         },
+        "range_filters":{
+            "today": "Today",
+            "thisw": "This week",
+            "prevw": "Previous week",
+            "thism": "This month",
+            "prevm": "Previous month",
+            "custom": "Custom range",
+            "-1": "All stats"
+        },
         "search":"Search",
+        "tickets":"Tickets",
         "event_filter_label":"Filter By",
-        "sort_filter_label":"Sort By"
-    },
-    "manage-orders-layout":{
-        "create_order":"Create order",
-        "send_order":"Send order",
-        "download_pdf":"PDF",
-        "no_data_available":"No data available"
+        "office_filter_label":"Select office",
+        "country_filter_label":"Select country",
+        "range_filter_label":"Select Range",
+        "sort_filter_label":"Sort By",
+        "tickets_waiting_label":"WAITING",
+        "tickets_sold_label":"SOLD",
+        "tickets_revenue_label":"REVENUE",
+        "tickets_total_revenue_label":"TOTAL REVENUE",
+        "tickets_vat_label":"All prices are excluding VAT."
     },
     "manage-orders-page":{
+        "tickets_label":"Tickets",
         "no_data_available":"No data available",
         "stats_sold_tickets":"sold",
-        "stats_my_sold_tickets":"My Sold Tickets",
-        "stats_my_revenue":"My Revenue",
+        "stats_total_revenue":"Total Revenue",
+        "stats_revenue":"Revenue",
+        "stats_total_tickets":"Total",
+        "stats_left_tickets":"Left",
+        "tickets_vat_label":"All prices are excluding VAT.",
         "order_list":"Order List",
         "tickets_detail":"Tickets details",
         "tickets_detail_table":{
@@ -98,12 +119,28 @@
             "attendee_name":"Name",
             "attendee_email":"Email",
             "company":"Company",
-            "sold_tickets":"Sold Ticket",
-            "revenue":"Revenue",
-            "status":"Order Status",
+            "job_title":"Job Title",
+            "amount":"Amount",
+            "sales_agent":"Sales Agent",
             "payment_status":"Payment Status"
         },
-
+        "range_filters":{
+            "today": "Today",
+            "thisw": "This week",
+            "prevw": "Previous week",
+            "thism": "This month",
+            "prevm": "Previous month",
+            "custom": "Custom range",
+            "-1": "All stats"
+        },
+        "field_filters":{
+            "select_field":"Select field",
+            "order_number":"Order Number",
+            "name":"Name",
+            "email":"Email",
+            "job_title":"Job Title",
+            "company":"Company"
+        },
         "view":"View",
         "download":"Download as order",
         "download_as_invoice":"Download as invoice",

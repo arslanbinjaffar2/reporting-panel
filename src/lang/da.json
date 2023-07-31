@@ -1,0 +1,156 @@
+{
+    "auth_layout": {
+        "title": "VELKOMMEN TIL RAPPORTERINGSPORTAL",
+        "subtitle": "Strømlin din rapporteringsproces med lethed og effektivitet",
+        "feature_one": "Tilpasning efter nemme trin",
+        "feature_two": "Salgsprognose og analyse",
+        "feature_three": "Brugeradministrationsfunktioner, herunder adgangskontrol og brugergodkendelse.",
+        "feature_four": "Føl dig sikker med vores trinvise navigation"
+    },
+    "auth_login":{
+        "page_title":"Log ind",
+        "email_label":"Indtast din e-mail", 
+        "password_label":"Adgangskode", 
+        "remember_me_label":"Husk mig",
+        "forgot_password_label":"Glemt din adgangskode?",
+        "signin_button_label":"Log ind", 
+        "signin_button_processing_label":"Logger ind..." 
+    },
+    "auth_forgot_password_request":{
+        "page_title":"Har du glemt din adgangskode?",
+        "page_subtitle":"Indtast din e-mailadresse som du anvender til din konto nedenfor og vi vil sende dig et link med en nulstillingskode.",
+        "email_label":"Indtast din e-mail.",  
+        "send_button_label":"SEND",
+        "send_button_sending_label":"SENDER..." 
+    },
+    "auth_forgot_password_verify":{
+        "page_title":"Bekræft din nye adgangskode.",
+        "page_subtitle":"Indtast venligst din nulstillingskode, som vi lige har sendt til din registrerede e-mailadresse.",
+        "reset_code_label":"Indsæt din nustillingskode.",
+        "verify_button_label":"Bekræft", 
+        "verify_button_verifying_label":"Bekræfter..." 
+    },
+    "auth_forgot_password_reset":{
+        "page_title":"Nulstil adgangskode", 
+        "page_subtitle":"Indtast ny adgangskode og bekræft ny adgangskode for at nulstille adgangskoden",
+        "new_password_label":"Indsæt den nye adgangskode",
+        "confirm_password_label":"Bekræft den nye adgangskode",
+        "reset_button_label":"NUSTIL",
+        "reset_button_reseting_label":"NULSTILLER..."
+    },
+    "manage-events-layout":{
+        "return_to_list_label":"Tillage til listen",
+        "export_orders":"EXPORT ORDERS"
+    },
+    "manage-events-page":{
+        "no_data_available":"Ingen data er tilgængelig",
+        "view_details":"View details",
+        "export_orders":"Export orders",
+        "event_table":{
+            "event_logo":"Event Logo",
+            "event_name":"Event navn ", 
+            "event_date":"Event dato", 
+            "created_by":"Oprettet af", 
+            "organized_by":"Organiseret af",
+            "tickets_left":"Ledige billetter", 
+            "sold_tickets":"Solgte billletter", 
+            "total_tickets":"Totale billetter",
+            "my_sold_tickets":"Mine solgte billetter", 
+            "my_revenue":"Mine indtægter.",
+            "revenue":"Indtægter",
+            "total_revenue":"Totale Indtægter"
+        },
+        "event_filters":{
+            "active_future":"Aktive og fremtidige events",
+            "active":"Aktive events",
+            "future":"Fremtid events",
+            "expired":"Udløbet events",
+            "name":"Alle events"
+        },
+        "sort_filters":{
+            "name": "Event navn",
+            "organizer_name": "Organizer navn",
+            "start_date": "Start dato",
+            "end_date": "Ende dato"
+       },
+        "range_filters":{
+            "today": "I dag",
+            "thisw": "Denne uge",
+            "prevw": "Forrige uge",
+            "thism": "Denne måned",
+            "prevm": "Forrige måned",
+            "custom": "Brugerdefineret rækkevidde",
+            "-1": "Alle statistikker"
+        },
+        "search":"Søg",
+        "tickets":"Billetter",
+        "event_filter_label":"Sorter efter",
+        "office_filter_label":"Vælg kontor",
+        "country_filter_label":"Vælg land",
+        "range_filter_label":"Vælg Område",
+        "sort_filter_label":"Sorter efter",
+        "tickets_waiting_label":"VENTER",
+        "tickets_sold_label":"SOLGT",
+        "tickets_revenue_label":"INDTÆGTER",
+        "tickets_total_revenue_label":"TOTAL INDTÆGTER",
+        "tickets_vat_label":"Alle priser er eksklusiv moms."
+    },
+    "manage-orders-page":{
+        "tickets_label":"Tickets",
+        "no_data_available":"Ingen data er tilgængelig",
+        "stats_sold_tickets":"solgt",
+        "stats_total_revenue":"Total Indtægter",
+        "stats_revenue":"Indtægter",
+        "stats_total_tickets":"Total",
+        "stats_left_tickets":"tilbage",
+        "tickets_vat_label":"Alle priser er eksklusiv moms.",
+        "order_list":"Ordreliste", 
+        "tickets_detail":"Billetoversigt", 
+        "tickets_detail_table":{
+            "form":"Figure",  
+            "tickets_sold":"Solgte billetter", 
+            "tickets_left":"Ledige billetter", 
+            "total_tickets":"Totale billetter",
+            "time_left":"Tid tilbage" 
+        },
+        "order_table":{
+            "number":"Order #",
+            "date":"Dato",
+            "attendee_name":"Navn",
+            "attendee_email":"Email",
+            "company":"Virksomhed",
+            "job_title":"Jobtitel",
+            "amount":"Amount",
+            "sales_agent":"Sales Agent",
+            "payment_status":"Betalingsstatus"
+        },
+        "range_filters":{
+            "today": "I dag",
+            "thisw": "Denne uge",
+            "prevw": "Forrige uge",
+            "thism": "Denne måned",
+            "prevm": "Forrige måned",
+            "custom": "Brugerdefineret rækkevidde",
+            "-1": "Alle statistikker"
+        },
+        "field_filters":{
+            "select_field":"Vælg felt",
+            "order_number":"Ordre Nummer",
+            "name":"Navn",
+            "email":"Email",
+            "job_title":"Jobtitel",
+            "company":"Virksomhed"
+        },
+        "search":"Søg"
+
+    },
+    "messages":{
+        "errors":{
+            "invalid_data":"Ugyldige data!",
+            "someting_went_wrong":"Undskyld! noget gik galt"
+        },
+        "success":{
+            "password_changed":"Adgangskoden blev ændret"
+        }
+    }
+}

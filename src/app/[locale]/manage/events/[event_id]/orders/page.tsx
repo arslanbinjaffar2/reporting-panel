@@ -1,5 +1,5 @@
 'use client'
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import Image from 'next/image'
 import Dropdown from '@/components/DropDown';
 import Pagination from '@/components/pagination';
@@ -11,31 +11,34 @@ import { getSelectedLabel } from '@/helpers';
 import Loader from '@/components/Loader';
 import DateTime from '@/components/DateTimePicker';
 import TicketDetail from '@/components/TicketDetail';
+import { useTranslations } from 'next-intl';
 
-const rangeFilters = [
-  { id: 'today', name: "Today" },
-  { id: 'thisw', name: "This week" },
-  { id: 'prevw', name: "Previous week" },
-  { id: 'thism', name: "This month" },
-  { id: 'prevm', name: "Previous month" },
-  { id: 'custom', name: "Custom range" },
-  { id: '-1', name: "All stats" },
-];
-const fieldFilters = [
-  { id: '', name: "Select field" },
-  { id: 'order_number', name: "Order Number" },
-  { id: 'name', name: "Name" },
-  { id: 'email', name: "Email" },
-  { id: 'job_title', name: "Job Title" },
-  { id: 'company', name: "Company" }
-];
+// const rangeFilters = [
+//   { id: 'today', name: "Today" },
+//   { id: 'thisw', name: "This week" },
+//   { id: 'prevw', name: "Previous week" },
+//   { id: 'thism', name: "This month" },
+//   { id: 'prevm', name: "Previous month" },
+//   { id: 'custom', name: "Custom range" },
+//   { id: '-1', name: "All stats" },
+// ];
+// const fieldFilters = [
+//   { id: '', name: "Select field" },
+//   { id: 'order_number', name: "Order Number" },
+//   { id: 'name', name: "Name" },
+//   { id: 'email', name: "Email" },
+//   { id: 'job_title', name: "Job Title" },
+//   { id: 'company', name: "Company" }
+// ];
 
 let storedOrderFilterData =
     typeof window !== "undefined" && localStorage.getItem("orderFilterData");
 const storedOrderFilters =
     storedOrderFilterData && storedOrderFilterData !== undefined ? JSON.parse(storedOrderFilterData) : null;
 
-export default function OrderListing({ params }: { params: { event_id: string } }) {
+export default function OrderListing({ params }: { params: { locale:string, event_id: string } }) {
+  const t = useTranslations('manage-orders-page');
+
   const dispatch = useAppDispatch();
   const {event_orders, event_stats, totalPages, currentPage, form_stats, event} = useAppSelector((state: RootState) => state.event);
   const [sortCol, setSortCol] = useState(storedOrderFilters!== null ? storedOrderFilters.sortCol : 'order_number');
@@ -88,6 +91,25 @@ export default function OrderListing({ params }: { params: { event_id: string } 
       localStorage.setItem('orderFilterData', JSON.stringify(updatedOrderFilters));
     }
   }
+
+  const rangeFilters = useMemo(() => [
+    { id: 'today', name: t('range_filters.today') },
+    { id: 'thisw', name: t('range_filters.thisw') },
+    { id: 'prevw', name: t('range_filters.prevw') },
+    { id: 'thism', name: t('range_filters.thism') },
+    { id: 'prevm', name: t('range_filters.prevm') },
+    { id: 'custom', name: t('range_filters.custom') },
+    { id: '-1', name: t('range_filters.-1') },
+  ], [params.locale])
+
+  const fieldFilters = useMemo(() => [
+    { id: '', name: t('field_filters.select_field') },
+  { id: 'order_number', name: t('field_filters.order_number') },
+  { id: 'name', name: t('field_filters.name') },
+  { id: 'email', name: t('field_filters.email') },
+  { id: 'job_title', name: t('field_filters.job_title') },
+  { id: 'company', name: t('field_filters.company') }
+  ], [params.locale])
 
   const handleSearchTextFilter = (e:any) => {
     const {value} = e.target;
@@ -209,7 +231,7 @@ export default function OrderListing({ params }: { params: { event_id: string } 
               </div> */}
               <div style={{ background: "#fff", borderRadius: '0 0 8px 8px' }} className="main-data-table">
               <div className="ebs-ticket-section">
-                  <h4>Tickets</h4>
+                  <h4>{t('tickets_label')}</h4>
                   <div className="row d-flex">
                     <div className="col-6">
                       <div className="row">
@@ -221,19 +243,19 @@ export default function OrderListing({ params }: { params: { event_id: string } 
                         {event_stats !== null && event_stats?.event_stats?.total_tickets != 0 ? <div className="col">
                           <div className="ebs-ticket-information ebs-bg-light">
                             <strong>{event_stats?.event_tickets_left}</strong>
-                            <span>LEFT</span>
+                            <span>{t('stats_left_tickets')}</span>
                           </div>
                         </div> : null}
                         <div className="col">
                           <div className="ebs-ticket-information ebs-bg-light">
                             <strong>{event_stats?.reporting_data?.total_tickets}</strong>
-                            <span>sold</span>
+                            <span>{t('stats_sold_tickets')}</span>
                           </div>
                         </div>
                         <div className="col">
                           <div className="ebs-ticket-information ebs-bg-light">
                             <strong>{event_stats?.event_stats?.total_tickets}</strong>
-                            <span>total</span>
+                            <span>{t('stats_total_tickets')}</span>
                           </div>
                         </div>
                       </div>
@@ -245,19 +267,19 @@ export default function OrderListing({ params }: { params: { event_id: string } 
                           <div className="col-6">
                             <div className="p-1">
                               <strong>{event_stats?.orders_range_stats?.total_range_revenue_text}</strong>
-                              <span>Revenue</span>
+                              <span>{t('stats_revenue')}</span>
                             </div>
                           </div>
                           <div className="col-6">
                             <div className="ebs-border-left p-1">
                               <strong>{event_stats?.reporting_data?.total_revenue_text}</strong>
-                              <span>Total Revenue</span>
+                              <span>{t('stats_total_revenue')}</span>
                             </div>
                           </div>
                         </div>
                       </div>
                       <div className="col-4">
-                        <p className='m-0 ebs-info-vat'><i className="material-symbols-outlined">info</i>All prices are excluding VAT.</p>
+                        <p className='m-0 ebs-info-vat'><i className="material-symbols-outlined">info</i>{t('tickets_vat_label')}</p>
                       </div>
                      </div>
                     </div>
@@ -266,10 +288,10 @@ export default function OrderListing({ params }: { params: { event_id: string } 
                 {toggle && <TicketDetail handleClose={handlePopup} event_id={params.event_id} form_stats={form_stats} />}
                 <div className="ebs-order-list-section">
                   <div className="ebs-order-header">
-                    <h4>Orders List</h4>
+                    <h4>{t('order_list')}</h4>
                     <div className="row">
                       <div className="col-8 d-flex">
-                        <input style={{ width: "410px" }} type="text" className="ebs-search-area" placeholder='Search' value={orderFilterData.searchText} onKeyUp={(e) => { e.key === 'Enter' ? handleSearchTextFilter(e): null}} onChange={(e)=>{setOrderFilterData((prev:any)=> ({...prev, searchText:e.target.value}))}} />
+                        <input style={{ width: "410px" }} type="text" className="ebs-search-area" placeholder={t('search')} value={orderFilterData.searchText} onKeyUp={(e) => { e.key === 'Enter' ? handleSearchTextFilter(e): null}} onChange={(e)=>{setOrderFilterData((prev:any)=> ({...prev, searchText:e.target.value}))}} />
                         <label style={{ width: "210px" }} className="label-select-alt">
                           <Dropdown
                             label="Select field"
@@ -320,55 +342,64 @@ export default function OrderListing({ params }: { params: { event_id: string } 
                     <div className="d-flex align-items-center ebs-table-header">
                       <div className="ebs-table-box ebs-box-1">
                         <strong>
-                          Order #
+                          {t('order_table.number')}
                           <span className='d-flex flex-column'>
                             <em className={`material-symbols-outlined ${sort === 'asc' && sortCol === 'order_number' ? 'fw-bolder' : 'cursor-pointer'}`} onClick={()=>{handleSortChange('asc', 'order_number')}}>keyboard_arrow_up</em> 
                             <em className={`material-symbols-outlined ${sort === 'desc' && sortCol === 'order_number' ? 'fw-bolder' : 'cursor-pointer'}`} onClick={()=>{handleSortChange('desc', 'order_number')}}>keyboard_arrow_down</em>
                           </span>
                         </strong>
                       </div>
-                      <div className="ebs-table-box ebs-box-1"><strong>Date 
+                      <div className="ebs-table-box ebs-box-1"><strong>                          
+                        {t('order_table.date')} 
                       <span className='d-flex flex-column'>
                       <em className={`material-symbols-outlined ${sort === 'asc' && sortCol === 'order_date' ? 'fw-bolder' : 'cursor-pointer'}`} onClick={()=>{handleSortChange('asc', 'order_date')}}>keyboard_arrow_up</em> 
                       <em className={`material-symbols-outlined ${sort === 'desc' && sortCol === 'order_date' ? 'fw-bolder' : 'cursor-pointer'}`} onClick={()=>{handleSortChange('desc', 'order_date')}}>keyboard_arrow_down</em>
                     </span>
                       </strong></div>
-                      <div className="ebs-table-box ebs-box-2"><strong>Name
+                      <div className="ebs-table-box ebs-box-2"><strong>
+                      {t('order_table.attendee_name')}
                       <span className='d-flex flex-column'>
                       <em className={`material-symbols-outlined ${sort === 'asc' && sortCol === 'name' ? 'fw-bolder' : 'cursor-pointer'}`} onClick={()=>{handleSortChange('asc', 'name')}}>keyboard_arrow_up</em> 
                       <em className={`material-symbols-outlined ${sort === 'desc' && sortCol === 'name' ? 'fw-bolder' : 'cursor-pointer'}`} onClick={()=>{handleSortChange('desc', 'name')}}>keyboard_arrow_down</em>
                     </span>
                       </strong></div>
-                      <div className="ebs-table-box ebs-box-2"><strong>Email
+                      <div className="ebs-table-box ebs-box-2"><strong>
+                      {t('order_table.attendee_email')}
                       <span className='d-flex flex-column'>
                       <em className={`material-symbols-outlined ${sort === 'asc' && sortCol === 'email' ? 'fw-bolder' : 'cursor-pointer'}`} onClick={()=>{handleSortChange('asc', 'email')}}>keyboard_arrow_up</em> 
                       <em className={`material-symbols-outlined ${sort === 'desc' && sortCol === 'email' ? 'fw-bolder' : 'cursor-pointer'}`} onClick={()=>{handleSortChange('desc', 'email')}}>keyboard_arrow_down</em>
                     </span>
                       </strong></div>
-                      <div style={{width: 150}} className="ebs-table-box ebs-box-2"><strong>Job Title
+                      <div style={{width: 150}} className="ebs-table-box ebs-box-2"><strong>
+                      {t('order_table.job_title')}
                       <span className='d-flex flex-column'>
                       <em className={`material-symbols-outlined ${sort === 'asc' && sortCol === 'job_title' ? 'fw-bolder' : 'cursor-pointer'}`} onClick={()=>{handleSortChange('asc', 'job_title')}}>keyboard_arrow_up</em> 
                       <em className={`material-symbols-outlined ${sort === 'desc' && sortCol === 'job_title' ? 'fw-bolder' : 'cursor-pointer'}`} onClick={()=>{handleSortChange('desc', 'job_title')}}>keyboard_arrow_down</em>
                     </span>  
                       </strong></div>
-                      <div className="ebs-table-box ebs-box-4"><strong>Company
+                      <div className="ebs-table-box ebs-box-4"><strong>
+                      {t('order_table.company')}
                       <span className='d-flex flex-column'>
                       <em className={`material-symbols-outlined ${sort === 'asc' && sortCol === 'company' ? 'fw-bolder' : 'cursor-pointer'}`} onClick={()=>{handleSortChange('asc', 'company')}}>keyboard_arrow_up</em> 
                       <em className={`material-symbols-outlined ${sort === 'desc' && sortCol === 'company' ? 'fw-bolder' : 'cursor-pointer'}`} onClick={()=>{handleSortChange('desc', 'company')}}>keyboard_arrow_down</em>
                     </span>
                       </strong></div>
-                      <div className="ebs-table-box ebs-box-4"><strong>Amount
+                      <div className="ebs-table-box ebs-box-4"><strong>
+                      {t('order_table.amount')}
+                       
                       <span className='d-flex flex-column'>
                       <em className={`material-symbols-outlined ${sort === 'asc' && sortCol === 'amount' ? 'fw-bolder' : 'cursor-pointer'}`} onClick={()=>{handleSortChange('asc', 'amount')}}>keyboard_arrow_up</em> 
                       <em className={`material-symbols-outlined ${sort === 'desc' && sortCol === 'amount' ? 'fw-bolder' : 'cursor-pointer'}`} onClick={()=>{handleSortChange('desc', 'amount')}}>keyboard_arrow_down</em>
                     </span></strong></div>
-                      <div className="ebs-table-box ebs-box-4"><strong>Sales Agent
+                      <div className="ebs-table-box ebs-box-4"><strong>
+                      {t('order_table.sales_agent')}
                       <span className='d-flex flex-column'>
                       <em className={`material-symbols-outlined ${sort === 'asc' && sortCol === 'sales_agent' ? 'fw-bolder' : 'cursor-pointer'}`} onClick={()=>{handleSortChange('asc', 'sales_agent')}}>keyboard_arrow_up</em> 
                       <em className={`material-symbols-outlined ${sort === 'desc' && sortCol === 'sales_agent' ? 'fw-bolder' : 'cursor-pointer'}`} onClick={()=>{handleSortChange('desc', 'sales_agent')}}>keyboard_arrow_down</em>
                     </span>
                       </strong></div>
-                      <div className="ebs-table-box ebs-box-4" style={{width: 150}}><strong>Payment Status
+                      <div className="ebs-table-box ebs-box-4" style={{width: 150}}><strong>
+                      {t('order_table.payment_status')}
                       <span className='d-flex flex-column'>
                       <em className={`material-symbols-outlined ${sort === 'asc' && sortCol === 'payment_status' ? 'fw-bolder' : 'cursor-pointer'}`} onClick={()=>{handleSortChange('asc', 'payment_status')}}>keyboard_arrow_up</em> 
                       <em className={`material-symbols-outlined ${sort === 'desc' && sortCol === 'payment_status' ? 'fw-bolder' : 'cursor-pointer'}`} onClick={()=>{handleSortChange('desc', 'payment_status')}}>keyboard_arrow_down</em>

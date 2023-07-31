@@ -2,7 +2,7 @@
 import { useAppDispatch, useAppSelector } from '@/redux/hooks/hooks';
 import { RootState } from '@/redux/store/store';
 import { usePathname, useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useTransition } from 'react';
 import Image from 'next/image'
 import { logOutUser } from '@/redux/store/slices/AuthSlice';
 import axios from 'axios';
@@ -10,10 +10,13 @@ import { authHeader } from '@/helpers';
 import moment from 'moment';
 import { AGENT_ENDPOINT } from '@/constants/endpoints';
 import FullPageLoader from '@/components/FullPageLoader';
+import { useLocale, useTranslations } from 'next-intl';
 
-const languages = [{ id: 1, name: "English" }, { id: 2, name: "Danish" }];
+const languages = [{ id: 1, name: "English", locale:'en' }, { id: 2, name: "Danish", locale:'da' }];
 
-export default function RootLayout({ children}: { children: React.ReactNode }) {
+
+export default function RootLayout({ children, params}: { children: React.ReactNode, params: { locale:string, event_id: string } }) {
+    const t = useTranslations('manage-events-layout');
     const router = useRouter();
     const {user} = useAppSelector((state: RootState) => state.authUser);
     const { event } = useAppSelector((state: RootState) => state.event);
@@ -23,6 +26,19 @@ export default function RootLayout({ children}: { children: React.ReactNode }) {
     useEffect(() => {
          (user === null) ? router.push('auth/login') : null;
     }, [user]);
+
+    const [isPending, startTransition] = useTransition();
+    const locale = useLocale();
+
+    function onLanguageChange(value:string) {
+        console.log(`${pathname}`, 'selectchange');
+
+        let replaceUrl = value === 'en' ? pathname.replace('/da', '/en') : pathname.includes('/da') ? `${pathname}` : `/${value}${pathname}`;
+
+        startTransition(() => {
+          router.replace(replaceUrl);
+        });
+    }
 
     const exportAllEventOrders = () =>{
       setDownloading(true);
@@ -74,11 +90,22 @@ export default function RootLayout({ children}: { children: React.ReactNode }) {
           <div className="row bottom-header-elements">
             <div className="col-8">
               <div className="ebs-bottom-header-left">
-                {pathname !== "/manage/events" ? <p>
-                  <a href="#!" onClick={(e)=>{e.preventDefault(); router.back();}} >
-                    <i className="material-icons">arrow_back</i> Return to list
-                  </a>
-                </p> : null}
+              {pathname !== `${params.locale === 'da' ? '/da' : '' }/manage/events` ? <p>
+                        <a href="#!" onClick={(e)=>{e.preventDefault(); 
+                            console.log('pathname', pathname);
+                            if(pathname.includes('invoice') || pathname.includes('create') || pathname.includes('edit')){
+                                router.push(`/${params.locale}/manage/events/${pathname.split('/')[3]}/orders`);
+                            }
+                            else if(pathname.includes('orders')){
+                                router.push(`/${params.locale}/manage/events`);
+                            }
+                            else{
+                                router.push(`/${params.locale}/manage/events`);
+                            }
+                        }}>
+                            <i className="material-icons">arrow_back</i> {t('return_to_list_label')}
+                        </a>
+                    </p>: null}
                 {event !== null ? <>
                     <h3>
                         <a href="#!">{event?.event_name}</a>
@@ -105,14 +132,15 @@ export default function RootLayout({ children}: { children: React.ReactNode }) {
                   </ul>
                 </li> : null}
                 <li>
-                  English <i className="material-icons">expand_more</i>
+                {locale === 'da' ? 'Danish' : 'English'} <i className="material-icons">expand_more</i>
                   <ul>
-                    <li>
-                      <a href="">English</a>
-                    </li>
-                    <li>
-                      <a href=""> Danish</a>
-                    </li>
+                  {languages.map((value, key) => {
+                      return (
+                          <li key={key}>
+                              <a href='' onClick={(e)=>{e.preventDefault(); onLanguageChange(value.locale)}}>{value.name}</a>
+                          </li>
+                      );
+                  })}
                   </ul>
                 </li>
               </ul>
@@ -148,7 +176,7 @@ export default function RootLayout({ children}: { children: React.ReactNode }) {
                             exportAllEventOrders();
                           }
                         }}>
-                        Export Orders
+                        {t('export_orders')}
                       </button>
                     </div>
                   </div>
