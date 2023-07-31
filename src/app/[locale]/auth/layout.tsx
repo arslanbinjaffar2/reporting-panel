@@ -8,10 +8,6 @@ import { useLocale, useTranslations } from 'next-intl';
 
 const languages = [{ id: 1, name: "English",  locale:'en' }, { id: 2, name: "Danish",  locale:'da' }];
 
-export const metadata = {
-  title: 'Reporting portal - Eventbuizz',
-  description: 'Reporting portal - Eventbuizz',
-}
 
 export default function RootLayout({ children}: { children: React.ReactNode }) {
   
