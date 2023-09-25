@@ -158,7 +158,9 @@ export default function RootLayout({ children, params}: { children: React.ReactN
                     <div className="logo">
                       <a href="">
                         <Image
-                          src={"/img/logo.svg"}
+                          // src={"/img/logo.svg"}
+                          src={event !== null ? (event.header_logo ? (`${process.env.serverImageHost + '/assets/event/branding/' + event.header_logo}`) : `${process.env.serverImageHost + '/_admin_assets/images/eventbuizz_logo.png'}`) : '/img/logo.svg'}
+                          
                           alt=""
                           width="150"
                           height="32"

@@ -125,6 +125,7 @@
             "amount":"Beløb",
             "sales_agent":"Sælger",
             "payment_status":"Betalingsstatus",
+            "order_status":"Ordre status",
             "payment_received":"Modtaget",
             "payment_pending":"Verserende"
         },

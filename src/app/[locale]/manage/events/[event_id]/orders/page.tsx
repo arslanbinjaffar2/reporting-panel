@@ -31,15 +31,16 @@ import { useTranslations } from 'next-intl';
 //   { id: 'company', name: "Company" }
 // ];
 
-let storedOrderFilterData =
-    typeof window !== "undefined" && localStorage.getItem("orderFilterData");
-const storedOrderFilters =
-    storedOrderFilterData && storedOrderFilterData !== undefined ? JSON.parse(storedOrderFilterData) : null;
+
 
 export default function OrderListing({ params }: { params: { locale:string, event_id: string } }) {
   const t = useTranslations('manage-orders-page');
 
   const dispatch = useAppDispatch();
+
+  let storedOrderFilterData = typeof window !== "undefined" && localStorage.getItem("orderFilterData");
+  const storedOrderFilters = storedOrderFilterData && storedOrderFilterData !== undefined ? JSON.parse(storedOrderFilterData) : null;
+
   const {event_orders, event_stats, totalPages, currentPage, form_stats, event} = useAppSelector((state: RootState) => state.event);
   const [sortCol, setSortCol] = useState(storedOrderFilters!== null ? storedOrderFilters.sortCol : 'order_number');
   const [sort, setSort] = useState(storedOrderFilters!== null ? storedOrderFilters.sort : 'desc');
@@ -48,12 +49,12 @@ export default function OrderListing({ params }: { params: { locale:string, even
   const [toggle, setToggle] = useState(false)
   const [orderFilterData, setOrderFilterData] = useState(storedOrderFilters !== null ? storedOrderFilters : {
       field:'',
-      range:'',
+      range:'today',
       start_date:'',
       end_date:'',
       searchText:'',
-      sort:'order_number',
-      sort_col:'desc',
+      sort:'desc',
+      sort_col:'order_number',
       limit:10,
       page:1,
   });
@@ -248,7 +249,7 @@ export default function OrderListing({ params }: { params: { locale:string, even
                         </div> : null}
                         <div className="col">
                           <div className="ebs-ticket-information ebs-bg-light">
-                            <strong>{event_stats?.reporting_data?.total_tickets}</strong>
+                            <strong>{event_stats?.orders_range_stats?.range_sold_tickets}</strong>
                             <span>{t('stats_sold_tickets')}</span>
                           </div>
                         </div>
@@ -401,10 +402,10 @@ export default function OrderListing({ params }: { params: { locale:string, even
                     </span>
                       </strong></div>
                       <div className="ebs-table-box ebs-box-4" style={{width: 150}}><strong>
-                      {t('order_table.payment_status')}
+                      {t('order_table.order_status')}
                       <span className='d-flex flex-column'>
-                      <em className={`material-symbols-outlined ${sort === 'asc' && sortCol === 'payment_status' ? 'fw-bolder' : 'cursor-pointer'}`} onClick={()=>{handleSortChange('asc', 'payment_status')}}>keyboard_arrow_up</em> 
-                      <em className={`material-symbols-outlined ${sort === 'desc' && sortCol === 'payment_status' ? 'fw-bolder' : 'cursor-pointer'}`} onClick={()=>{handleSortChange('desc', 'payment_status')}}>keyboard_arrow_down</em>
+                      <em className={`material-symbols-outlined ${sort === 'asc' && sortCol === 'order_status' ? 'fw-bolder' : 'cursor-pointer'}`} onClick={()=>{handleSortChange('asc', 'payment_status')}}>keyboard_arrow_up</em> 
+                      <em className={`material-symbols-outlined ${sort === 'desc' && sortCol === 'order_status' ? 'fw-bolder' : 'cursor-pointer'}`} onClick={()=>{handleSortChange('desc', 'payment_status')}}>keyboard_arrow_down</em>
                     </span>
                         </strong></div>
                     </div>
@@ -440,7 +441,7 @@ export default function OrderListing({ params }: { params: { locale:string, even
                         <div className="ebs-table-box ebs-box-4"><p>{order?.order_attendee?.detail?.company_name}</p></div>
                         <div className="ebs-table-box ebs-box-4"><p>{order?.reporting_panel_total_text}</p></div>
                         <div className="ebs-table-box ebs-box-4"><p>{order?.sales_agent_name}</p></div>
-                        <div className="ebs-table-box ebs-box-4" style={{width: 150}}><p style={{fontWeight: 600, color: order.is_payment_received == 1 ? '#60A259' : '#AB8D2E'}}>{order.is_payment_received == 1 ? t('order_table.payment_received') : t('order_table.payment_pending')}</p></div>
+                        <div className="ebs-table-box ebs-box-4" style={{width: 150}}><p style={{fontWeight: 600, color: order.billing_order_status == 'completed' ? '#60A259' : '#AB8D2E'}}>{order.billing_order_status}</p></div>
                       </div>) : (
                         <div style={{minHeight: '335px', backgroundColor: '#fff', borderRadius: '8px'}} className='d-flex align-items-center justify-content-center h-100 w-100'>
                         <div className="text-center">

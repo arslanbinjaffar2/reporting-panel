@@ -39,15 +39,17 @@ import { useTranslations } from 'next-intl';
 //   { id: '-1', name: "All stats" },
 // ];
 
-let storedEventFilterData =
-    typeof window !== "undefined" && localStorage.getItem("eventFilterData");
-const storedEventFilters =
-    storedEventFilterData && storedEventFilterData !== undefined ? JSON.parse(storedEventFilterData) : null;
+
 
 
 export default function Dashboard({params:{locale}}:{params:{locale:string}}) {
   const t = useTranslations('manage-events-page');
+
   const dispatch = useAppDispatch();
+
+  let storedEventFilterData = typeof window !== "undefined" && localStorage.getItem("eventFilterData");
+  const storedEventFilters =storedEventFilterData && storedEventFilterData !== undefined ? JSON.parse(storedEventFilterData) : null;
+
   const {events, loading, totalPages, currentPage, event_countries, office_countries, currencies, allEventsStats, totalevents} = useAppSelector((state: RootState) => state.events);
   const [showCustomRange, setShowCustomRange] = useState(storedEventFilters !== null && storedEventFilters.range === 'custom' ? true : false);
   const [limit, setLimit] = useState(storedEventFilters !== null ? storedEventFilters.limit : 10);
@@ -58,7 +60,7 @@ export default function Dashboard({params:{locale}}:{params:{locale:string}}) {
       country:0,
       office_country_id:0,
       currency:208,
-      range:'',
+      range:'today',
       start_date:'',
       end_date:'',
       searchTextEvents:'',
@@ -384,7 +386,7 @@ export default function Dashboard({params:{locale}}:{params:{locale:string}}) {
                       <div className="row">
                         <div className="col">
                           <div className="ebs-ticket-information">
-                            <strong>{allEventsStats !== null && allEventsStats.waiting_list_attendees  > 0 ? allEventsStats.waiting_list_attendees : 0}</strong>
+                            <strong>{allEventsStats !== null && allEventsStats.range_reporting_stats?.range_waiting_list_attendees  > 0 ? allEventsStats.range_reporting_stats?.range_waiting_list_attendees : 0}</strong>
                             <span>{t('tickets_waiting_label')}</span>
                           </div>
                         </div>
@@ -396,7 +398,7 @@ export default function Dashboard({params:{locale}}:{params:{locale:string}}) {
                         </div> */}
                         <div className="col">
                           <div className="ebs-ticket-information">
-                            <strong>{allEventsStats !== null && allEventsStats.total_sold_tickets  > 0 ? allEventsStats.total_sold_tickets : 0}</strong>
+                            <strong>{allEventsStats !== null && allEventsStats?.range_reporting_stats?.range_sold_tickets  > 0 ? allEventsStats?.range_reporting_stats?.range_sold_tickets : 0}</strong>
                             <span>{t('tickets_sold_label')}</span>
                           </div>
                         </div>
@@ -460,7 +462,7 @@ export default function Dashboard({params:{locale}}:{params:{locale:string}}) {
                                 <div style={{width: 170}}  className="ebs-table-box ebs-box-2"><p>{moment(event.start_date).format('L')} - {moment(event.end_date).format('L')}</p></div>
                                 <div style={{width: 140}}  className="ebs-table-box ebs-box-1"><p>{event.owner}</p></div>
                                 <div style={{width: 140}} className="ebs-table-box ebs-box-4"><p>{event?.reporting_data.waiting_tickets}</p></div>
-                                <div className="ebs-table-box ebs-box-4"><p>{event?.reporting_data.sold_tickets}</p></div>
+                                <div className="ebs-table-box ebs-box-4"><p>{event?.reporting_data.range_sold_tickets}</p></div>
                                 {/* <div className="ebs-table-box ebs-box-4"><p>{event?.reporting_data.total_tickets}</p></div> */}
                                 <div className="ebs-table-box ebs-box-1" ><p>{event?.reporting_data.total_range_revenue_text}</p></div>
                                 <div className="ebs-table-box ebs-box-4" style={{paddingRight: 0}}><p>{event?.reporting_data.total_revenue_text}</p></div>
