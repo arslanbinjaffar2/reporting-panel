@@ -182,7 +182,7 @@ export default function OrderListing({ params }: { params: { locale:string, even
 
   const handleStartDateChange = (date: any) => {
     const orderFilterDataUpdate = orderFilterData;
-    orderFilterDataUpdate['start_date'] = date;
+    orderFilterDataUpdate['start_date'] = date.format('MM/DD/YYYY');
     setOrderFilterData(orderFilterDataUpdate);
     savefiltersToLocalStorage(orderFilterDataUpdate);
     if(orderFilterDataUpdate.end_date !== ''){
@@ -192,7 +192,7 @@ export default function OrderListing({ params }: { params: { locale:string, even
   
   const handleEndDateChange = (date: any) => {
     const orderFilterDataUpdate = orderFilterData;
-    orderFilterDataUpdate['end_date'] = date;
+    orderFilterDataUpdate['end_date'] = date.format('MM/DD/YYYY');
     setOrderFilterData(orderFilterDataUpdate);
     savefiltersToLocalStorage(orderFilterDataUpdate);
     if(orderFilterDataUpdate.start_date !== ''){
@@ -404,8 +404,8 @@ export default function OrderListing({ params }: { params: { locale:string, even
                       <div className="ebs-table-box ebs-box-4" style={{width: 150}}><strong>
                       {t('order_table.order_status')}
                       <span className='d-flex flex-column'>
-                      <em className={`material-symbols-outlined ${sort === 'asc' && sortCol === 'order_status' ? 'fw-bolder' : 'cursor-pointer'}`} onClick={()=>{handleSortChange('asc', 'payment_status')}}>keyboard_arrow_up</em> 
-                      <em className={`material-symbols-outlined ${sort === 'desc' && sortCol === 'order_status' ? 'fw-bolder' : 'cursor-pointer'}`} onClick={()=>{handleSortChange('desc', 'payment_status')}}>keyboard_arrow_down</em>
+                      <em className={`material-symbols-outlined ${sort === 'asc' && sortCol === 'order_status' ? 'fw-bolder' : 'cursor-pointer'}`} onClick={()=>{handleSortChange('asc', 'order_status')}}>keyboard_arrow_up</em> 
+                      <em className={`material-symbols-outlined ${sort === 'desc' && sortCol === 'order_status' ? 'fw-bolder' : 'cursor-pointer'}`} onClick={()=>{handleSortChange('desc', 'order_status')}}>keyboard_arrow_down</em>
                     </span>
                         </strong></div>
                     </div>

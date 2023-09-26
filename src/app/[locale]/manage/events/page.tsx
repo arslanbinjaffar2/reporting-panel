@@ -220,7 +220,7 @@ export default function Dashboard({params:{locale}}:{params:{locale:string}}) {
   
   const handleStartDateChange = (date: any) => {
     const eventFilterDataUpdate = eventFilterData;
-    eventFilterDataUpdate['start_date'] = date;
+    eventFilterDataUpdate['start_date'] = date.format('MM/DD/YYYY');
     setEventFilterData(eventFilterDataUpdate);
     savefiltersToLocalStorage(eventFilterDataUpdate);
     if(eventFilterDataUpdate.end_date !== ''){
@@ -230,7 +230,7 @@ export default function Dashboard({params:{locale}}:{params:{locale:string}}) {
   
   const handleEndDateChange = (date: any) => {
     const eventFilterDataUpdate = eventFilterData;
-    eventFilterDataUpdate['end_date'] = date;
+    eventFilterDataUpdate['end_date'] = date.format('MM/DD/YYYY');
     setEventFilterData(eventFilterDataUpdate);
     savefiltersToLocalStorage(eventFilterDataUpdate);
     if(eventFilterDataUpdate.start_date !== ''){
@@ -461,7 +461,7 @@ export default function Dashboard({params:{locale}}:{params:{locale:string}}) {
                                 <div style={{width: 210}}  className="ebs-table-box ebs-box-2"><p style={{fontWeight: 600, color: '#404242'}}>{event.name}</p></div>
                                 <div style={{width: 170}}  className="ebs-table-box ebs-box-2"><p>{moment(event.start_date).format('L')} - {moment(event.end_date).format('L')}</p></div>
                                 <div style={{width: 140}}  className="ebs-table-box ebs-box-1"><p>{event.owner}</p></div>
-                                <div style={{width: 140}} className="ebs-table-box ebs-box-4"><p>{event?.reporting_data.waiting_tickets}</p></div>
+                                <div style={{width: 140}} className="ebs-table-box ebs-box-4"><p>{event?.reporting_data.range_waiting_list_attendees}</p></div>
                                 <div className="ebs-table-box ebs-box-4"><p>{event?.reporting_data.range_sold_tickets}</p></div>
                                 {/* <div className="ebs-table-box ebs-box-4"><p>{event?.reporting_data.total_tickets}</p></div> */}
                                 <div className="ebs-table-box ebs-box-1" ><p>{event?.reporting_data.total_range_revenue_text}</p></div>
