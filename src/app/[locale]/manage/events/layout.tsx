@@ -35,9 +35,8 @@ export default function RootLayout({ children, params}: { children: React.ReactN
 
         let replaceUrl = value === 'en' ? pathname.replace('/da', '/en') : pathname.includes('/da') ? `${pathname}` : `/${value}${pathname}`;
 
-        startTransition(() => {
-          router.replace(replaceUrl);
-        });
+        window.location.href = replaceUrl;
+
     }
 
     const exportAllEventOrders = () =>{

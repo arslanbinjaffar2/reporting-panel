@@ -21,9 +21,7 @@ export default function RootLayout({ children}: { children: React.ReactNode }) {
 
         let replaceUrl = value === 'en' ? pathname.replace('/da', '/en') : pathname.includes('/da') ? `${pathname}` : `/${value}${pathname}`;
 
-        startTransition(() => {
-          router.replace(replaceUrl);
-        });
+        window.location.href = replaceUrl;
     }
   
   return (
