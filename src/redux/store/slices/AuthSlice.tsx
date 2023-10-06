@@ -186,7 +186,7 @@ export const authUserSlice = createSlice({
       state.loading = false;
     }),
     builder.addCase(loginUser.rejected, (state, action) => {
-      console.log("rejected", action.payload);
+      console.log("rejected", action);
       state.error = "Network Error";
       state.loading = false;
     }),
