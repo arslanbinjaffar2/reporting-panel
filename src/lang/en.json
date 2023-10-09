@@ -112,6 +112,7 @@
         "tickets_detail_table":{
             "form":"Form",
             "tickets_sold":"Tickets sold",
+            "tickets_waiting":"Tickets waiting",
             "tickets_left":"Tickets left",
             "total_tickets":"Total tickets",
             "time_left":"Time left"
@@ -147,6 +148,7 @@
             "job_title":"Job Title",
             "company":"Company"
         },
+        "date_ended":"Date ended",
         "view":"View",
         "download":"Download as order",
         "download_as_invoice":"Download as invoice",

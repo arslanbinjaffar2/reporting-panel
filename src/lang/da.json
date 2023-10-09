@@ -109,8 +109,10 @@
         "tickets_vat_label":"Alle priser er eksklusiv moms.",
         "order_list":"Ordreliste", 
         "tickets_detail":"Billetoversigt", 
+        "date_ended":"Dato sluttet",
         "tickets_detail_table":{
             "form":"Figure",  
+            "tickets_waiting":"Venter billetter",
             "tickets_sold":"Solgte billetter", 
             "tickets_left":"Ledige billetter", 
             "total_tickets":"Totale billetter",

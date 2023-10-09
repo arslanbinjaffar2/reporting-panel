@@ -34,6 +34,7 @@ const TicketDetail = ({handleClose, form_stats }: any) => {
               <div className="ebs-grid-ticket-wrapper">
                 <div className="d-flex ebs-grid-ticket-row ebs-grid-ticket-header">
                 <div className="ebs-box-1"><strong>{t('tickets_detail_table.form')} </strong></div>
+                  <div className="ebs-box-2"><strong>{t('tickets_detail_table.tickets_waiting')}</strong></div>
                   <div className="ebs-box-2"><strong>{t('tickets_detail_table.tickets_sold')}</strong></div>
                   <div className="ebs-box-2"><strong>{t('tickets_detail_table.tickets_left')}</strong></div>
                   <div className="ebs-box-2"><strong>{t('tickets_detail_table.total_tickets')}</strong></div>
@@ -42,6 +43,7 @@ const TicketDetail = ({handleClose, form_stats }: any) => {
                 <div style={{maxHeight: _container?.current?.offsetHeight - 300}} className="ebs-grid-ticket-scroll">
                   {filteredFormStats.length > 0 && filteredFormStats.map((item:any, i:any) => <div key={i} className="d-flex ebs-grid-ticket-row">
                     <div className="ebs-box-1"><p>{item.attendee_type.attendee_type}</p></div>
+                    <div className="ebs-box-2"><p>{item.tickets_waiting}</p></div>
                     <div className="ebs-box-2"><p>{item.tickets_sold}</p></div>
                     <div className="ebs-box-2"><p>{item.tickets_left}</p></div>
                     <div className="ebs-box-2"><p>{item.total_tickets}</p></div>
