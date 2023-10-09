@@ -46,7 +46,7 @@ const TicketDetail = ({handleClose, form_stats }: any) => {
                     <div className="ebs-box-2"><p>{item.tickets_left}</p></div>
                     <div className="ebs-box-2"><p>{item.total_tickets}</p></div>
                     <div className="ebs-box-2 text-center"><p>
-                        {item.eventsite_settings.registration_end_date !== "0000-00-00 00:00:00" ? <Countdown date={moment(item.eventsite_settings.registration_end_date)} /> : '00:00:00:00'}
+                        {item.eventsite_settings.registration_end_date !== "0000-00-00 00:00:00" ? <Countdown date={`${moment(item.eventsite_settings.registration_end_date).format('YYYY-MM-DD')} ${item.eventsite_settings.registration_end_time}`} /> : '00:00:00:00'}
                       </p></div>
                   </div>)}
                 </div>

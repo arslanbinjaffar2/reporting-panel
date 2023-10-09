@@ -36,7 +36,8 @@
         "new_password_label":"Enter new password",
         "confirm_password_label":"Confirm new password",
         "reset_button_label":"RESET PASSWORD",
-        "reset_button_reseting_label":"RESETING..."
+        "reset_button_reseting_label":"RESETING...",
+        "confirm_password_mismatch_label":"Password and confirm password do not match"
     },
     "manage-events-layout":{
         "return_to_list_label":"Return to list",
