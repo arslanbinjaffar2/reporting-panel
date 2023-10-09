@@ -459,7 +459,7 @@ export default function Dashboard({params:{locale}}:{params:{locale:string}}) {
                                   alt={event.name} width={100} height={34} />
                                 </div>
                                 <div style={{width: 210}}  className="ebs-table-box ebs-box-2"><p style={{fontWeight: 600, color: '#404242'}}>{event.name}</p></div>
-                                <div style={{width: 170}}  className="ebs-table-box ebs-box-2"><p>{moment(event.start_date).format('L')} - {moment(event.end_date).format('L')}</p></div>
+                                <div style={{width: 170}}  className="ebs-table-box ebs-box-2"><p>{moment(event.start_date).format('DD-MM-YYYY')} - {moment(event.end_date).format('DD-MM-YYYY')}</p></div>
                                 <div style={{width: 140}}  className="ebs-table-box ebs-box-1"><p>{event.owner}</p></div>
                                 <div style={{width: 140}} className="ebs-table-box ebs-box-4"><p>{event?.reporting_data.range_waiting_list_attendees}</p></div>
                                 <div className="ebs-table-box ebs-box-4"><p>{event?.reporting_data.range_sold_tickets}</p></div>

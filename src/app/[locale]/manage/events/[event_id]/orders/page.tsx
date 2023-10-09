@@ -79,7 +79,9 @@ export default function OrderListing({ params }: { params: { locale:string, even
   const handleBody = (e:any) => {
     var _items = document.querySelectorAll('.ebs-btn-dropdown');
     _items.forEach(element => {
-      element.classList.remove('ebs-active')
+      if(e.target != element){
+        element.classList.remove('ebs-active')
+      }
     });
   }
   const handleToggle = (e:any) => {
@@ -411,7 +413,7 @@ export default function OrderListing({ params }: { params: { locale:string, even
                     </div>
                     <div style={{minHeight:"calc(100vh - 720px)"}}>
                       {event_orders !== null ? event_orders.data.length > 0 ? event_orders.data.map((order:any,k:number) => 
-                      <div key={k} className="d-flex align-items-center ebs-table-content">
+                      <div key={k} className="d-flex align-items-center ebs-table-content" style={{cursor:'text'}}>
                         <div className="ebs-table-box ebs-box-1"><p>{order.order_number}</p></div>
                         <div className="ebs-table-box ebs-box-1"><p>{moment(order.order_date).format('L')}</p></div>
                         <div className="ebs-table-box ebs-box-2 ebs-attendee-name-list">
