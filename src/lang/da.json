@@ -122,7 +122,7 @@
             "number":"Order #",
             "date":"Dato",
             "attendee_name":"Navn",
-            "attendee_email":"Email",
+            "attendee_email":"E-mail",
             "company":"Virksomhed",
             "job_title":"Jobtitel",
             "amount":"Beløb",
@@ -139,7 +139,9 @@
             "thism": "Denne måned",
             "prevm": "Forrige måned",
             "custom": "Brugerdefineret rækkevidde",
-            "-1": "Alle statistikker"
+            "-1": "Alle statistikker",
+            "start_date": "Start dato",
+            "end_date": "Ende dato"
         },
         "field_filters":{
             "select_field":"Vælg felt",

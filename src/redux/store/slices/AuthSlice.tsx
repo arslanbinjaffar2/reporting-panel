@@ -137,8 +137,9 @@ export const authUserSlice = createSlice({
       state.user = action.payload;
     },
     removeAuthUser: (state, action: PayloadAction<any>) => {
-      console.log('ddddd')
       localStorage.removeItem('agent');
+      localStorage.removeItem('eventFilterData');
+      localStorage.removeItem('orderFilterData');
       state.user = null;
     },
     setRedirect: (state, action: PayloadAction<any>) => {
@@ -206,6 +207,8 @@ export const authUserSlice = createSlice({
       state.error = null;
       state.errors=null;
       localStorage.removeItem('agent');
+      localStorage.removeItem('eventFilterData');
+      localStorage.removeItem('orderFilterData');
     }),
     builder.addCase(logOutUser.rejected, (state, action) => {
       console.log("rejected", action.payload);

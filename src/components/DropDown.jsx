@@ -66,7 +66,7 @@ class DropDown extends React.Component {
         const style = {
           option: (base, { data, isDisabled, isFocused, isSelected }) => ({
               ...base,
-              backgroundColor: isSelected ? "#DD386A" : "",
+              backgroundColor: isSelected ? "#DD386A" : isFocused ? "#EEF2F4" : "",
               ":hover": {
                 backgroundColor: "#E3708F",
                 color: '#fff'

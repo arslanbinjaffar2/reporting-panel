@@ -138,7 +138,9 @@
             "thism": "This month",
             "prevm": "Previous month",
             "custom": "Custom range",
-            "-1": "All stats"
+            "-1": "All stats",
+            "start_date": "Start date",
+            "end_date": "End date"
         },
         "field_filters":{
             "select_field":"Select field",

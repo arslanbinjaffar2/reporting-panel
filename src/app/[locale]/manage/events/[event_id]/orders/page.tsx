@@ -47,6 +47,7 @@ export default function OrderListing({ params }: { params: { locale:string, even
   const [showCustomRange, setShowCustomRange] = useState(storedOrderFilters !== null && storedOrderFilters.range === 'custom' ? true : false);
   const [limit, setLimit] = useState(storedOrderFilters !== null ? storedOrderFilters.limit : 10);
   const [toggle, setToggle] = useState(false)
+  const [startDate, setStartDate] = useState('');
   const [orderFilterData, setOrderFilterData] = useState(storedOrderFilters !== null ? storedOrderFilters : {
       field:'',
       range:'today',
@@ -185,6 +186,7 @@ export default function OrderListing({ params }: { params: { locale:string, even
   const handleStartDateChange = (date: any) => {
     const orderFilterDataUpdate = orderFilterData;
     orderFilterDataUpdate['start_date'] = date.format('MM/DD/YYYY');
+    setStartDate(orderFilterDataUpdate['start_date']);
     setOrderFilterData(orderFilterDataUpdate);
     savefiltersToLocalStorage(orderFilterDataUpdate);
     if(orderFilterDataUpdate.end_date !== ''){
@@ -325,7 +327,7 @@ export default function OrderListing({ params }: { params: { locale:string, even
                             <DateTime
                               showtime={false}
                               showdate={'MM/DD/YYYY'}
-                              label="Start date"
+                              label={t('range_filters.start_date')}
                               value={orderFilterData.start_date}
                               onChange={handleStartDateChange}
                             />
@@ -334,8 +336,10 @@ export default function OrderListing({ params }: { params: { locale:string, even
                           <DateTime
                             showtime={false}
                             showdate={'MM/DD/YYYY'}
-                            label="End date"
+                            label={t('range_filters.end_date')}
                             value={orderFilterData.end_date}
+                            minDate={startDate}
+                            key={startDate}
                             onChange={handleEndDateChange}
                           />
                           </label>

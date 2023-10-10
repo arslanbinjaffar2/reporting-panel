@@ -68,6 +68,8 @@ export default function Dashboard({params:{locale}}:{params:{locale:string}}) {
       page:1,
   });
 
+  const [startDate, setStartDate] = useState(storedEventFilters !== null ? storedEventFilters.start_date : '')
+
   useEffect(() => {
       const promise1 = dispatch(userEventsFilters({}));
       const promise2 = dispatch(userEventsStats(eventFilterData));
@@ -221,6 +223,7 @@ export default function Dashboard({params:{locale}}:{params:{locale:string}}) {
   const handleStartDateChange = (date: any) => {
     const eventFilterDataUpdate = eventFilterData;
     eventFilterDataUpdate['start_date'] = date.format('MM/DD/YYYY');
+    setStartDate(eventFilterDataUpdate['start_date']);
     setEventFilterData(eventFilterDataUpdate);
     savefiltersToLocalStorage(eventFilterDataUpdate);
     if(eventFilterDataUpdate.end_date !== ''){
@@ -359,7 +362,7 @@ export default function Dashboard({params:{locale}}:{params:{locale:string}}) {
                   <DateTime
                     showtime={false}
                     showdate={'MM/DD/YYYY'}
-                    label="Start date"
+                    label={t('sort_filters.start_date')}
                     value={eventFilterData.start_date}
                     onChange={handleStartDateChange}
                   />
@@ -370,8 +373,10 @@ export default function Dashboard({params:{locale}}:{params:{locale:string}}) {
                   <DateTime
                     showtime={false}
                     showdate={'MM/DD/YYYY'}
-                    label="End date"
+                    label={t('sort_filters.end_date')}
                     value={eventFilterData.end_date}
+                    minDate={startDate}
+                    key={startDate}
                     onChange={handleEndDateChange}
                   />
                   </label>
