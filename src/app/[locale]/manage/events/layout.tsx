@@ -172,7 +172,7 @@ export default function RootLayout({ children, params}: { children: React.ReactN
                     <div className="right-top-header">
                       <button className="btn btn-default" onClick={(e)=>{
                           if(!pathname.endsWith("/manage/events")){
-                            exportEventOrders(pathname.split('/')[3]);
+                            exportEventOrders( pathname.includes('/da') ? pathname.split('/')[4] : pathname.split('/')[3]);
                           }else{
                             exportAllEventOrders();
                           }

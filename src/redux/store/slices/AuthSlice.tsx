@@ -292,7 +292,7 @@ export const authUserSlice = createSlice({
         state.forgetPasswordTokenSuccess = false;
         state.user = null;
         state.error = null;
-        state.successMessage = 'Password successfully updated';
+        state.successMessage = res.message;
       }else{
         if(Array.isArray(res.message)){
           state.errors = res.message;
