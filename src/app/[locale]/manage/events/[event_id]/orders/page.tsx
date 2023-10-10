@@ -46,6 +46,7 @@ export default function OrderListing({ params }: { params: { locale:string, even
   const [sort, setSort] = useState(storedOrderFilters!== null ? storedOrderFilters.sort : 'desc');
   const [showCustomRange, setShowCustomRange] = useState(storedOrderFilters !== null && storedOrderFilters.range === 'custom' ? true : false);
   const [limit, setLimit] = useState(storedOrderFilters !== null ? storedOrderFilters.limit : 10);
+  const [regFormId, setRegFromId] = useState(0);
   const [toggle, setToggle] = useState(false)
   const [startDate, setStartDate] = useState('');
   const [orderFilterData, setOrderFilterData] = useState(storedOrderFilters !== null ? storedOrderFilters : {
@@ -203,6 +204,15 @@ export default function OrderListing({ params }: { params: { locale:string, even
       dispatch(userEventStatsAndOrders({event_id:params.event_id, ...orderFilterDataUpdate}));
     }
   };
+  
+  const handleRegFormByFilter = (e: any) => {
+    setRegFromId(e.value);
+    const orderFilterDataUpdate = orderFilterData;
+    orderFilterDataUpdate['regFormId'] = e.value
+    setOrderFilterData(orderFilterDataUpdate);
+    savefiltersToLocalStorage(orderFilterDataUpdate);
+    dispatch(userEventStatsAndOrders({event_id:params.event_id, ...orderFilterDataUpdate}));
+  };
 
   const handlePopup = (e:any) => {
     setToggle(false);
@@ -246,7 +256,7 @@ export default function OrderListing({ params }: { params: { locale:string, even
                   <div className="row d-flex">
                     <div className="col-6">
                       <div className="row">
-                        {event?.registration_form_id === 1 && <div className="col">
+                        {event?.registration_form_id === 1 && form_stats && <div className="col">
                           <div className="ebs-ticket-information ebs-bg-light">
                               <button onClick={() => setToggle(true)} className='btn'><em className="material-symbols-outlined">local_activity</em></button>
                           </div>
@@ -313,6 +323,15 @@ export default function OrderListing({ params }: { params: { locale:string, even
                             selectedlabel={getSelectedLabel(fieldFilters,orderFilterData.field)}
                           />
                         </label>
+                        {form_stats && form_stats?.length > 0 && <label style={{ width: "210px" }} className="label-select-alt">
+                          <Dropdown
+                            label="Registration forms"
+                            selected={regFormId} 
+                            onChange={handleRegFormByFilter}
+                            selectedlabel={getSelectedLabel([{id:0,name:"Registration forms"},...form_stats.map((item:any)=>({id:item.id, name:item.attendee_type.attendee_type}))],regFormId)}
+                            listitems={[{id:0,name:"Registration forms"},...form_stats.map((item:any)=>({id:item.id, name:item.attendee_type.attendee_type}))]}
+                          />
+                        </label>}
                         <label style={{ width: "210px" }} className="label-select-alt">
                           <Dropdown
                             label={t('range_filter_label')}
@@ -323,7 +342,6 @@ export default function OrderListing({ params }: { params: { locale:string, even
                             selectedlabel={getSelectedLabel(rangeFilters,orderFilterData.range)}
                           />
                         </label>
-                        
                       </div>
                     </div>
                     {showCustomRange && <div className='row mt-3'>
