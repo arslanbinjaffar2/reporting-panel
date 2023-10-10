@@ -236,7 +236,13 @@ export default function OrderListing({ params }: { params: { locale:string, even
               </div> */}
               <div style={{ background: "#fff", borderRadius: '0 0 8px 8px' }} className="main-data-table">
               <div className="ebs-ticket-section">
-                  <h4>{t('tickets_label')}</h4>
+                  <div className='d-flex justify-content-between mb-2'>
+                    <h4>{t('tickets_label')}</h4>
+                    <div className='cron-notification'>
+                        <p> <strong>Last updated</strong> :  {moment().format('DD-MM-YYYY')} | {moment().startOf('hour').format('hh:ss')}</p>
+                        <p> <strong>Next update at</strong> : {moment().format('DD-MM-YYYY')} | {moment().startOf('hour').add(1,'hours').format('hh:ss')}</p>
+                    </div>
+                  </div>
                   <div className="row d-flex">
                     <div className="col-6">
                       <div className="row">
