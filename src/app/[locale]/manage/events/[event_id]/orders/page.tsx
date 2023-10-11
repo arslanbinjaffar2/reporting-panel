@@ -441,38 +441,43 @@ export default function OrderListing({ params }: { params: { locale:string, even
                     </div>
                     <div style={{minHeight:"calc(100vh - 720px)"}}>
                       {event_orders !== null ? event_orders.data.length > 0 ? event_orders.data.map((order:any,k:number) => 
-                      <div key={k} className="d-flex align-items-center ebs-table-content" style={{cursor:'text'}}>
-                        <div className="ebs-table-box ebs-box-1"><p>{order.order_number}</p></div>
-                        <div className="ebs-table-box ebs-box-1"><p>{moment(order.order_date).format('L')}</p></div>
-                        <div className="ebs-table-box ebs-box-2 ebs-attendee-name-list">
-                          {order.order_attendees.length <= 1 ? <p>{`${order?.order_attendee?.first_name} ${order?.order_attendee?.last_name}`}</p> : (
-                            <div onClick={(e) => e.stopPropagation()} className="ebs-dropdown-area">
-                              <div className="d-flex align-items-center">
-                                <p>{`${order?.order_attendee?.first_name} ${order?.order_attendee?.last_name}`}</p>  
-                                <button onClick={handleToggle} className='ebs-btn-panel ebs-btn-dropdown'>
-                                  <i className="material-icons">expand_more</i>
-                                </button>
-                                <div style={{minWidth: 180}} className="ebs-dropdown-menu">
-                                  <h5>attendees ({order.order_attendees.length})</h5>
-                                  {order?.order_attendees?.map((attendee:any, k:number)=>(
-                                    <div className="ebs-dropdown-list" key={k}>
-                                      <p className="name">{`${attendee.attendee_detail?.first_name} ${attendee.attendee_detail?.last_name}`}</p>
-                                      <p className="email">{attendee.attendee_detail?.email}</p>
-                                    </div>
-                                  ))}
-                                  
+                      <div key={order.id} >
+                        <div key={k} className="d-flex align-items-center ebs-table-content" style={{cursor:'text'}}>
+                          <div className="ebs-table-box ebs-box-1"><p>{order.order_number}</p></div>
+                          <div className="ebs-table-box ebs-box-1"><p>{moment(order.order_date).format('L')}</p></div>
+                          <div className="ebs-table-box ebs-box-2 ebs-attendee-name-list">
+                            <p>{`${order?.order_attendee?.first_name} ${order?.order_attendee?.last_name}`}</p>
+                            {/* {order.order_attendees.length <= 1 ? <p>{`${order?.order_attendee?.first_name} ${order?.order_attendee?.last_name}`}</p> : (
+                              <div onClick={(e) => e.stopPropagation()} className="ebs-dropdown-area">
+                                <div className="d-flex align-items-center">
+                                  <p>{`${order?.order_attendee?.first_name} ${order?.order_attendee?.last_name}`}</p>  
+                                  <button onClick={handleToggle} className='ebs-btn-panel ebs-btn-dropdown'>
+                                    <i className="material-icons">expand_more</i>
+                                  </button>
+                                  <div style={{minWidth: 180}} className="ebs-dropdown-menu">
+                                    <h5>attendees ({order.order_attendees.length})</h5>
+                                    {order?.order_attendees?.map((attendee:any, k:number)=>(
+                                      <div className="ebs-dropdown-list" key={k}>
+                                        <p className="name">{`${attendee.attendee_detail?.first_name} ${attendee.attendee_detail?.last_name}`}</p>
+                                        <p className="email">{attendee.attendee_detail?.email}</p>
+                                      </div>
+                                    ))}
+                                    
+                                  </div>
                                 </div>
                               </div>
-                            </div>
-                          )}
+                            )} */}
+                          </div>
+                          <div className="ebs-table-box ebs-box-2"><p>{order?.order_attendee?.email}</p></div>
+                          <div style={{width: 150}} className="ebs-table-box ebs-box-2"><p>{order?.order_attendee?.detail?.title}</p></div>
+                          <div className="ebs-table-box ebs-box-4"><p>{order?.order_attendee?.detail?.company_name}</p></div>
+                          <div className="ebs-table-box ebs-box-4"><p>{order?.reporting_panel_total_text}</p></div>
+                          <div className="ebs-table-box ebs-box-4"><p>{order?.sales_agent_name}</p></div>
+                          <div className="ebs-table-box ebs-box-4" style={{width: 150}}><p style={{fontWeight: 600, color: order.billing_order_status == 'completed' ? '#60A259' : '#AB8D2E'}}>{order.billing_order_status}</p></div>
                         </div>
-                        <div className="ebs-table-box ebs-box-2"><p>{order?.order_attendee?.email}</p></div>
-                        <div style={{width: 150}} className="ebs-table-box ebs-box-2"><p>{order?.order_attendee?.detail?.title}</p></div>
-                        <div className="ebs-table-box ebs-box-4"><p>{order?.order_attendee?.detail?.company_name}</p></div>
-                        <div className="ebs-table-box ebs-box-4"><p>{order?.reporting_panel_total_text}</p></div>
-                        <div className="ebs-table-box ebs-box-4"><p>{order?.sales_agent_name}</p></div>
-                        <div className="ebs-table-box ebs-box-4" style={{width: 150}}><p style={{fontWeight: 600, color: order.billing_order_status == 'completed' ? '#60A259' : '#AB8D2E'}}>{order.billing_order_status}</p></div>
-                      </div>) : (
+                        {order?.order_attendees?.length > 1 && <MoreAttendees data={order.order_attendees} />}
+                      </div>
+                      ) : (
                         <div style={{minHeight: '335px', backgroundColor: '#fff', borderRadius: '8px'}} className='d-flex align-items-center justify-content-center h-100 w-100'>
                         <div className="text-center">
                           <Image
@@ -508,3 +513,42 @@ export default function OrderListing({ params }: { params: { locale:string, even
   );
 }
 
+
+const MoreAttendees = ({data}: any) => {
+  const [toggle, setToggle] = useState(false)
+  return (
+    <div style={{background: '#EEF2F4',}} className='rounded-4'>
+      <div style={{background: '#EEF2F4', cursor:'default'}} className="d-flex align-items-center ebs-table-content" >
+          <div className="ebs-table-box ebs-box-1" />
+          <div className="ebs-table-box ebs-box-1" />
+        <div className="ebs-table-box ebs-box-2"><p><strong onClick={() => setToggle(!toggle)}> <i  style={{fontSize: 18}} className="material-icons">{toggle ? 'expand_more' : 'chevron_right' }</i>  <span style={{marginRight:'5px'}}>{data?.length - 1}</span> {"more attendees"}  </strong></p></div>
+        <div className="ebs-table-box ebs-box-2" />
+        <div className="ebs-table-box  ebs-box-4" />
+       <div className="ebs-table-box ebs-box-4" />
+       <div className="ebs-table-box ebs-box-4" />
+       <div className="ebs-table-box ebs-box-3" style={{paddingRight: 0}} />
+       <div className="ebs-table-box ebs-box-3" style={{paddingRight: 0}} />
+       <div className="ebs-table-box ebs-box-3 d-flex justify-content-end" />
+      </div>
+      {toggle && <React.Fragment>
+        {data.map((attendee:any,k:any) =>
+         k === 0 ? null : (<div style={{background: '#EEF2F4', cursor:'default'}} key={attendee.id} className="d-flex align-items-center ebs-table-content">
+          <div className="ebs-table-box ebs-box-1" />
+          <div className="ebs-table-box ebs-box-1" />
+          <div className="ebs-table-box ebs-box-2" style={{paddingLeft:'32px'}}>
+            <p><strong>{attendee?.attendee_detail?.first_name} {attendee?.attendee_detail?.last_name}</strong></p>
+            <p>{attendee?.attendee_detail?.email} </p>
+            </div>
+          <div className="ebs-table-box ebs-box-2"></div>
+          <div className="ebs-table-box  ebs-box-4" />
+        <div className="ebs-table-box ebs-box-4" />
+        <div className="ebs-table-box ebs-box-4" />
+        <div className="ebs-table-box ebs-box-3" style={{paddingRight: 0}} />
+        <div className="ebs-table-box ebs-box-3" style={{paddingRight: 0}} />
+        <div className="ebs-table-box ebs-box-3 d-flex justify-content-end" />
+        </div>)
+      )}
+      </React.Fragment>}
+    </div>
+  )
+}
