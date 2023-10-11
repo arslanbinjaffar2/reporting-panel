@@ -48,7 +48,8 @@ export default function OrderListing({ params }: { params: { locale:string, even
   const [limit, setLimit] = useState(storedOrderFilters !== null ? storedOrderFilters.limit : 10);
   const [regFormId, setRegFromId] = useState(0);
   const [toggle, setToggle] = useState(false)
-  const [startDate, setStartDate] = useState('');
+  const [startDate, setStartDate] = useState(storedOrderFilters !== null ? storedOrderFilters.start_date : '');
+  const [endDate, setEndDate] = useState(storedOrderFilters !== null ? storedOrderFilters.end_date : '');
   const [orderFilterData, setOrderFilterData] = useState(storedOrderFilters !== null ? storedOrderFilters : {
       field:'',
       range:'today',
@@ -198,6 +199,7 @@ export default function OrderListing({ params }: { params: { locale:string, even
   const handleEndDateChange = (date: any) => {
     const orderFilterDataUpdate = orderFilterData;
     orderFilterDataUpdate['end_date'] = date.format('MM/DD/YYYY');
+    setEndDate(orderFilterDataUpdate['end_date']);
     setOrderFilterData(orderFilterDataUpdate);
     savefiltersToLocalStorage(orderFilterDataUpdate);
     if(orderFilterDataUpdate.start_date !== ''){
@@ -350,16 +352,18 @@ export default function OrderListing({ params }: { params: { locale:string, even
                           <label className="label-select-alt m-0 w-100">
                             <DateTime
                               showtime={false}
-                              showdate={'MM/DD/YYYY'}
+                              showdate={'DD-MM-YYYY'}
                               label={t('range_filters.start_date')}
                               value={orderFilterData.start_date}
+                              maxDate={endDate}
+                              key={endDate}
                               onChange={handleStartDateChange}
                             />
                           </label>
                           <label className="label-select-alt m-0 w-100">
                           <DateTime
                             showtime={false}
-                            showdate={'MM/DD/YYYY'}
+                            showdate={'DD-MM-YYYY'}
                             label={t('range_filters.end_date')}
                             value={orderFilterData.end_date}
                             minDate={startDate}

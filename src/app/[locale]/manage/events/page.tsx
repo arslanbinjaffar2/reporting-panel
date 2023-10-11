@@ -69,6 +69,7 @@ export default function Dashboard({params:{locale}}:{params:{locale:string}}) {
   });
 
   const [startDate, setStartDate] = useState(storedEventFilters !== null ? storedEventFilters.start_date : '')
+  const [endDate, setEndDate] = useState(storedEventFilters !== null ? storedEventFilters.end_date : '')
 
   useEffect(() => {
       const promise1 = dispatch(userEventsFilters({}));
@@ -234,6 +235,7 @@ export default function Dashboard({params:{locale}}:{params:{locale:string}}) {
   const handleEndDateChange = (date: any) => {
     const eventFilterDataUpdate = eventFilterData;
     eventFilterDataUpdate['end_date'] = date.format('MM/DD/YYYY');
+    setEndDate(eventFilterDataUpdate['end_date']);
     setEventFilterData(eventFilterDataUpdate);
     savefiltersToLocalStorage(eventFilterDataUpdate);
     if(eventFilterDataUpdate.start_date !== ''){
@@ -361,9 +363,11 @@ export default function Dashboard({params:{locale}}:{params:{locale:string}}) {
                   <label className="label-select-alt m-0 w-100">
                   <DateTime
                     showtime={false}
-                    showdate={'MM/DD/YYYY'}
+                    showdate={'DD-MM-YYYY'}
                     label={t('sort_filters.start_date')}
                     value={eventFilterData.start_date}
+                    maxDate={endDate}
+                    key={endDate}
                     onChange={handleStartDateChange}
                   />
                   </label>
@@ -372,7 +376,7 @@ export default function Dashboard({params:{locale}}:{params:{locale:string}}) {
                   <label className="label-select-alt m-0 w-100">
                   <DateTime
                     showtime={false}
-                    showdate={'MM/DD/YYYY'}
+                    showdate={'DD-MM-YYYY'}
                     label={t('sort_filters.end_date')}
                     value={eventFilterData.end_date}
                     minDate={startDate}
