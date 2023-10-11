@@ -245,10 +245,7 @@ export default function Dashboard({params:{locale}}:{params:{locale:string}}) {
 
   const exportEventOrders = (event_id:string) =>{
     setDownloading(true);
-    let storedOrderFilterData =
-    typeof window !== "undefined" && localStorage.getItem("orderFilterData");
-    const storedOrderFilters = storedOrderFilterData && storedOrderFilterData !== undefined ? JSON.parse(storedOrderFilterData) : null;
-    axios.post(`${AGENT_ENDPOINT}/export-event-orders/${event_id}`, storedOrderFilters, {
+    axios.post(`${AGENT_ENDPOINT}/export-event-orders/${event_id}`, eventFilterData, {
       headers: authHeader('GET'),
       responseType: 'blob'
     }).then((res)=>{
@@ -392,8 +389,8 @@ export default function Dashboard({params:{locale}}:{params:{locale:string}}) {
                   <div className='d-flex justify-content-between mb-2'>
                     <h4>{t('tickets')}</h4>
                     <div className='cron-notification'>
-                        <p> <strong>Last updated</strong> :  {moment().format('DD-MM-YYYY')} | {moment().startOf('hour').format('hh:ss')}</p>
-                        <p> <strong>Next update at</strong> : {moment().format('DD-MM-YYYY')} | {moment().startOf('hour').add(1,'hours').format('hh:ss')}</p>
+                        <p> <strong>{t('last_updated')}</strong> :  {moment().startOf('hour').format('HH:ss')} | {moment().format('DD-MM-YYYY')} </p>
+                        <p> <strong>{t('next_update_at')}</strong> : {moment().startOf('hour').add(1,'hours').format('HH:ss')} | {moment().format('DD-MM-YYYY')} </p>
                     </div>
                   </div>
                   <div className="row d-flex">
@@ -475,7 +472,7 @@ export default function Dashboard({params:{locale}}:{params:{locale:string}}) {
                                 </div>
                                 <div style={{width: 210}}  className="ebs-table-box ebs-box-2"><p style={{fontWeight: 600, color: '#404242'}}>{event.name}</p></div>
                                 <div style={{width: 170}}  className="ebs-table-box ebs-box-2"><p>{moment(event.start_date).format('DD-MM-YYYY')} - {moment(event.end_date).format('DD-MM-YYYY')}</p></div>
-                                <div style={{width: 140}}  className="ebs-table-box ebs-box-1"><p>{event.owner}</p></div>
+                                <div style={{width: 140}}  className="ebs-table-box ebs-box-1"><p>{event.organizer_name}</p></div>
                                 <div style={{width: 140}} className="ebs-table-box ebs-box-4"><p>{event?.reporting_data.range_waiting_list_attendees}</p></div>
                                 <div className="ebs-table-box ebs-box-4"><p>{event?.reporting_data.range_sold_tickets}</p></div>
                                 {/* <div className="ebs-table-box ebs-box-4"><p>{event?.reporting_data.total_tickets}</p></div> */}
@@ -490,7 +487,7 @@ export default function Dashboard({params:{locale}}:{params:{locale:string}}) {
                                         </button>
                                         <div style={{minWidth: 130}} className="ebs-dropdown-menu">
                                           <Link href={'/manage/events/'+event.id +'/orders'} className="dropdown-item">{t('view_details')}</Link>
-                                          <button className="dropdown-item" onClick={(e)=>{ exportEventOrders(event.id) }}>{t('export_orders')}</button>
+                                          <button className="dropdown-item" onClick={(e)=>{ e.preventDefault(); exportEventOrders(event.id) }}>{t('export_orders')}</button>
                                         </div>
                                       </div>
                                     </li>

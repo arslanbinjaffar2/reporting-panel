@@ -47,6 +47,8 @@
         "no_data_available":"No data available",
         "view_details":"View details",
         "export_orders":"Export orders",
+        "last_updated":"Last updated",
+        "next_update_at":"Next update at",
         "event_table":{
             "event_logo":"Event Logo",
             "event_name":"Event Name ",
@@ -109,6 +111,8 @@
         "tickets_vat_label":"All prices are excluding VAT.",
         "order_list":"Order List",
         "tickets_detail":"Tickets details",
+        "last_updated":"Last updated",
+        "next_update_at":"Next update at",
         "tickets_detail_table":{
             "form":"Form",
             "tickets_sold":"Tickets sold",

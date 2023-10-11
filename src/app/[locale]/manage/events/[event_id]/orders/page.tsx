@@ -50,7 +50,7 @@ export default function OrderListing({ params }: { params: { locale:string, even
   const [toggle, setToggle] = useState(false)
   const [startDate, setStartDate] = useState(storedOrderFilters !== null ? storedOrderFilters.start_date : '');
   const [endDate, setEndDate] = useState(storedOrderFilters !== null ? storedOrderFilters.end_date : '');
-  const [orderFilterData, setOrderFilterData] = useState(storedOrderFilters !== null ? storedOrderFilters : {
+  const [orderFilterData, setOrderFilterData] = useState(storedOrderFilters !== null ? {...storedOrderFilters, regFormId:0} : {
       field:'',
       range:'today',
       start_date:'',
@@ -60,6 +60,7 @@ export default function OrderListing({ params }: { params: { locale:string, even
       sort_col:'order_number',
       limit:10,
       page:1,
+      regFormId:0
   });
 
   useEffect(() => {
@@ -251,8 +252,8 @@ export default function OrderListing({ params }: { params: { locale:string, even
                   <div className='d-flex justify-content-between mb-2'>
                     <h4>{t('tickets_label')}</h4>
                     <div className='cron-notification'>
-                        <p> <strong>Last updated</strong> :  {moment().format('DD-MM-YYYY')} | {moment().startOf('hour').format('hh:ss')}</p>
-                        <p> <strong>Next update at</strong> : {moment().format('DD-MM-YYYY')} | {moment().startOf('hour').add(1,'hours').format('hh:ss')}</p>
+                        <p> <strong>{t('last_updated')}</strong> :  {moment().startOf('hour').format('HH:ss')} | {moment().format('DD-MM-YYYY')} </p>
+                        <p> <strong>{t('next_update_at')}</strong> : {moment().startOf('hour').add(1,'hours').format('HH:ss')} | {moment().format('DD-MM-YYYY')} </p>
                     </div>
                   </div>
                   <div className="row d-flex">

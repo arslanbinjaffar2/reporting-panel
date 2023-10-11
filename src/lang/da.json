@@ -47,6 +47,8 @@
         "no_data_available":"Ingen data er tilgængelig",
         "view_details":"Se detaljer",
         "export_orders":"Eksport ordrer",
+        "last_updated":"Sidst opdateret",
+        "next_update_at":"Næste opdatering kl",
         "event_table":{
             "event_logo":"Event Logo",
             "event_name":"Event navn ", 
@@ -110,6 +112,8 @@
         "order_list":"Ordreliste", 
         "tickets_detail":"Billetoversigt", 
         "date_ended":"Dato sluttet",
+        "last_updated":"Sidst opdateret",
+        "next_update_at":"Næste opdatering kl",
         "tickets_detail_table":{
             "form":"Figure",  
             "tickets_waiting":"Venter billetter",
@@ -119,7 +123,7 @@
             "time_left":"Tid tilbage" 
         },
         "order_table":{
-            "number":"Order #",
+            "number":"Ordre #",
             "date":"Dato",
             "attendee_name":"Navn",
             "attendee_email":"E-mail",
