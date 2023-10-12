@@ -64,6 +64,7 @@ export default function OrderListing({ params }: { params: { locale:string, even
   });
 
   useEffect(() => {
+    savefiltersToLocalStorage(orderFilterData);
     const promise1 = dispatch(userEventStatsAndOrders({event_id:params.event_id, ...orderFilterData}));
     const promise2 = dispatch(userEventFormBasedStats({event_id:params.event_id, ...orderFilterData}));
     return () =>{
@@ -252,8 +253,8 @@ export default function OrderListing({ params }: { params: { locale:string, even
                   <div className='d-flex justify-content-between mb-2'>
                     <h4>{t('tickets_label')}</h4>
                     <div className='cron-notification'>
-                        <p> <strong>{t('last_updated')}</strong> :  {moment().startOf('hour').format('HH:ss')} | {moment().format('DD-MM-YYYY')} </p>
-                        <p> <strong>{t('next_update_at')}</strong> : {moment().startOf('hour').add(1,'hours').format('HH:ss')} | {moment().format('DD-MM-YYYY')} </p>
+                        <p> <strong>{t('last_updated')}</strong> :  {moment().startOf('hour').format('HH:ss')}  {moment().format('DD-MM-YYYY')} </p>
+                        <p> <strong>{t('next_update_at')}</strong> : {moment().startOf('hour').add(1,'hours').format('HH:ss')}  {moment().format('DD-MM-YYYY')} </p>
                     </div>
                   </div>
                   <div className="row d-flex">
@@ -264,6 +265,12 @@ export default function OrderListing({ params }: { params: { locale:string, even
                               <button onClick={() => setToggle(true)} className='btn'><em className="material-symbols-outlined">local_activity</em></button>
                           </div>
                         </div>}
+                        {event_stats !== null && event_stats?.reporting_data?.waiting_tickets != "0" ? <div className="col">
+                          <div className="ebs-ticket-information ebs-bg-light">
+                            <strong>{event_stats?.reporting_data?.waiting_tickets}</strong>
+                            <span>{t('stats_waiting_tickets')}</span>
+                          </div>
+                        </div> : null}
                         {event_stats !== null && event_stats?.event_stats?.total_tickets != 0 ? <div className="col">
                           <div className="ebs-ticket-information ebs-bg-light">
                             <strong>{event_stats?.event_tickets_left}</strong>

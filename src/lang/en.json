@@ -108,6 +108,7 @@
         "stats_revenue":"Revenue",
         "stats_total_tickets":"Total",
         "stats_left_tickets":"Left",
+        "stats_waiting_tickets":"Waiting",
         "tickets_vat_label":"All prices are excluding VAT.",
         "order_list":"Order List",
         "tickets_detail":"Tickets details",

@@ -389,8 +389,8 @@ export default function Dashboard({params:{locale}}:{params:{locale:string}}) {
                   <div className='d-flex justify-content-between mb-2'>
                     <h4>{t('tickets')}</h4>
                     <div className='cron-notification'>
-                        <p> <strong>{t('last_updated')}</strong> :  {moment().startOf('hour').format('HH:ss')} | {moment().format('DD-MM-YYYY')} </p>
-                        <p> <strong>{t('next_update_at')}</strong> : {moment().startOf('hour').add(1,'hours').format('HH:ss')} | {moment().format('DD-MM-YYYY')} </p>
+                        <p> <strong>{t('last_updated')}</strong> :  {moment().startOf('hour').format('HH:ss')}  {moment().format('DD-MM-YYYY')} </p>
+                        <p> <strong>{t('next_update_at')}</strong> : {moment().startOf('hour').add(1,'hours').format('HH:ss')}  {moment().format('DD-MM-YYYY')} </p>
                     </div>
                   </div>
                   <div className="row d-flex">

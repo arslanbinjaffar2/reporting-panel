@@ -108,6 +108,7 @@
         "stats_revenue":"Indtægter",
         "stats_total_tickets":"Total",
         "stats_left_tickets":"tilbage",
+        "stats_waiting_tickets":"venter",
         "tickets_vat_label":"Alle priser er eksklusiv moms.",
         "order_list":"Ordreliste", 
         "tickets_detail":"Billetoversigt", 
