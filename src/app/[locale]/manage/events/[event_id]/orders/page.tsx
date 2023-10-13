@@ -456,7 +456,7 @@ export default function OrderListing({ params }: { params: { locale:string, even
                       <div key={order.id} >
                         <div key={k} className="d-flex align-items-center ebs-table-content" style={{cursor:'text'}}>
                           <div className="ebs-table-box ebs-box-1"><p>{order.order_number}</p></div>
-                          <div className="ebs-table-box ebs-box-1"><p>{moment(order.order_date).format('L')}</p></div>
+                          <div className="ebs-table-box ebs-box-1"><p>{moment(order.order_date).format('DD-MM-YYYY')}</p></div>
                           <div className="ebs-table-box ebs-box-2 ebs-attendee-name-list">
                             <p>{`${order?.order_attendee?.first_name} ${order?.order_attendee?.last_name}`}</p>
                             {/* {order.order_attendees.length <= 1 ? <p>{`${order?.order_attendee?.first_name} ${order?.order_attendee?.last_name}`}</p> : (
