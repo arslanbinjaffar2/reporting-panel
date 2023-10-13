@@ -1,19 +1,15 @@
 "use client";
+import { useTranslations } from 'next-intl';
 import React from 'react'
 import Countdown, { zeroPad } from "react-countdown";
 
-
-const Completionist = () =>  
-  <div className="col-12">
-    <p>Date ended</p>
-  </div>
-;
-
 // Renderer callback with condition
-const renderer = ({ months,days,hours, minutes, seconds, completed }:any) => {
+const Renderer = ({ months,days,hours, minutes, seconds, completed, completeText }:any) => {
     if (completed) {
       // Render a complete state
-      return <Completionist />;
+      return (<div className="col-12">
+      <p>{completeText}</p>
+    </div>);
     } else {
       // Render a countdown
       return (
@@ -25,8 +21,10 @@ const renderer = ({ months,days,hours, minutes, seconds, completed }:any) => {
   };
 
 const Index = ({date}:any) => {
+  const t = useTranslations('manage-orders-page');
+
   return (
-    <Countdown date={date} renderer={renderer} />
+    <Countdown date={date} renderer={props=> <Renderer {...props} completeText={t('date_ended')} />} />
   )
 }
 

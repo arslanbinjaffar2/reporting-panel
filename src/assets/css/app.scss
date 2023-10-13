@@ -1409,3 +1409,12 @@ animation: widgetLoaderSpin 2s linear infinite;
   scrollbar-color: $border #F2F2F2;
   scrollbar-gutter: stable;
 }
+
+.cron-notification{
+  background-color: #DADFE0;
+  padding: 5px 10px;
+  font-size: 14px;
+  p {
+    margin: 0;
+  }
+}

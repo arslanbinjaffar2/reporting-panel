@@ -36,7 +36,8 @@
         "new_password_label":"Enter new password",
         "confirm_password_label":"Confirm new password",
         "reset_button_label":"RESET PASSWORD",
-        "reset_button_reseting_label":"RESETING..."
+        "reset_button_reseting_label":"RESETING...",
+        "confirm_password_mismatch_label":"Password and confirm password do not match"
     },
     "manage-events-layout":{
         "return_to_list_label":"Return to list",
@@ -46,6 +47,8 @@
         "no_data_available":"No data available",
         "view_details":"View details",
         "export_orders":"Export orders",
+        "last_updated":"Last updated",
+        "next_update_at":"Next update at",
         "event_table":{
             "event_logo":"Event Logo",
             "event_name":"Event Name ",
@@ -105,12 +108,16 @@
         "stats_revenue":"Revenue",
         "stats_total_tickets":"Total",
         "stats_left_tickets":"Left",
+        "stats_waiting_tickets":"Waiting",
         "tickets_vat_label":"All prices are excluding VAT.",
         "order_list":"Order List",
         "tickets_detail":"Tickets details",
+        "last_updated":"Last updated",
+        "next_update_at":"Next update at",
         "tickets_detail_table":{
             "form":"Form",
             "tickets_sold":"Tickets sold",
+            "tickets_waiting":"Tickets waiting",
             "tickets_left":"Tickets left",
             "total_tickets":"Total tickets",
             "time_left":"Time left"
@@ -136,7 +143,9 @@
             "thism": "This month",
             "prevm": "Previous month",
             "custom": "Custom range",
-            "-1": "All stats"
+            "-1": "All stats",
+            "start_date": "Start date",
+            "end_date": "End date"
         },
         "field_filters":{
             "select_field":"Select field",
@@ -146,6 +155,7 @@
             "job_title":"Job Title",
             "company":"Company"
         },
+        "date_ended":"Date ended",
         "view":"View",
         "download":"Download as order",
         "download_as_invoice":"Download as invoice",

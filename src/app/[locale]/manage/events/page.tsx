@@ -68,6 +68,9 @@ export default function Dashboard({params:{locale}}:{params:{locale:string}}) {
       page:1,
   });
 
+  const [startDate, setStartDate] = useState(storedEventFilters !== null ? storedEventFilters.start_date : '')
+  const [endDate, setEndDate] = useState(storedEventFilters !== null ? storedEventFilters.end_date : '')
+
   useEffect(() => {
       const promise1 = dispatch(userEventsFilters({}));
       const promise2 = dispatch(userEventsStats(eventFilterData));
@@ -221,6 +224,7 @@ export default function Dashboard({params:{locale}}:{params:{locale:string}}) {
   const handleStartDateChange = (date: any) => {
     const eventFilterDataUpdate = eventFilterData;
     eventFilterDataUpdate['start_date'] = date.format('MM/DD/YYYY');
+    setStartDate(eventFilterDataUpdate['start_date']);
     setEventFilterData(eventFilterDataUpdate);
     savefiltersToLocalStorage(eventFilterDataUpdate);
     if(eventFilterDataUpdate.end_date !== ''){
@@ -231,6 +235,7 @@ export default function Dashboard({params:{locale}}:{params:{locale:string}}) {
   const handleEndDateChange = (date: any) => {
     const eventFilterDataUpdate = eventFilterData;
     eventFilterDataUpdate['end_date'] = date.format('MM/DD/YYYY');
+    setEndDate(eventFilterDataUpdate['end_date']);
     setEventFilterData(eventFilterDataUpdate);
     savefiltersToLocalStorage(eventFilterDataUpdate);
     if(eventFilterDataUpdate.start_date !== ''){
@@ -240,10 +245,7 @@ export default function Dashboard({params:{locale}}:{params:{locale:string}}) {
 
   const exportEventOrders = (event_id:string) =>{
     setDownloading(true);
-    let storedOrderFilterData =
-    typeof window !== "undefined" && localStorage.getItem("orderFilterData");
-    const storedOrderFilters = storedOrderFilterData && storedOrderFilterData !== undefined ? JSON.parse(storedOrderFilterData) : null;
-    axios.post(`${AGENT_ENDPOINT}/export-event-orders/${event_id}`, storedOrderFilters, {
+    axios.post(`${AGENT_ENDPOINT}/export-event-orders/${event_id}`, eventFilterData, {
       headers: authHeader('GET'),
       responseType: 'blob'
     }).then((res)=>{
@@ -358,9 +360,11 @@ export default function Dashboard({params:{locale}}:{params:{locale:string}}) {
                   <label className="label-select-alt m-0 w-100">
                   <DateTime
                     showtime={false}
-                    showdate={'MM/DD/YYYY'}
-                    label="Start date"
+                    showdate={'DD-MM-YYYY'}
+                    label={t('sort_filters.start_date')}
                     value={eventFilterData.start_date}
+                    maxDate={endDate}
+                    key={endDate}
                     onChange={handleStartDateChange}
                   />
                   </label>
@@ -369,9 +373,11 @@ export default function Dashboard({params:{locale}}:{params:{locale:string}}) {
                   <label className="label-select-alt m-0 w-100">
                   <DateTime
                     showtime={false}
-                    showdate={'MM/DD/YYYY'}
-                    label="End date"
+                    showdate={'DD-MM-YYYY'}
+                    label={t('sort_filters.end_date')}
                     value={eventFilterData.end_date}
+                    minDate={startDate}
+                    key={startDate}
                     onChange={handleEndDateChange}
                   />
                   </label>
@@ -380,7 +386,13 @@ export default function Dashboard({params:{locale}}:{params:{locale:string}}) {
             </div>
             <div className="main-data-table">
                 <div className="ebs-ticket-section">
-                  <h4>{t('tickets')}</h4>
+                  <div className='d-flex justify-content-between mb-2'>
+                    <h4>{t('tickets')}</h4>
+                    <div className='cron-notification'>
+                        <p> <strong>{t('last_updated')}</strong> :  {moment().startOf('hour').format('HH:ss')}  {moment().format('DD-MM-YYYY')} </p>
+                        <p> <strong>{t('next_update_at')}</strong> : {moment().startOf('hour').add(1,'hours').format('HH:ss')}  {moment().format('DD-MM-YYYY')} </p>
+                    </div>
+                  </div>
                   <div className="row d-flex">
                     <div className="col-6">
                       <div className="row">
@@ -459,8 +471,8 @@ export default function Dashboard({params:{locale}}:{params:{locale:string}}) {
                                   alt={event.name} width={100} height={34} />
                                 </div>
                                 <div style={{width: 210}}  className="ebs-table-box ebs-box-2"><p style={{fontWeight: 600, color: '#404242'}}>{event.name}</p></div>
-                                <div style={{width: 170}}  className="ebs-table-box ebs-box-2"><p>{moment(event.start_date).format('L')} - {moment(event.end_date).format('L')}</p></div>
-                                <div style={{width: 140}}  className="ebs-table-box ebs-box-1"><p>{event.owner}</p></div>
+                                <div style={{width: 170}}  className="ebs-table-box ebs-box-2"><p>{moment(event.start_date).format('DD-MM-YYYY')} - {moment(event.end_date).format('DD-MM-YYYY')}</p></div>
+                                <div style={{width: 140}}  className="ebs-table-box ebs-box-1"><p>{event.organizer_name}</p></div>
                                 <div style={{width: 140}} className="ebs-table-box ebs-box-4"><p>{event?.reporting_data.range_waiting_list_attendees}</p></div>
                                 <div className="ebs-table-box ebs-box-4"><p>{event?.reporting_data.range_sold_tickets}</p></div>
                                 {/* <div className="ebs-table-box ebs-box-4"><p>{event?.reporting_data.total_tickets}</p></div> */}
@@ -475,7 +487,7 @@ export default function Dashboard({params:{locale}}:{params:{locale:string}}) {
                                         </button>
                                         <div style={{minWidth: 130}} className="ebs-dropdown-menu">
                                           <Link href={'/manage/events/'+event.id +'/orders'} className="dropdown-item">{t('view_details')}</Link>
-                                          <button className="dropdown-item" onClick={(e)=>{ exportEventOrders(event.id) }}>{t('export_orders')}</button>
+                                          <button className="dropdown-item" onClick={(e)=>{ e.preventDefault(); exportEventOrders(event.id) }}>{t('export_orders')}</button>
                                         </div>
                                       </div>
                                     </li>

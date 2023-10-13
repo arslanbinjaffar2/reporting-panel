@@ -1,6 +1,7 @@
 import React, { ReactElement, FC, useRef } from 'react';
 import "react-datetime/css/react-datetime.css";
 import Datetime from "react-datetime";
+import moment from 'moment';
 
 type Props = {
   value: any;
@@ -12,6 +13,8 @@ type Props = {
   showdate: boolean;
   locale?: any;
   initialValue?: any;
+  maxDate:any;
+  minDate:any;
 }
 
 const MyDTPicker: FC<any> = (props: Props): ReactElement => {
@@ -46,7 +49,27 @@ const MyDTPicker: FC<any> = (props: Props): ReactElement => {
     );
   }
 
-  return <Datetime locale={props?.locale !== undefined ? props?.locale : 'en'} initialValue={props.initialValue} ref={textInput} renderView={(mode, renderDefault) => renderView(mode, renderDefault, props.showtime,props.showdate)} initialViewMode={props.showdate ? 'days' : 'time'} closeOnSelect={props.showtime ? false : true} onChange={props.onChange} value={props.value} timeFormat={props.showtime} dateFormat={props.showdate} inputProps={{ placeholder: props.placeholder, required: props.required }} renderInput={renderInput} />;
+  return <Datetime locale={props?.locale !== undefined ? props?.locale : 'en'} initialValue={props.initialValue} ref={textInput} renderView={(mode, renderDefault) => renderView(mode, renderDefault, props.showtime,props.showdate)} initialViewMode={props.showdate ? 'days' : 'time'} closeOnSelect={props.showtime ? false : true} onChange={props.onChange} value={props.value} timeFormat={props.showtime} dateFormat={props.showdate} inputProps={{ placeholder: props.placeholder, required: props.required }} renderInput={renderInput} 
+
+    isValidDate={ (currentDate) => {
+      if(props.minDate !== '' && props.maxDate !== ''){
+        
+        return  currentDate.isBefore(moment(props.maxDate)) && currentDate.isAfter(moment(props.minDate)) 
+      }
+      else if(props.maxDate !== ''){
+        
+        return  currentDate.isBefore(moment(props.maxDate)) 
+      }
+      else if(props.minDate !== ''){
+
+        return currentDate.isAfter(moment(props.minDate)) 
+      }
+      else {
+        return true;
+      }
+  }}
+
+  />;
 };
 
 type DateTimeProps = {
@@ -60,11 +83,13 @@ type DateTimeProps = {
   fromDate?: any;
   locale?: any;
   initialValue?: any;
+  maxDate?:any;
+  minDate?:any;
 }
 
 const DateTime: FC<DateTimeProps> = (props): ReactElement => {
   return (
-    <MyDTPicker locale={props?.locale !== undefined ? props?.locale : 'en'} initialValue={props.initialValue} onChange={props.onChange} value={props.value} showtime={props.showtime !== undefined ? props.showtime : false} showdate={props.showdate !== undefined ? props.showdate : true} placeholder={props.label} />
+    <MyDTPicker locale={props?.locale !== undefined ? props?.locale : 'en'} minDate={props.minDate !== undefined ? props.minDate : ''} maxDate={props.maxDate !== undefined ? props.maxDate : ''} initialValue={props.initialValue} onChange={props.onChange} value={props.value} showtime={props.showtime !== undefined ? props.showtime : false} showdate={props.showdate !== undefined ? props.showdate : true} placeholder={props.label} />
   )
 };
 

@@ -35,9 +35,8 @@ export default function RootLayout({ children, params}: { children: React.ReactN
 
         let replaceUrl = value === 'en' ? pathname.replace('/da', '/en') : pathname.includes('/da') ? `${pathname}` : `/${value}${pathname}`;
 
-        startTransition(() => {
-          router.replace(replaceUrl);
-        });
+        window.location.href = replaceUrl;
+
     }
 
     const exportAllEventOrders = () =>{
@@ -172,8 +171,8 @@ export default function RootLayout({ children, params}: { children: React.ReactN
                   <div className="col-8">
                     <div className="right-top-header">
                       <button className="btn btn-default" onClick={(e)=>{
-                          if(pathname !== "/manage/events"){
-                            exportEventOrders(pathname.split('/')[3]);
+                          if(!pathname.endsWith("/manage/events")){
+                            exportEventOrders( pathname.includes('/da') ? pathname.split('/')[4] : pathname.split('/')[3]);
                           }else{
                             exportAllEventOrders();
                           }

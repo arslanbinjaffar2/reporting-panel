@@ -46,8 +46,11 @@ export default function OrderListing({ params }: { params: { locale:string, even
   const [sort, setSort] = useState(storedOrderFilters!== null ? storedOrderFilters.sort : 'desc');
   const [showCustomRange, setShowCustomRange] = useState(storedOrderFilters !== null && storedOrderFilters.range === 'custom' ? true : false);
   const [limit, setLimit] = useState(storedOrderFilters !== null ? storedOrderFilters.limit : 10);
+  const [regFormId, setRegFromId] = useState(0);
   const [toggle, setToggle] = useState(false)
-  const [orderFilterData, setOrderFilterData] = useState(storedOrderFilters !== null ? storedOrderFilters : {
+  const [startDate, setStartDate] = useState(storedOrderFilters !== null ? storedOrderFilters.start_date : '');
+  const [endDate, setEndDate] = useState(storedOrderFilters !== null ? storedOrderFilters.end_date : '');
+  const [orderFilterData, setOrderFilterData] = useState(storedOrderFilters !== null ? {...storedOrderFilters, regFormId:0} : {
       field:'',
       range:'today',
       start_date:'',
@@ -57,9 +60,11 @@ export default function OrderListing({ params }: { params: { locale:string, even
       sort_col:'order_number',
       limit:10,
       page:1,
+      regFormId:0
   });
 
   useEffect(() => {
+    savefiltersToLocalStorage(orderFilterData);
     const promise1 = dispatch(userEventStatsAndOrders({event_id:params.event_id, ...orderFilterData}));
     const promise2 = dispatch(userEventFormBasedStats({event_id:params.event_id, ...orderFilterData}));
     return () =>{
@@ -79,7 +84,9 @@ export default function OrderListing({ params }: { params: { locale:string, even
   const handleBody = (e:any) => {
     var _items = document.querySelectorAll('.ebs-btn-dropdown');
     _items.forEach(element => {
-      element.classList.remove('ebs-active')
+      if(e.target != element){
+        element.classList.remove('ebs-active')
+      }
     });
   }
   const handleToggle = (e:any) => {
@@ -183,6 +190,7 @@ export default function OrderListing({ params }: { params: { locale:string, even
   const handleStartDateChange = (date: any) => {
     const orderFilterDataUpdate = orderFilterData;
     orderFilterDataUpdate['start_date'] = date.format('MM/DD/YYYY');
+    setStartDate(orderFilterDataUpdate['start_date']);
     setOrderFilterData(orderFilterDataUpdate);
     savefiltersToLocalStorage(orderFilterDataUpdate);
     if(orderFilterDataUpdate.end_date !== ''){
@@ -193,11 +201,21 @@ export default function OrderListing({ params }: { params: { locale:string, even
   const handleEndDateChange = (date: any) => {
     const orderFilterDataUpdate = orderFilterData;
     orderFilterDataUpdate['end_date'] = date.format('MM/DD/YYYY');
+    setEndDate(orderFilterDataUpdate['end_date']);
     setOrderFilterData(orderFilterDataUpdate);
     savefiltersToLocalStorage(orderFilterDataUpdate);
     if(orderFilterDataUpdate.start_date !== ''){
       dispatch(userEventStatsAndOrders({event_id:params.event_id, ...orderFilterDataUpdate}));
     }
+  };
+  
+  const handleRegFormByFilter = (e: any) => {
+    setRegFromId(e.value);
+    const orderFilterDataUpdate = orderFilterData;
+    orderFilterDataUpdate['regFormId'] = e.value
+    setOrderFilterData(orderFilterDataUpdate);
+    savefiltersToLocalStorage(orderFilterDataUpdate);
+    dispatch(userEventStatsAndOrders({event_id:params.event_id, ...orderFilterDataUpdate}));
   };
 
   const handlePopup = (e:any) => {
@@ -232,15 +250,27 @@ export default function OrderListing({ params }: { params: { locale:string, even
               </div> */}
               <div style={{ background: "#fff", borderRadius: '0 0 8px 8px' }} className="main-data-table">
               <div className="ebs-ticket-section">
-                  <h4>{t('tickets_label')}</h4>
+                  <div className='d-flex justify-content-between mb-2'>
+                    <h4>{t('tickets_label')}</h4>
+                    <div className='cron-notification'>
+                        <p> <strong>{t('last_updated')}</strong> :  {moment().startOf('hour').format('HH:ss')}  {moment().format('DD-MM-YYYY')} </p>
+                        <p> <strong>{t('next_update_at')}</strong> : {moment().startOf('hour').add(1,'hours').format('HH:ss')}  {moment().format('DD-MM-YYYY')} </p>
+                    </div>
+                  </div>
                   <div className="row d-flex">
                     <div className="col-6">
                       <div className="row">
-                        {event?.registration_form_id === 1 && <div className="col">
+                        {event?.registration_form_id === 1 && form_stats && <div className="col">
                           <div className="ebs-ticket-information ebs-bg-light">
                               <button onClick={() => setToggle(true)} className='btn'><em className="material-symbols-outlined">local_activity</em></button>
                           </div>
                         </div>}
+                        {event_stats !== null && event_stats?.reporting_data?.waiting_tickets != "0" ? <div className="col">
+                          <div className="ebs-ticket-information ebs-bg-light">
+                            <strong>{event_stats?.reporting_data?.waiting_tickets}</strong>
+                            <span>{t('stats_waiting_tickets')}</span>
+                          </div>
+                        </div> : null}
                         {event_stats !== null && event_stats?.event_stats?.total_tickets != 0 ? <div className="col">
                           <div className="ebs-ticket-information ebs-bg-light">
                             <strong>{event_stats?.event_tickets_left}</strong>
@@ -303,6 +333,15 @@ export default function OrderListing({ params }: { params: { locale:string, even
                             selectedlabel={getSelectedLabel(fieldFilters,orderFilterData.field)}
                           />
                         </label>
+                        {form_stats && form_stats?.length > 0 && <label style={{ width: "210px" }} className="label-select-alt">
+                          <Dropdown
+                            label="Registration forms"
+                            selected={regFormId} 
+                            onChange={handleRegFormByFilter}
+                            selectedlabel={getSelectedLabel([{id:0,name:"Registration forms"},...form_stats.map((item:any)=>({id:item.id, name:item.attendee_type.attendee_type}))],regFormId)}
+                            listitems={[{id:0,name:"Registration forms"},...form_stats.map((item:any)=>({id:item.id, name:item.attendee_type.attendee_type}))]}
+                          />
+                        </label>}
                         <label style={{ width: "210px" }} className="label-select-alt">
                           <Dropdown
                             label={t('range_filter_label')}
@@ -313,7 +352,6 @@ export default function OrderListing({ params }: { params: { locale:string, even
                             selectedlabel={getSelectedLabel(rangeFilters,orderFilterData.range)}
                           />
                         </label>
-                        
                       </div>
                     </div>
                     {showCustomRange && <div className='row mt-3'>
@@ -322,18 +360,22 @@ export default function OrderListing({ params }: { params: { locale:string, even
                           <label className="label-select-alt m-0 w-100">
                             <DateTime
                               showtime={false}
-                              showdate={'MM/DD/YYYY'}
-                              label="Start date"
+                              showdate={'DD-MM-YYYY'}
+                              label={t('range_filters.start_date')}
                               value={orderFilterData.start_date}
+                              maxDate={endDate}
+                              key={endDate}
                               onChange={handleStartDateChange}
                             />
                           </label>
                           <label className="label-select-alt m-0 w-100">
                           <DateTime
                             showtime={false}
-                            showdate={'MM/DD/YYYY'}
-                            label="End date"
+                            showdate={'DD-MM-YYYY'}
+                            label={t('range_filters.end_date')}
                             value={orderFilterData.end_date}
+                            minDate={startDate}
+                            key={startDate}
                             onChange={handleEndDateChange}
                           />
                           </label>
@@ -411,38 +453,43 @@ export default function OrderListing({ params }: { params: { locale:string, even
                     </div>
                     <div style={{minHeight:"calc(100vh - 720px)"}}>
                       {event_orders !== null ? event_orders.data.length > 0 ? event_orders.data.map((order:any,k:number) => 
-                      <div key={k} className="d-flex align-items-center ebs-table-content">
-                        <div className="ebs-table-box ebs-box-1"><p>{order.order_number}</p></div>
-                        <div className="ebs-table-box ebs-box-1"><p>{moment(order.order_date).format('L')}</p></div>
-                        <div className="ebs-table-box ebs-box-2 ebs-attendee-name-list">
-                          {order.order_attendees.length <= 1 ? <p>{`${order?.order_attendee?.first_name} ${order?.order_attendee?.last_name}`}</p> : (
-                            <div onClick={(e) => e.stopPropagation()} className="ebs-dropdown-area">
-                              <div className="d-flex align-items-center">
-                                <p>{`${order?.order_attendee?.first_name} ${order?.order_attendee?.last_name}`}</p>  
-                                <button onClick={handleToggle} className='ebs-btn-panel ebs-btn-dropdown'>
-                                  <i className="material-icons">expand_more</i>
-                                </button>
-                                <div style={{minWidth: 180}} className="ebs-dropdown-menu">
-                                  <h5>attendees ({order.order_attendees.length})</h5>
-                                  {order?.order_attendees?.map((attendee:any, k:number)=>(
-                                    <div className="ebs-dropdown-list" key={k}>
-                                      <p className="name">{`${attendee.attendee_detail?.first_name} ${attendee.attendee_detail?.last_name}`}</p>
-                                      <p className="email">{attendee.attendee_detail?.email}</p>
-                                    </div>
-                                  ))}
-                                  
+                      <div key={order.id} >
+                        <div key={k} className="d-flex align-items-center ebs-table-content" style={{cursor:'text'}}>
+                          <div className="ebs-table-box ebs-box-1"><p>{order.order_number}</p></div>
+                          <div className="ebs-table-box ebs-box-1"><p>{moment(order.order_date).format('L')}</p></div>
+                          <div className="ebs-table-box ebs-box-2 ebs-attendee-name-list">
+                            <p>{`${order?.order_attendee?.first_name} ${order?.order_attendee?.last_name}`}</p>
+                            {/* {order.order_attendees.length <= 1 ? <p>{`${order?.order_attendee?.first_name} ${order?.order_attendee?.last_name}`}</p> : (
+                              <div onClick={(e) => e.stopPropagation()} className="ebs-dropdown-area">
+                                <div className="d-flex align-items-center">
+                                  <p>{`${order?.order_attendee?.first_name} ${order?.order_attendee?.last_name}`}</p>  
+                                  <button onClick={handleToggle} className='ebs-btn-panel ebs-btn-dropdown'>
+                                    <i className="material-icons">expand_more</i>
+                                  </button>
+                                  <div style={{minWidth: 180}} className="ebs-dropdown-menu">
+                                    <h5>attendees ({order.order_attendees.length})</h5>
+                                    {order?.order_attendees?.map((attendee:any, k:number)=>(
+                                      <div className="ebs-dropdown-list" key={k}>
+                                        <p className="name">{`${attendee.attendee_detail?.first_name} ${attendee.attendee_detail?.last_name}`}</p>
+                                        <p className="email">{attendee.attendee_detail?.email}</p>
+                                      </div>
+                                    ))}
+                                    
+                                  </div>
                                 </div>
                               </div>
-                            </div>
-                          )}
+                            )} */}
+                          </div>
+                          <div className="ebs-table-box ebs-box-2"><p>{order?.order_attendee?.email}</p></div>
+                          <div style={{width: 150}} className="ebs-table-box ebs-box-2"><p>{order?.order_attendee?.detail?.title}</p></div>
+                          <div className="ebs-table-box ebs-box-4"><p>{order?.order_attendee?.detail?.company_name}</p></div>
+                          <div className="ebs-table-box ebs-box-4"><p>{order?.reporting_panel_total_text}</p></div>
+                          <div className="ebs-table-box ebs-box-4"><p>{order?.sales_agent_name}</p></div>
+                          <div className="ebs-table-box ebs-box-4" style={{width: 150}}><p style={{fontWeight: 600, color: order.billing_order_status == 'completed' ? '#60A259' : '#AB8D2E'}}>{order.billing_order_status}</p></div>
                         </div>
-                        <div className="ebs-table-box ebs-box-2"><p>{order?.order_attendee?.email}</p></div>
-                        <div style={{width: 150}} className="ebs-table-box ebs-box-2"><p>{order?.order_attendee?.detail?.title}</p></div>
-                        <div className="ebs-table-box ebs-box-4"><p>{order?.order_attendee?.detail?.company_name}</p></div>
-                        <div className="ebs-table-box ebs-box-4"><p>{order?.reporting_panel_total_text}</p></div>
-                        <div className="ebs-table-box ebs-box-4"><p>{order?.sales_agent_name}</p></div>
-                        <div className="ebs-table-box ebs-box-4" style={{width: 150}}><p style={{fontWeight: 600, color: order.billing_order_status == 'completed' ? '#60A259' : '#AB8D2E'}}>{order.billing_order_status}</p></div>
-                      </div>) : (
+                        {order?.order_attendees?.length > 1 && <MoreAttendees data={order.order_attendees} />}
+                      </div>
+                      ) : (
                         <div style={{minHeight: '335px', backgroundColor: '#fff', borderRadius: '8px'}} className='d-flex align-items-center justify-content-center h-100 w-100'>
                         <div className="text-center">
                           <Image
@@ -478,3 +525,42 @@ export default function OrderListing({ params }: { params: { locale:string, even
   );
 }
 
+
+const MoreAttendees = ({data}: any) => {
+  const [toggle, setToggle] = useState(false)
+  return (
+    <div style={{background: '#EEF2F4',}} className='rounded-4'>
+      <div style={{background: '#EEF2F4', cursor:'default'}} className="d-flex align-items-center ebs-table-content" >
+          <div className="ebs-table-box ebs-box-1" />
+          <div className="ebs-table-box ebs-box-1" />
+        <div className="ebs-table-box ebs-box-2"><p><strong onClick={() => setToggle(!toggle)}> <i  style={{fontSize: 18}} className="material-icons">{toggle ? 'expand_more' : 'chevron_right' }</i>  <span style={{marginRight:'5px'}}>{data?.length - 1}</span> {"more attendees"}  </strong></p></div>
+        <div className="ebs-table-box ebs-box-2" />
+        <div className="ebs-table-box  ebs-box-4" />
+       <div className="ebs-table-box ebs-box-4" />
+       <div className="ebs-table-box ebs-box-4" />
+       <div className="ebs-table-box ebs-box-3" style={{paddingRight: 0}} />
+       <div className="ebs-table-box ebs-box-3" style={{paddingRight: 0}} />
+       <div className="ebs-table-box ebs-box-3 d-flex justify-content-end" />
+      </div>
+      {toggle && <React.Fragment>
+        {data.map((attendee:any,k:any) =>
+         k === 0 ? null : (<div style={{background: '#EEF2F4', cursor:'default'}} key={attendee.id} className="d-flex align-items-center ebs-table-content">
+          <div className="ebs-table-box ebs-box-1" />
+          <div className="ebs-table-box ebs-box-1" />
+          <div className="ebs-table-box ebs-box-2" style={{paddingLeft:'32px'}}>
+            <p><strong>{attendee?.attendee_detail?.first_name} {attendee?.attendee_detail?.last_name}</strong></p>
+            <p>{attendee?.attendee_detail?.email} </p>
+            </div>
+          <div className="ebs-table-box ebs-box-2"></div>
+          <div className="ebs-table-box  ebs-box-4" />
+        <div className="ebs-table-box ebs-box-4" />
+        <div className="ebs-table-box ebs-box-4" />
+        <div className="ebs-table-box ebs-box-3" style={{paddingRight: 0}} />
+        <div className="ebs-table-box ebs-box-3" style={{paddingRight: 0}} />
+        <div className="ebs-table-box ebs-box-3 d-flex justify-content-end" />
+        </div>)
+      )}
+      </React.Fragment>}
+    </div>
+  )
+}

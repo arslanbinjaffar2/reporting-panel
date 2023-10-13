@@ -137,8 +137,9 @@ export const authUserSlice = createSlice({
       state.user = action.payload;
     },
     removeAuthUser: (state, action: PayloadAction<any>) => {
-      console.log('ddddd')
       localStorage.removeItem('agent');
+      localStorage.removeItem('eventFilterData');
+      localStorage.removeItem('orderFilterData');
       state.user = null;
     },
     setRedirect: (state, action: PayloadAction<any>) => {
@@ -186,7 +187,7 @@ export const authUserSlice = createSlice({
       state.loading = false;
     }),
     builder.addCase(loginUser.rejected, (state, action) => {
-      console.log("rejected", action.payload);
+      console.log("rejected", action);
       state.error = "Network Error";
       state.loading = false;
     }),
@@ -206,6 +207,8 @@ export const authUserSlice = createSlice({
       state.error = null;
       state.errors=null;
       localStorage.removeItem('agent');
+      localStorage.removeItem('eventFilterData');
+      localStorage.removeItem('orderFilterData');
     }),
     builder.addCase(logOutUser.rejected, (state, action) => {
       console.log("rejected", action.payload);
@@ -289,7 +292,7 @@ export const authUserSlice = createSlice({
         state.forgetPasswordTokenSuccess = false;
         state.user = null;
         state.error = null;
-        state.successMessage = 'Password successfully updated';
+        state.successMessage = res.message;
       }else{
         if(Array.isArray(res.message)){
           state.errors = res.message;
