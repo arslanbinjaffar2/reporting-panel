@@ -34,7 +34,7 @@ export default function RootLayout({ children}: { children: React.ReactNode }) {
               <div className="row">
                 <div className="col-6">
                   <div className="left-signup">
-                    <Image src={'/img/logo-old.png'} alt="" width="150" height="38" className='logos' />
+                    <Image src={'/img/logo.svg'} alt="" width="150" height="38" className='logos' />
                     <div className="text-block">
                       <h4>{t('title')}</h4>
                       <p>{t('subtitle')}</p>
