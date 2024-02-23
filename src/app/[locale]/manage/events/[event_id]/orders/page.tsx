@@ -221,7 +221,7 @@ export default function OrderListing({ params }: { params: { locale:string, even
   const handlePopup = (e:any) => {
     setToggle(false);
   }
-  console.log(startDate);
+  
   return (
     <>
               {/* <div className="top-landing-page">
@@ -363,7 +363,7 @@ export default function OrderListing({ params }: { params: { locale:string, even
                               showdate={'DD-MM-YYYY'}
                               label={t('range_filters.start_date')}
                               value={orderFilterData.start_date}
-                              maxDate={endDate}
+                              maxDate={ moment(endDate).add(1, "days") }
                               key={endDate}
                               onChange={handleStartDateChange}
                             />

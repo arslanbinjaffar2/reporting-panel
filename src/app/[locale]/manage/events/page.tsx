@@ -261,7 +261,7 @@ export default function Dashboard({params:{locale}}:{params:{locale:string}}) {
       setDownloading(false);
     });
   }
-  console.log(startDate);
+
   return (
    <>
             <div className="top-landing-page shadow-none">
@@ -363,7 +363,7 @@ export default function Dashboard({params:{locale}}:{params:{locale:string}}) {
                     showdate={'DD-MM-YYYY'}
                     label={t('sort_filters.start_date')}
                     value={eventFilterData.start_date}
-                    maxDate={endDate}
+                    maxDate={ moment(endDate).add(1, "days") }
                     key={endDate}
                     onChange={handleStartDateChange}
                   />
