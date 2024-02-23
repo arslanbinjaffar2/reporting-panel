@@ -376,7 +376,7 @@ export default function Dashboard({params:{locale}}:{params:{locale:string}}) {
                     showdate={'DD-MM-YYYY'}
                     label={t('sort_filters.end_date')}
                     value={eventFilterData.end_date}
-                    minDate={startDate}
+                    minDate={ moment(startDate).substract(1, "days") }
                     key={startDate}
                     onChange={handleEndDateChange}
                   />

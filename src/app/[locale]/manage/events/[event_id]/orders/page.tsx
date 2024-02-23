@@ -374,7 +374,7 @@ export default function OrderListing({ params }: { params: { locale:string, even
                             showdate={'DD-MM-YYYY'}
                             label={t('range_filters.end_date')}
                             value={orderFilterData.end_date}
-                            minDate={startDate}
+                            minDate={ moment(startDate).substract(1, "days") }
                             key={startDate}
                             onChange={handleEndDateChange}
                           />
