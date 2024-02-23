@@ -261,7 +261,7 @@ export default function Dashboard({params:{locale}}:{params:{locale:string}}) {
       setDownloading(false);
     });
   }
-
+  console.log(startDate);
   return (
    <>
             <div className="top-landing-page shadow-none">
@@ -376,7 +376,7 @@ export default function Dashboard({params:{locale}}:{params:{locale:string}}) {
                     showdate={'DD-MM-YYYY'}
                     label={t('sort_filters.end_date')}
                     value={eventFilterData.end_date}
-                    minDate={ moment(startDate).substract(1, "days") }
+                    minDate={ moment(startDate).subtract(1, "days") }
                     key={startDate}
                     onChange={handleEndDateChange}
                   />
