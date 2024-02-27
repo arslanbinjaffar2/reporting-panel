@@ -363,7 +363,7 @@ export default function Dashboard({params:{locale}}:{params:{locale:string}}) {
                     showdate={'DD-MM-YYYY'}
                     label={t('sort_filters.start_date')}
                     value={eventFilterData.start_date}
-                    maxDate={ moment(new Date(endDate)).add('days', 1).format('MM/DD/YYYY') }
+                    maxDate={endDate ? moment(endDate).add('days', 1).format('MM/DD/YYYY') : '' }
                     key={endDate}
                     onChange={handleStartDateChange}
                   />
@@ -376,7 +376,7 @@ export default function Dashboard({params:{locale}}:{params:{locale:string}}) {
                     showdate={'DD-MM-YYYY'}
                     label={t('sort_filters.end_date')}
                     value={eventFilterData.end_date}
-                    minDate={ moment(new Date(startDate)).subtract('days', 1).format('MM/DD/YYYY') }
+                    minDate={startDate ?  moment(startDate).subtract('days', 1).format('MM/DD/YYYY') : '' }
                     key={startDate}
                     onChange={handleEndDateChange}
                   />
