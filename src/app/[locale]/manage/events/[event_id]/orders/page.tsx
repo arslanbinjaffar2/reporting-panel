@@ -363,7 +363,7 @@ export default function OrderListing({ params }: { params: { locale:string, even
                               showdate={'DD-MM-YYYY'}
                               label={t('range_filters.start_date')}
                               value={orderFilterData.start_date}
-                              maxDate={ moment(endDate, "MM/DD/YYYY").add('days', 1).format('MM/DD/YYYY') }
+                              maxDate={ moment(new Date(endDate)).add('days', 1).format('MM/DD/YYYY') }
                               key={endDate}
                               onChange={handleStartDateChange}
                             />
@@ -374,7 +374,7 @@ export default function OrderListing({ params }: { params: { locale:string, even
                             showdate={'DD-MM-YYYY'}
                             label={t('range_filters.end_date')}
                             value={orderFilterData.end_date}
-                            minDate={  moment(startDate, "MM/DD/YYYY").subtract('days', 1).format('MM/DD/YYYY') }
+                            minDate={ moment(new Date(startDate)).subtract('days', 1).format('MM/DD/YYYY') }
                             key={startDate}
                             onChange={handleEndDateChange}
                           />
