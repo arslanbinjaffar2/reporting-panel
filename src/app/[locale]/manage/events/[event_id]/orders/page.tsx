@@ -279,13 +279,13 @@ export default function OrderListing({ params }: { params: { locale:string, even
                         </div> : null}
                         <div className="col">
                           <div className="ebs-ticket-information ebs-bg-light">
-                            <strong>{event_stats?.orders_range_stats?.range_sold_tickets}</strong>
+                            <strong>{event_stats?.orders_range_stats?.range_sold_tickets ? event_stats?.orders_range_stats?.range_sold_tickets : 0}</strong>
                             <span>{t('stats_sold_tickets')}</span>
                           </div>
                         </div>
                         <div className="col">
                           <div className="ebs-ticket-information ebs-bg-light">
-                            <strong>{event_stats?.event_stats?.total_tickets}</strong>
+                            <strong>{event_stats?.reporting_data?.total_tickets}</strong>
                             <span>{t('stats_total_tickets')}</span>
                           </div>
                         </div>
