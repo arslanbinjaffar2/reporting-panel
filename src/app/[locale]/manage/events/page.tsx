@@ -416,12 +416,12 @@ export default function Dashboard({params:{locale}}:{params:{locale:string}}) {
                             <span>{t('tickets_sold_label')}</span>
                           </div>
                         </div>
-                        {/* <div className="col">
+                        <div className="col">
                           <div className="ebs-ticket-information">
-                            <strong>{allEventsStats !== null && allEventsStats.total_tickets  > 0 ? allEventsStats.total_tickets : 0}</strong>
-                            <span>total</span>
+                            <strong>{allEventsStats !== null && allEventsStats?.totalReportingData?.total_tickets  > 0 ? allEventsStats?.totalReportingData?.total_tickets : 0}</strong>
+                            <span>{t('event_table.total_tickets')}</span>
                           </div>
-                        </div> */}
+                        </div>
                       </div>
                     </div>
                     <div className="col-6">
@@ -458,15 +458,15 @@ export default function Dashboard({params:{locale}}:{params:{locale:string}}) {
                       <div style={{width: 140}}  className="ebs-table-box ebs-box-1"><strong>{t('event_table.organized_by')}</strong></div>
                       <div style={{width: 140}}  className="ebs-table-box ebs-box-4"><strong>Tickets Waiting</strong></div>
                       <div className="ebs-table-box ebs-box-4"><strong>{t('event_table.sold_tickets')}</strong></div>
-                      {/* <div className="ebs-table-box ebs-box-4"><strong>Total Tickets</strong></div> */}
+                      <div className="ebs-table-box ebs-box-4"><strong>{t('event_table.total_tickets')}</strong></div>
                       <div className="ebs-table-box ebs-box-1"><strong>{t('event_table.revenue')}</strong></div>
                       <div className="ebs-table-box ebs-box-4" style={{paddingRight: 0}}><strong>{t('event_table.total_revenue')}</strong></div>
                       <div className="ebs-table-box ebs-box-1" style={{width: 80}}  />
                     </div>
                     <div style={{minHeight:"calc(100vh - 720px)"}}>
                         {events.length > 0 && !loading  ? events.map((event,k) => 
-                            <Link href={'/manage/events/'+event.id +'/orders'} className="dropdown-item">
-                              <div key={k} className="d-flex align-items-center ebs-table-content" >
+                            <Link key={k} href={'/manage/events/'+event.id +'/orders'} className="dropdown-item">
+                              <div className="d-flex align-items-center ebs-table-content" >
                                 <div className="ebs-table-box ebs-box-1">
                                   <Image 
                                   src={event.header_logo ? (`${process.env.serverImageHost + '/assets/event/branding/' + event.header_logo}`) : `${process.env.serverImageHost + '/_admin_assets/images/eventbuizz_logo.png'}`}
@@ -477,7 +477,7 @@ export default function Dashboard({params:{locale}}:{params:{locale:string}}) {
                                 <div style={{width: 140}}  className="ebs-table-box ebs-box-1"><p>{event.organizer_name}</p></div>
                                 <div style={{width: 140}} className="ebs-table-box ebs-box-4"><p>{event?.reporting_data.range_waiting_list_attendees}</p></div>
                                 <div className="ebs-table-box ebs-box-4"><p>{event?.reporting_data.range_sold_tickets}</p></div>
-                                {/* <div className="ebs-table-box ebs-box-4"><p>{event?.reporting_data.total_tickets}</p></div> */}
+                                <div className="ebs-table-box ebs-box-4"><p>{event?.reporting_data.range_total_tickets}</p></div>
                                 <div className="ebs-table-box ebs-box-1" ><p>{event?.reporting_data.total_range_revenue_text}</p></div>
                                 <div className="ebs-table-box ebs-box-4" style={{paddingRight: 0}}><p>{event?.reporting_data.total_revenue_text}</p></div>
                                 <div style={{width: 80}} className="ebs-table-box ebs-box-1 d-flex justify-content-end">
