@@ -360,6 +360,7 @@ export default function Dashboard({params:{locale}}:{params:{locale:string}}) {
                   <label className="label-select-alt m-0 w-100">
                   <DateTime
                     showtime={false}
+                    locale={locale}
                     showdate={'DD-MM-YYYY'}
                     label={t('sort_filters.start_date')}
                     value={eventFilterData.start_date}
@@ -373,6 +374,7 @@ export default function Dashboard({params:{locale}}:{params:{locale:string}}) {
                   <label className="label-select-alt m-0 w-100">
                   <DateTime
                     showtime={false}
+                    locale={locale}
                     showdate={'DD-MM-YYYY'}
                     label={t('sort_filters.end_date')}
                     value={eventFilterData.end_date}

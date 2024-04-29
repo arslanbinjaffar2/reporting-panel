@@ -360,6 +360,7 @@ export default function OrderListing({ params }: { params: { locale:string, even
                           <label className="label-select-alt m-0 w-100">
                             <DateTime
                               showtime={false}
+                              locale={params.locale}
                               showdate={'DD-MM-YYYY'}
                               label={t('range_filters.start_date')}
                               value={orderFilterData.start_date}
@@ -371,6 +372,7 @@ export default function OrderListing({ params }: { params: { locale:string, even
                           <label className="label-select-alt m-0 w-100">
                           <DateTime
                             showtime={false}
+                            locale={params.locale}
                             showdate={'DD-MM-YYYY'}
                             label={t('range_filters.end_date')}
                             value={orderFilterData.end_date}
