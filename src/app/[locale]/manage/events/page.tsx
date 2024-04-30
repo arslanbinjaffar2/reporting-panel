@@ -472,14 +472,14 @@ export default function Dashboard({params:{locale}}:{params:{locale:string}}) {
                                   src={event.header_logo ? (`${process.env.serverImageHost + '/assets/event/branding/' + event.header_logo}`) : `${process.env.serverImageHost + '/_admin_assets/images/eventbuizz_logo.png'}`}
                                   alt={event.name} width={100} height={34} />
                                 </div>
-                                <div style={{width: 210}}  className="ebs-table-box ebs-box-2"><p style={{fontWeight: 600, color: '#404242'}}>{event.name}</p></div>
-                                <div style={{width: 170}}  className="ebs-table-box ebs-box-2"><p>{moment(event.start_date).format('DD-MM-YYYY')} - {moment(event.end_date).format('DD-MM-YYYY')}</p></div>
-                                <div style={{width: 140}}  className="ebs-table-box ebs-box-1"><p>{event.organizer_name}</p></div>
-                                <div style={{width: 140}} className="ebs-table-box ebs-box-4"><p>{event?.reporting_data.range_waiting_list_attendees}</p></div>
-                                <div className="ebs-table-box ebs-box-4"><p>{event?.reporting_data.range_sold_tickets}</p></div>
-                                <div className="ebs-table-box ebs-box-4"><p>{event?.reporting_data.range_total_tickets}</p></div>
-                                <div className="ebs-table-box ebs-box-1" ><p>{event?.reporting_data.total_range_revenue_text}</p></div>
-                                <div className="ebs-table-box ebs-box-4" style={{paddingRight: 0}}><p>{event?.reporting_data.total_revenue_text}</p></div>
+                                <div style={{width: 210}}  className="ebs-table-box ebs-box-2"><p title={event.name} style={{fontWeight: 600, color: '#404242'}}>{event.name}</p></div>
+                                <div style={{width: 170}}  className="ebs-table-box ebs-box-2"><p title={`${moment(event.start_date).format('DD-MM-YYYY')} - ${moment(event.end_date).format('DD-MM-YYYY')}`}>{moment(event.start_date).format('DD-MM-YYYY')} - {moment(event.end_date).format('DD-MM-YYYY')}</p></div>
+                                <div style={{width: 140}}  className="ebs-table-box ebs-box-1"><p title={event.organizer_name}>{event.organizer_name}</p></div>
+                                <div style={{width: 140}} className="ebs-table-box ebs-box-4"><p title={event?.reporting_data.range_waiting_list_attendees}>{event?.reporting_data.range_waiting_list_attendees}</p></div>
+                                <div className="ebs-table-box ebs-box-4"><p title={event?.reporting_data.range_sold_tickets}>{event?.reporting_data.range_sold_tickets}</p></div>
+                                <div className="ebs-table-box ebs-box-4"><p title={event?.reporting_data.range_total_tickets}>{event?.reporting_data.range_total_tickets}</p></div>
+                                <div className="ebs-table-box ebs-box-1" ><p title={event?.reporting_data.total_range_revenue_text}>{event?.reporting_data.total_range_revenue_text}</p></div>
+                                <div className="ebs-table-box ebs-box-4" style={{paddingRight: 0}}><p title={event?.reporting_data.total_revenue_text}>{event?.reporting_data.total_revenue_text}</p></div>
                                 <div style={{width: 80}} className="ebs-table-box ebs-box-1 d-flex justify-content-end">
                                   <ul className='d-flex ebs-panel-list m-0 p-0'>
                                     <li>

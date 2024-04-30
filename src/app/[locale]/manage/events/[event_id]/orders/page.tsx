@@ -457,10 +457,10 @@ export default function OrderListing({ params }: { params: { locale:string, even
                       {event_orders !== null ? event_orders.data.length > 0 ? event_orders.data.map((order:any,k:number) => 
                       <div key={order.id} >
                         <div key={k} className="d-flex align-items-center ebs-table-content" style={{cursor:'text'}}>
-                          <div className="ebs-table-box ebs-box-1"><p>{order.order_number}</p></div>
+                          <div className="ebs-table-box ebs-box-1"><p title={order.order_number}>{order.order_number}</p></div>
                           <div className="ebs-table-box ebs-box-1"><p>{moment(order.order_date).format('DD-MM-YYYY')}</p></div>
                           <div className="ebs-table-box ebs-box-2 ebs-attendee-name-list">
-                            <p>{`${order?.order_attendee?.first_name} ${order?.order_attendee?.last_name}`}</p>
+                            <p title={`${order?.order_attendee?.first_name} ${order?.order_attendee?.last_name}`}>{`${order?.order_attendee?.first_name} ${order?.order_attendee?.last_name}`}</p>
                             {/* {order.order_attendees.length <= 1 ? <p>{`${order?.order_attendee?.first_name} ${order?.order_attendee?.last_name}`}</p> : (
                               <div onClick={(e) => e.stopPropagation()} className="ebs-dropdown-area">
                                 <div className="d-flex align-items-center">
@@ -482,11 +482,11 @@ export default function OrderListing({ params }: { params: { locale:string, even
                               </div>
                             )} */}
                           </div>
-                          <div className="ebs-table-box ebs-box-2"><p>{order?.order_attendee?.email}</p></div>
-                          <div style={{width: 150}} className="ebs-table-box ebs-box-2"><p>{order?.order_attendee?.detail?.title}</p></div>
-                          <div className="ebs-table-box ebs-box-4"><p>{order?.order_attendee?.detail?.company_name}</p></div>
-                          <div className="ebs-table-box ebs-box-4"><p>{order?.reporting_panel_total_text}</p></div>
-                          <div className="ebs-table-box ebs-box-4"><p>{order?.sales_agent_name}</p></div>
+                          <div className="ebs-table-box ebs-box-2"><p title={order?.order_attendee?.email}>{order?.order_attendee?.email}</p></div>
+                          <div style={{width: 150}} className="ebs-table-box ebs-box-2"><p title={order?.order_attendee?.detail?.title}>{order?.order_attendee?.detail?.title}</p></div>
+                          <div className="ebs-table-box ebs-box-4"><p title={order?.order_attendee?.detail?.company_name}>{order?.order_attendee?.detail?.company_name}</p></div>
+                          <div className="ebs-table-box ebs-box-4"><p title={order?.reporting_panel_total_text}>{order?.reporting_panel_total_text}</p></div>
+                          <div className="ebs-table-box ebs-box-4"><p title={order?.sales_agent_name}>{order?.sales_agent_name}</p></div>
                           <div className="ebs-table-box ebs-box-4" style={{width: 150}}><p style={{fontWeight: 600, color: order.billing_order_status == 'completed' ? '#60A259' : '#AB8D2E'}}>{order.billing_order_status}</p></div>
                         </div>
                         {order?.order_attendees?.length > 1 && <MoreAttendees data={order.order_attendees} />}
@@ -550,8 +550,8 @@ const MoreAttendees = ({data}: any) => {
           <div className="ebs-table-box ebs-box-1" />
           <div className="ebs-table-box ebs-box-1" />
           <div className="ebs-table-box ebs-box-2" style={{paddingLeft:'32px'}}>
-            <p><strong>{attendee?.attendee_detail?.first_name} {attendee?.attendee_detail?.last_name}</strong></p>
-            <p>{attendee?.attendee_detail?.email} </p>
+            <p title={`${attendee?.attendee_detail?.first_name} ${attendee?.attendee_detail?.last_name}`}><strong>{attendee?.attendee_detail?.first_name} {attendee?.attendee_detail?.last_name}</strong></p>
+            <p title={attendee?.attendee_detail?.email}>{attendee?.attendee_detail?.email} </p>
             </div>
           <div className="ebs-table-box ebs-box-2"></div>
           <div className="ebs-table-box  ebs-box-4" />
