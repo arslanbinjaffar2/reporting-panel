@@ -2,6 +2,7 @@ import React, { ReactElement, FC, useRef } from 'react';
 import "react-datetime/css/react-datetime.css";
 import Datetime from "react-datetime";
 import moment from 'moment';
+import 'moment/locale/da';
 
 type Props = {
   value: any;
