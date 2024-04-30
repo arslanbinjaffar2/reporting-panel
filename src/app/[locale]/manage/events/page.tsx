@@ -453,7 +453,7 @@ export default function Dashboard({params:{locale}}:{params:{locale:string}}) {
                   <div className="ebs-data-table ebs-order-table position-relative">
                     <div className="d-flex align-items-center ebs-table-header">
                       <div className="ebs-table-box ebs-box-1"><strong>{t('event_table.event_logo')}</strong></div>
-                      <div style={{width: 210}}  className="ebs-table-box ebs-box-2"><strong>{t('event_table.event_name')}</strong></div>
+                      <div style={{width: 170}}  className="ebs-table-box ebs-box-2"><strong>{t('event_table.event_name')}</strong></div>
                       <div style={{width: 170}}  className="ebs-table-box ebs-box-2"><strong>{t('event_table.event_date')}</strong></div>
                       <div style={{width: 140}}  className="ebs-table-box ebs-box-1"><strong>{t('event_table.organized_by')}</strong></div>
                       <div style={{width: 140}}  className="ebs-table-box ebs-box-4"><strong>Tickets Waiting</strong></div>
@@ -472,7 +472,7 @@ export default function Dashboard({params:{locale}}:{params:{locale:string}}) {
                                   src={event.header_logo ? (`${process.env.serverImageHost + '/assets/event/branding/' + event.header_logo}`) : `${process.env.serverImageHost + '/_admin_assets/images/eventbuizz_logo.png'}`}
                                   alt={event.name} width={100} height={34} />
                                 </div>
-                                <div style={{width: 210}}  className="ebs-table-box ebs-box-2"><p title={event.name} style={{fontWeight: 600, color: '#404242'}}>{event.name}</p></div>
+                                <div style={{width: 170}}  className="ebs-table-box ebs-box-2"><p title={event.name} style={{fontWeight: 600, color: '#404242'}}>{event.name}</p></div>
                                 <div style={{width: 170}}  className="ebs-table-box ebs-box-2"><p title={`${moment(event.start_date).format('DD-MM-YYYY')} - ${moment(event.end_date).format('DD-MM-YYYY')}`}>{moment(event.start_date).format('DD-MM-YYYY')} - {moment(event.end_date).format('DD-MM-YYYY')}</p></div>
                                 <div style={{width: 140}}  className="ebs-table-box ebs-box-1"><p title={event.organizer_name}>{event.organizer_name}</p></div>
                                 <div style={{width: 140}} className="ebs-table-box ebs-box-4"><p title={event?.reporting_data.range_waiting_list_attendees}>{event?.reporting_data.range_waiting_list_attendees}</p></div>
