@@ -87,6 +87,7 @@
         },
         "search":"Søg",
         "tickets":"Billetter",
+        "reports_list":"RapportLister",
         "event_filter_label":"Sorter efter",
         "office_filter_label":"Vælg kontor",
         "country_filter_label":"Vælg land",

@@ -1,6 +1,6 @@
 @import "./base/vars";
 @import "./main";
-
+@import "./utilies";
 .wrapper-box {
   background: $white;
   border-radius: 20px;
@@ -835,6 +835,7 @@
   }
   .ebs-table-box {
     padding: 13px 12px;
+   
     &.ebs-box-1 {
       width: 120px;
     }
@@ -1417,4 +1418,9 @@ animation: widgetLoaderSpin 2s linear infinite;
   p {
     margin: 0;
   }
+}
+
+
+.reports_menu{
+  background-color: $color-primary;
 }

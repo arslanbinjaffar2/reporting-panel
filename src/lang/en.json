@@ -87,6 +87,7 @@
         },
         "search":"Search",
         "tickets":"Tickets",
+        "reports_list":"Reports List",
         "event_filter_label":"Filter By",
         "office_filter_label":"Select office",
         "country_filter_label":"Select country",

@@ -450,7 +450,10 @@ export default function Dashboard({params:{locale}}:{params:{locale:string}}) {
                   </div>
                 </div>
                 <div className="ebs-order-list-section" >
-                  <div className="ebs-data-table ebs-order-table position-relative">
+                <h4>{t('reports_list')}</h4>
+                {/* <h4>Reports List</h4> */}
+
+                  {/* <div className="ebs-data-table ebs-order-table position-relative">
                     <div className="d-flex align-items-center ebs-table-header">
                       <div className="ebs-table-box ebs-box-1"><strong>{t('event_table.event_logo')}</strong></div>
                       <div style={{width: 170}}  className="ebs-table-box ebs-box-2"><strong>{t('event_table.event_name')}</strong></div>
@@ -530,7 +533,116 @@ export default function Dashboard({params:{locale}}:{params:{locale:string}}) {
                         </div>
                       </div>
                     </div>
+                  </div> */}
+                       {/* new Design starts from here */}
+                       <div style={{minHeight:"calc(100vh - 720px)"}}>
+                        {events.length > 0 && !loading  ? events.map((event,k) => 
+                            <Link key={k} href={'/manage/events/'+event.id +'/orders'} className="dropdown-item">
+                              <div className='bg-white d-flex align-items-center justify-content-between p-20 w-100 rounded_4'   style={{ height:"74px" }}>
+                   <figure className={`${event.header_logo ?"border":""} mb-0  rounded-1 h-100 d-flex align-items-center justify-content-center`} style={{ width:"120px" }}>
+                 
+                    <Image 
+                                  src={event.header_logo ? (`${process.env.serverImageHost + '/assets/event/branding/' + event.header_logo}`) : `${process.env.serverImageHost + '/_admin_assets/images/eventbuizz_logo.png'}`}
+                                  alt="image" width={120} height={42}                
+                                   />
+                   </figure>
+                   <div className='d-flex flex-column gap-1 ps-3' style={{ width:" 500px" }}>
+                    <strong className='fw-600 text-dark-grey'>
+                    {event.name}
+                      {/* Global Summit: Convening leaders for professional advancement */}
+                      </strong>
+                    <div className='d-flex gap-3 align-items-center'>
+                      <div className='d-flex gap-6  align-items-center'>
+                      <strong className='fw-600 fs-12 text-dark-grey'>{t('event_table.event_date')}:</strong>
+                      <span className='fs-12 text-dark-grey'>{moment(event.start_date).format('DD-MM-YYYY')} - {moment(event.end_date).format('DD-MM-YYYY')}</span>
+                      </div>
+                      <div className='d-flex gap-6  align-items-center'>
+                      <strong className='fs-12 fw-600 text-dark-grey'>{t('event_table.organized_by')}:</strong>
+                      <span className='fs-12 text-dark-grey'>{event.organizer_name}</span>
+                      </div>
+                    </div>
+                   </div>
+                   <article className='d-flex justify-content-between'>
+
+                   <div className='d-flex gap-6  align-items-center'>
+                    <strong className='fw-600 fs-12 text-dark-grey'>{t('event_table.total_tickets')}:</strong>
+                    <span className='fs-12 text-dark-grey'>{event?.reporting_data.range_total_tickets}</span>
+                   </div>
+                   <div className=' border-end border mx-10' style={{ height:"24px",width:"0" }}></div>
+                   <div className='d-flex gap-6 align-items-center'>
+                    <strong className='fw-600 fs-12 text-dark-grey'>Waiting:</strong>
+                    <span className='fs-12 text-dark-grey'>{event?.reporting_data.range_waiting_list_attendees}</span>
+                   </div>
+                   <div className=' border-end border mx-10' style={{ height:"24px",width:"0" }}></div>
+                   <div className='d-flex gap-6  align-items-center'>
+                    <strong className='fw-600 fs-12 text-dark-grey'>{t('event_table.sold_tickets')}:</strong>
+                    <span className='fs-12 text-dark-grey'>{event?.reporting_data.range_sold_tickets}</span>
+                   </div>
+                   <div className=' border-end border mx-10' style={{ height:"24px",width:"0" }}></div>
+                   <div className='d-flex gap-6 align-items-center'>
+                    <strong className='fw-600 fs-12 #text-dark-grey'>{t('event_table.revenue')}:</strong>
+                    <span className='fs-12 text-dark-grey'>{event?.reporting_data.total_range_revenue_text}</span>
+                   </div>
+                   <div className=' border-end border mx-10' style={{ height:"24px",width:"0" }}></div>
+                   <div className='d-flex gap-6  align-items-center'>
+                    <strong className='fw-600 fs-12 text-dark-grey'>{t('event_table.total_revenue')}:</strong>
+                    <span className='fs-12 text-dark-grey'>{event?.reporting_data.total_revenue_text}</span>
+                   </div>
+                   <div  className="ebs-table-box ebs-box-1  d-flex justify-content-end ms-4">
+                                  <ul className='d-flex ebs-panel-list m-0 p-0 '>
+                                    <li className=''>
+                                      <div onClick={(e) => e.stopPropagation()} className="ebs-dropdown-area ">
+                                        <button onClick={handleToggle} className='ebs-btn-panel ebs-btn-dropdown'>
+                                          <i className="material-icons">more_horiz</i>
+                                        </button>
+                                        <div style={{minWidth: 130}} className="ebs-dropdown-menu">
+                                          <Link href={""} className="dropdown-item">{t('view_details')}</Link>
+                                          <button className="dropdown-item" >{t('export_orders')}</button>
+                                        </div>
+                                      </div>
+                                    </li>
+                                  </ul>
+                                </div>
+                   </article>
+
                   </div>
+                            </Link>
+                        ) : 
+                          loading ? 
+                          <div>
+                            <Loader className={''} fixed={''}/> 
+                          </div>
+                          : 
+                          <div style={{minHeight: '335px', backgroundColor: '#fff', borderRadius: '8px'}} className='d-flex align-items-center justify-content-center h-100 w-100'>
+                            <div className="text-center">
+                              <Image
+                                  src={'/no_record_found.svg'} alt="" width="100" height="100"
+                              />
+                              <p className='pt-3 m-0'>{t('no_data_available')}</p>
+                            </div>
+                          </div>
+                        }
+                        
+                    </div>
+
+               {/* pagination */}
+               <div className='d-flex justify-content-end align-items-center pt-3'>
+                      <Pagination
+                          currentPage={currentPage}
+                          totalPages={totalPages}
+                          onPageChange={handlePageChange}
+                      />
+                    <div style={{minWidth: 60}} onClick={(e) => e.stopPropagation()} className="ebs-dropdown-area">
+                        <button onClick={handleToggle} className="ebs-btn-dropdown btn-select">
+                          {limit} <i className="material-symbols-outlined">expand_more</i>
+                        </button>
+                        <div className="ebs-dropdown-menu">
+                          {[ 10, 20, 50, 100, 500].map((i, k)=>(
+                            <button key={k} className="dropdown-item" onClick={(e)=> { handleLimitChange(e, i) }}>{i}</button>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
                 </div>
               </div>
       {downloading ? <FullPageLoader className={''} fixed={''}/> : null}
