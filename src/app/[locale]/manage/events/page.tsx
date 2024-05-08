@@ -547,46 +547,46 @@ export default function Dashboard({params:{locale}}:{params:{locale:string}}) {
                                    />
                    </figure>
                    <div className='d-flex flex-column gap-1 ps-3' style={{ width:" 500px" }}>
-                    <strong className='fw-600 text-dark-grey'>
+                    <strong className='fw-600 text-dark-black'>
                     {event.name}
                       {/* Global Summit: Convening leaders for professional advancement */}
                       </strong>
                     <div className='d-flex gap-3 align-items-center'>
                       <div className='d-flex gap-6  align-items-center'>
-                      <strong className='fw-600 fs-12 text-dark-grey'>{t('event_table.event_date')}:</strong>
-                      <span className='fs-12 text-dark-grey'>{moment(event.start_date).format('DD-MM-YYYY')} - {moment(event.end_date).format('DD-MM-YYYY')}</span>
+                      <strong className='fw-600 fs-12 text-dark-black'>{t('event_table.event_date')}:</strong>
+                      <span className='fs-12 text-dark-black'>{moment(event.start_date).format('DD-MM-YYYY')} - {moment(event.end_date).format('DD-MM-YYYY')}</span>
                       </div>
                       <div className='d-flex gap-6  align-items-center'>
-                      <strong className='fs-12 fw-600 text-dark-grey'>{t('event_table.organized_by')}:</strong>
-                      <span className='fs-12 text-dark-grey'>{event.organizer_name}</span>
+                      <strong className='fs-12 fw-600 text-dark-black'>{t('event_table.organized_by')}:</strong>
+                      <span className='fs-12 text-dark-black'>{event.organizer_name}</span>
                       </div>
                     </div>
                    </div>
                    <article className='d-flex justify-content-between'>
 
                    <div className='d-flex gap-6  align-items-center'>
-                    <strong className='fw-600 fs-12 text-dark-grey'>{t('event_table.total_tickets')}:</strong>
-                    <span className='fs-12 text-dark-grey'>{event?.reporting_data.range_total_tickets}</span>
+                    <strong className='fw-600 fs-12 text-dark-black'>{t('event_table.total_tickets')}:</strong>
+                    <span className='fs-12 text-dark-black'>{event?.reporting_data.range_total_tickets}</span>
                    </div>
                    <div className=' border-end border mx-10' style={{ height:"24px",width:"0" }}></div>
                    <div className='d-flex gap-6 align-items-center'>
-                    <strong className='fw-600 fs-12 text-dark-grey'>Waiting:</strong>
-                    <span className='fs-12 text-dark-grey'>{event?.reporting_data.range_waiting_list_attendees}</span>
+                    <strong className='fw-600 fs-12 text-dark-black'>Waiting:</strong>
+                    <span className='fs-12 text-dark-black'>{event?.reporting_data.range_waiting_list_attendees}</span>
                    </div>
                    <div className=' border-end border mx-10' style={{ height:"24px",width:"0" }}></div>
                    <div className='d-flex gap-6  align-items-center'>
-                    <strong className='fw-600 fs-12 text-dark-grey'>{t('event_table.sold_tickets')}:</strong>
-                    <span className='fs-12 text-dark-grey'>{event?.reporting_data.range_sold_tickets}</span>
+                    <strong className='fw-600 fs-12 text-dark-black'>{t('event_table.sold_tickets')}:</strong>
+                    <span className='fs-12 text-dark-black'>{event?.reporting_data.range_sold_tickets}</span>
                    </div>
                    <div className=' border-end border mx-10' style={{ height:"24px",width:"0" }}></div>
                    <div className='d-flex gap-6 align-items-center'>
-                    <strong className='fw-600 fs-12 #text-dark-grey'>{t('event_table.revenue')}:</strong>
-                    <span className='fs-12 text-dark-grey'>{event?.reporting_data.total_range_revenue_text}</span>
+                    <strong className='fw-600 fs-12 #text-dark-black'>{t('event_table.revenue')}:</strong>
+                    <span className='fs-12 text-dark-black'>{event?.reporting_data.total_range_revenue_text}</span>
                    </div>
                    <div className=' border-end border mx-10' style={{ height:"24px",width:"0" }}></div>
                    <div className='d-flex gap-6  align-items-center'>
-                    <strong className='fw-600 fs-12 text-dark-grey'>{t('event_table.total_revenue')}:</strong>
-                    <span className='fs-12 text-dark-grey'>{event?.reporting_data.total_revenue_text}</span>
+                    <strong className='fw-600 fs-12 text-dark-black'>{t('event_table.total_revenue')}:</strong>
+                    <span className='fs-12 text-dark-black'>{event?.reporting_data.total_revenue_text}</span>
                    </div>
                    <div  className="ebs-table-box ebs-box-1  d-flex justify-content-end ms-4">
                                   <ul className='d-flex ebs-panel-list m-0 p-0 '>
