@@ -7,6 +7,9 @@
 .bg-dark-grey{
     background: $border;
 }
+.bg-light-header{
+    background: $lightheader;
+}
 .text-dove-grey{
     color: $text;
 }
@@ -58,7 +61,7 @@
     border-bottom: 1px solid $border;
 }
 .box-shadow-white{
-    box-shadow:  3px 6px #0000001F;
+    box-shadow: 0px 3px 3px 6px #0000001F;
 }
 .h-0{
     height: 0px;
@@ -66,9 +69,18 @@
 .gap-6{
 gap: 6px;
 }
+.gap-45{
+    gap: 45px;
+}
 
 
+.word-break{
+    word-break: break-all;
+}
 
+.white-space-wrap{
+    white-space: normal !important;
+}
 
 
 
