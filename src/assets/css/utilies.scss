@@ -61,7 +61,7 @@
     border-bottom: 1px solid $border;
 }
 .box-shadow-white{
-    box-shadow: 0px 3px 3px 6px #0000001F;
+    box-shadow: 0px 0px 7px #0000001F;
 }
 .h-0{
     height: 0px;
@@ -73,7 +73,9 @@ gap: 6px;
     gap: 45px;
 }
 
-
+.gap-12{
+    gap: 12px;
+    }
 .word-break{
     word-break: break-all;
 }
@@ -83,6 +85,29 @@ gap: 6px;
 }
 
 
+
+
+
+/* WebKit-based browsers */
+::-webkit-scrollbar {
+    width: 4px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    background: #e8e8e85d; /* Change this to your desired background color */
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: #e8e8e871; /* Change this to your desired handle color */
+    border-radius: 2px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: grey; /* Change this to your desired handle color on hover */
+}
 
 
 

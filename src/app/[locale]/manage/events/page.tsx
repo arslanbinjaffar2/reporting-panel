@@ -535,7 +535,7 @@ export default function Dashboard({params:{locale}}:{params:{locale:string}}) {
                     </div>
                   </div> */}
                        {/* new Design starts from here */}
-                       <div style={{minHeight:"calc(100vh - 720px)"}}>
+                       <div className="bg-light-header pt-20 gap-12 d-flex flex-column p-20" style={{minHeight:"calc(100vh - 720px)"}}>
                         {events.length > 0 && !loading  ? events.map((event,k) => 
                             <Link key={k} href={'/manage/events/'+event.id +'/orders'} className="dropdown-item">
                               <div className='bg-white d-flex align-items-center justify-content-between p-20 w-100 rounded_4'   style={{ height:"74px" }}>
@@ -596,7 +596,7 @@ export default function Dashboard({params:{locale}}:{params:{locale:string}}) {
                                           <i className="material-icons">more_horiz</i>
                                         </button>
                                         <div style={{minWidth: 130}} className="ebs-dropdown-menu">
-                                          <Link href={""} className="dropdown-item">{t('view_details')}</Link>
+                                          <Link href={'/manage/events/'+event.id +'/orders'} className="dropdown-item">{t('view_details')}</Link>
                                           <button className="dropdown-item" >{t('export_orders')}</button>
                                         </div>
                                       </div>
