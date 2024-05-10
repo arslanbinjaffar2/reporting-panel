@@ -539,10 +539,11 @@ export default function Dashboard({params:{locale}}:{params:{locale:string}}) {
                         {events.length > 0 && !loading  ? events.map((event,k) => 
                             <Link key={k} href={'/manage/events/'+event.id +'/orders'} className="dropdown-item">
                               <div className='bg-white d-flex align-items-center justify-content-between p-20 w-100 rounded_4'   style={{ height:"74px" }}>
-                   <figure className={`${event.header_logo ?"border":""} mb-0  rounded-1 h-100 d-flex align-items-center justify-content-center`} style={{ width:"120px" }}>
+                   <figure className={`${event.header_logo ?"border":""} mb-0  rounded-1 h-100 d-flex align-items-center justify-content-center`}
+                    style={{ width:"120px" }}>
                  
                     <Image 
-                                  src={event.header_logo ? (`${process.env.serverImageHost + '/assets/event/branding/' + event.header_logo}`) : `${process.env.serverImageHost + '/_admin_assets/images/eventbuizz_logo.png'}`}
+                   src={event.header_logo ? (`${process.env.serverImageHost + '/assets/event/branding/' + event.header_logo}`) : `${process.env.serverImageHost + '/_admin_assets/images/eventbuizz_logo.png'}`}
                                   alt="image" width={120} height={42}                
                                    />
                    </figure>

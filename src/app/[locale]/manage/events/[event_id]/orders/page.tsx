@@ -470,7 +470,8 @@ export default function OrderListing({ params }: { params: { locale:string, even
                     }`}>
                     
                         <div key={k} className="d-flex align-items-center ebs-table-content ps-3 pe-4" style={{cursor:'text'}}>
-                          <div className="ebs-table-box ebs-box-1"  style={{ width:"80px" }}><Link href={'/manage/events/'+order.event_id+'/orders/'+order?.id+'/detail'}  title={order.order_number} className='text-dove-grey fs-12'>{order.order_number}</Link></div>
+                          <div className="ebs-table-box ebs-box-1"  style={{ width:"80px" }}>
+                            <p  title={order.order_number} className='text-dove-grey fs-12'>{order.order_number}</p></div>
                           <div className="ebs-table-box ebs-box-1"><p className='text-dove-grey fs-12'>{moment(order.order_date).format('DD-MM-YYYY')}</p></div>
                           <div className="ebs-table-box ebs-box-2 ebs-attendee-name-list d-flex align-items-center gap-2 position-relative" style={{ width:"189px" }}>
                             <strong  title={`${order?.order_attendee?.first_name} ${order?.order_attendee?.last_name}`}
@@ -571,11 +572,10 @@ const MoreAttendees = ({data,toggle,classes}: any) => {
        <div className="ebs-table-box ebs-box-3 d-flex justify-content-end" />
       </div> */}
       <div className='mt-2 p-2 border-down-grey fw-bold '>
-          <strong className='text-charcoal-grey fs-12 fw-600'>ATTENDEES ({data.length})</strong>
+          <strong className='text-charcoal-grey fs-12 fw-600'>ATTENDEES ({data.slice(1,data.length).length})</strong>
       </div>
      <div className='flex flex-column align-items-start'>
-        {data.length>0 && data.map((attendee:any,k:any) =>   
-
+        {data.length>0 && data.slice(1,data.length).map((attendee:any,k:any) =>   
           <div style={{background: 'white', cursor:'default'}} key={attendee.id} className="d-flex align-items-center ebs-table-content w-100"> 
           <div className="border-down-grey p-2 d-flex flex-column w-100" >
             <strong className='text-charcoal-grey fs-12 fw-600' title={`${attendee?.attendee_detail?.first_name} ${attendee?.attendee_detail?.last_name}`}><strong>{attendee?.attendee_detail?.first_name} {attendee?.attendee_detail?.last_name}</strong></strong>
