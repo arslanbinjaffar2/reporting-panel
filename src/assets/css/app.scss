@@ -1078,6 +1078,12 @@
       }
     }
   }
+  &.ebs-direction-bottom {
+    .ebs-dropdown-menu {
+      top: auto;
+      bottom: 100%;
+    }
+  }
 }
 .ebs-panel-list {
   list-style: none;
@@ -1412,11 +1418,14 @@ animation: widgetLoaderSpin 2s linear infinite;
 }
 
 .cron-notification{
-  background-color: #DADFE0;
+  background-color: #E2E7EA ;
   padding: 5px 10px;
-  font-size: 14px;
+  font-size: 12px;
   p {
     margin: 0;
+    strong {
+      font-weight: 600;
+    }
   }
 }
 
