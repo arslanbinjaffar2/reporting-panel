@@ -1,5 +1,5 @@
 'use client'
-import React, { useEffect, useState, useMemo } from 'react';
+import React, { useEffect, useState, useMemo, useRef } from 'react';
 import Image from 'next/image'
 import Dropdown from '@/components/DropDown';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks/hooks';
@@ -54,6 +54,7 @@ export default function Dashboard({params:{locale}}:{params:{locale:string}}) {
   const [showCustomRange, setShowCustomRange] = useState(storedEventFilters !== null && storedEventFilters.range === 'custom' ? true : false);
   const [limit, setLimit] = useState(storedEventFilters !== null ? storedEventFilters.limit : 10);
   const [downloading, setDownloading] = useState(false);
+  const _divElement = useRef<HTMLDivElement>(null)
   const [eventFilterData, setEventFilterData] = useState(storedEventFilters !== null ? storedEventFilters : {
       sort_by:'',
       event_action:'active_future',
@@ -79,6 +80,18 @@ export default function Dashboard({params:{locale}}:{params:{locale:string}}) {
           promise2.abort();
       }
   }, []);
+
+		useEffect(() => {
+			var _offset = 0;
+			if (_divElement.current) {
+				_offset = window.innerHeight - (_divElement.current?.offsetTop + 300)
+			}
+			if (_offset <= 0 ){
+				_divElement.current?.classList.add('ebs-direction-bottom')
+			} else {
+				_divElement.current?.classList.remove('ebs-direction-bottom')
+			}
+		}, [loading])
 
   useEffect(() => {
     document.body.addEventListener('click',handleBody,false)
@@ -398,25 +411,25 @@ export default function Dashboard({params:{locale}}:{params:{locale:string}}) {
                   <div className="row d-flex">
                     <div className="col-6">
                       <div className="row">
-                        <div className="col">
+                        <div className="col h-100">
                           <div className="ebs-ticket-information">
                             <strong>{allEventsStats !== null && allEventsStats.range_reporting_stats?.range_waiting_list_attendees  > 0 ? allEventsStats.range_reporting_stats?.range_waiting_list_attendees : 0}</strong>
                             <span>{t('tickets_waiting_label')}</span>
                           </div>
                         </div>
-                        {/* <div className="col">
+                        {/* <div className="col h-100">
                           <div className="ebs-ticket-information">
                             <strong>{allEventsStats !== null && allEventsStats.tickets_left  > 0 ? allEventsStats.tickets_left : 0}</strong>
                             <span>LEFT</span>
                           </div>
                         </div> */}
-                        <div className="col">
+                        <div className="col h-100">
                           <div className="ebs-ticket-information">
                             <strong>{allEventsStats !== null && allEventsStats?.range_reporting_stats?.range_sold_tickets  > 0 ? allEventsStats?.range_reporting_stats?.range_sold_tickets : 0}</strong>
                             <span>{t('tickets_sold_label')}</span>
                           </div>
                         </div>
-                        <div className="col">
+                        <div className="col h-100">
                           <div className="ebs-ticket-information">
                             <strong>{allEventsStats !== null && allEventsStats?.totalReportingData?.total_tickets  > 0 ? allEventsStats?.totalReportingData?.total_tickets : 0}</strong>
                             <span>{t('event_table.total_tickets')}</span>
@@ -429,13 +442,13 @@ export default function Dashboard({params:{locale}}:{params:{locale:string}}) {
                       <div className="col-8 h-100">
                         <div className="ebs-time-counter d-flex align-items-center">
                           <div className="col-5">
-                            <div className="p-1">
+                            <div className="p-1 word-break">
                               <strong>{allEventsStats !== null &&  allEventsStats?.range_reporting_stats?.total_range_revenue_text }</strong>
                               <span>{t('tickets_revenue_label')}</span>
                             </div>
                           </div>
                           <div className="col-7">
-                            <div className="ebs-border-left p-1">
+                            <div className="ebs-border-left p-1 word-break">
                               <strong>{allEventsStats !== null && allEventsStats.total_revenue_text }</strong>
                               <span>{t('tickets_total_revenue_label')}</span>
                             </div>
@@ -451,103 +464,36 @@ export default function Dashboard({params:{locale}}:{params:{locale:string}}) {
                 </div>
                 <div className="ebs-order-list-section" >
                 <h4>{t('reports_list')}</h4>
-                {/* <h4>Reports List</h4> */}
-
-                  {/* <div className="ebs-data-table ebs-order-table position-relative">
-                    <div className="d-flex align-items-center ebs-table-header">
-                      <div className="ebs-table-box ebs-box-1"><strong>{t('event_table.event_logo')}</strong></div>
-                      <div style={{width: 170}}  className="ebs-table-box ebs-box-2"><strong>{t('event_table.event_name')}</strong></div>
-                      <div style={{width: 170}}  className="ebs-table-box ebs-box-2"><strong>{t('event_table.event_date')}</strong></div>
-                      <div style={{width: 140}}  className="ebs-table-box ebs-box-1"><strong>{t('event_table.organized_by')}</strong></div>
-                      <div style={{width: 140}}  className="ebs-table-box ebs-box-4"><strong>Tickets Waiting</strong></div>
-                      <div className="ebs-table-box ebs-box-4"><strong>{t('event_table.sold_tickets')}</strong></div>
-                      <div className="ebs-table-box ebs-box-4"><strong>{t('event_table.total_tickets')}</strong></div>
-                      <div className="ebs-table-box ebs-box-1"><strong>{t('event_table.revenue')}</strong></div>
-                      <div className="ebs-table-box ebs-box-4" style={{paddingRight: 0}}><strong>{t('event_table.total_revenue')}</strong></div>
-                      <div className="ebs-table-box ebs-box-1" style={{width: 80}}  />
-                    </div>
-                    <div style={{minHeight:"calc(100vh - 720px)"}}>
-                        {events.length > 0 && !loading  ? events.map((event,k) => 
-                            <Link key={k} href={'/manage/events/'+event.id +'/orders'} className="dropdown-item">
-                              <div className="d-flex align-items-center ebs-table-content" >
-                                <div className="ebs-table-box ebs-box-1">
-                                  <Image 
-                                  src={event.header_logo ? (`${process.env.serverImageHost + '/assets/event/branding/' + event.header_logo}`) : `${process.env.serverImageHost + '/_admin_assets/images/eventbuizz_logo.png'}`}
-                                  alt={event.name} width={100} height={34} />
-                                </div>
-                                <div style={{width: 170}}  className="ebs-table-box ebs-box-2"><p title={event.name} style={{fontWeight: 600, color: '#404242'}}>{event.name}</p></div>
-                                <div style={{width: 170}}  className="ebs-table-box ebs-box-2"><p title={`${moment(event.start_date).format('DD-MM-YYYY')} - ${moment(event.end_date).format('DD-MM-YYYY')}`}>{moment(event.start_date).format('DD-MM-YYYY')} - {moment(event.end_date).format('DD-MM-YYYY')}</p></div>
-                                <div style={{width: 140}}  className="ebs-table-box ebs-box-1"><p title={event.organizer_name}>{event.organizer_name}</p></div>
-                                <div style={{width: 140}} className="ebs-table-box ebs-box-4"><p title={event?.reporting_data.range_waiting_list_attendees}>{event?.reporting_data.range_waiting_list_attendees}</p></div>
-                                <div className="ebs-table-box ebs-box-4"><p title={event?.reporting_data.range_sold_tickets}>{event?.reporting_data.range_sold_tickets}</p></div>
-                                <div className="ebs-table-box ebs-box-4"><p title={event?.reporting_data.range_total_tickets}>{event?.reporting_data.range_total_tickets}</p></div>
-                                <div className="ebs-table-box ebs-box-1" ><p title={event?.reporting_data.total_range_revenue_text}>{event?.reporting_data.total_range_revenue_text}</p></div>
-                                <div className="ebs-table-box ebs-box-4" style={{paddingRight: 0}}><p title={event?.reporting_data.total_revenue_text}>{event?.reporting_data.total_revenue_text}</p></div>
-                                <div style={{width: 80}} className="ebs-table-box ebs-box-1 d-flex justify-content-end">
-                                  <ul className='d-flex ebs-panel-list m-0 p-0'>
-                                    <li>
-                                      <div onClick={(e) => e.stopPropagation()} className="ebs-dropdown-area">
-                                        <button onClick={handleToggle} className='ebs-btn-panel ebs-btn-dropdown'>
-                                          <i className="material-icons">more_horiz</i>
-                                        </button>
-                                        <div style={{minWidth: 130}} className="ebs-dropdown-menu">
-                                          <Link href={'/manage/events/'+event.id +'/orders'} className="dropdown-item">{t('view_details')}</Link>
-                                          <button className="dropdown-item" onClick={(e)=>{ e.preventDefault(); exportEventOrders(event.id) }}>{t('export_orders')}</button>
-                                        </div>
-                                      </div>
-                                    </li>
-                                  </ul>
-                                </div>
-                              </div>
-                            </Link>
-                        ) : 
-                          loading ? 
-                          <div>
-                            <Loader className={''} fixed={''}/> 
-                          </div>
-                          : 
-                          <div style={{minHeight: '335px', backgroundColor: '#fff', borderRadius: '8px'}} className='d-flex align-items-center justify-content-center h-100 w-100'>
-                            <div className="text-center">
-                              <Image
-                                  src={'/no_record_found.svg'} alt="" width="100" height="100"
-                              />
-                              <p className='pt-3 m-0'>{t('no_data_available')}</p>
-                            </div>
-                          </div>
-                        }
-                    </div>
-                    <div className='d-flex justify-content-end align-items-center pt-3'>
-                      <Pagination
-                          currentPage={currentPage}
-                          totalPages={totalPages}
-                          onPageChange={handlePageChange}
-                      />
-                    <div style={{minWidth: 60}} onClick={(e) => e.stopPropagation()} className="ebs-dropdown-area">
-                        <button onClick={handleToggle} className="ebs-btn-dropdown btn-select">
-                          {limit} <i className="material-symbols-outlined">expand_more</i>
-                        </button>
-                        <div className="ebs-dropdown-menu">
-                          {[ 10, 20, 50, 100, 500].map((i, k)=>(
-                            <button key={k} className="dropdown-item" onClick={(e)=> { handleLimitChange(e, i) }}>{i}</button>
-                          ))}
-                        </div>
-                      </div>
-                    </div>
-                  </div> */}
+                
                        {/* new Design starts from here */}
-                       <div className="bg-light-header pt-20 gap-12 d-flex flex-column p-20" style={{minHeight:"calc(100vh - 720px)"}}>
+                       <div className="bg-light-header pt-20 gap-12 d-flex flex-column" style={{minHeight:"calc(100vh - 720px)"}}>
+                        {/* pagination */}
+                        {events.length > 0 && !loading  && <div className='d-flex justify-content-end align-items-center pt-3'>
+                                <Pagination
+                                    currentPage={currentPage}
+                                    totalPages={totalPages}
+                                    onPageChange={handlePageChange}
+                                />
+                              <div style={{minWidth: 60}} onClick={(e) => e.stopPropagation()} className="ebs-dropdown-area">
+                                  <button onClick={handleToggle} className="ebs-btn-dropdown btn-select">
+                                    {limit} <i className="material-symbols-outlined">expand_more</i>
+                                  </button>
+                                  <div className="ebs-dropdown-menu">
+                                    {[ 10, 20, 50, 100, 500].map((i, k)=>(
+                                      <button key={k} className="dropdown-item" onClick={(e)=> { handleLimitChange(e, i) }}>{i}</button>
+                                    ))}
+                                  </div>
+                                </div>
+                              </div>}
                         {events.length > 0 && !loading  ? events.map((event,k) => 
                             <Link key={k} href={'/manage/events/'+event.id +'/orders'} className="dropdown-item">
-                              <div className='bg-white d-flex align-items-start justify-content-between p-20 w-100 rounded_4 '   >
+                              <div className='bg-white d-flex align-items-center justify-content-start p-20 w-100 rounded_4 ' >
                    <figure className={`${event.header_logo ?"border":""} mb-0  rounded-1 h-100 d-flex align-items-center justify-content-center`}
                     style={{ width:"120px" }}>
                  
-                    <Image 
-                   src={event.header_logo ? (`${process.env.serverImageHost + '/assets/event/branding/' + event.header_logo}`) : `${process.env.serverImageHost + '/_admin_assets/images/eventbuizz_logo.png'}`}
-                                  alt="image" width={120} height={42}                
-                                   />
+                    <Image  src={event.header_logo ? (`${process.env.serverImageHost + '/assets/event/branding/' + event.header_logo}`) : `${process.env.serverImageHost + '/_admin_assets/images/eventbuizz_logo.png'}`} alt="image" width={118} height={40}  />
                    </figure>
-                   <div className='d-flex flex-column gap-6 ps-3' style={{ width:" 450px" }}>
+                   <div className='d-flex flex-column gap-6 ps-3 me-auto' style={{ width:" 450px" }}>
                     <strong className='fw-600 text-dark-black'>
                     {event.name}
                       {/* Global Summit: Convening leaders for professional advancement */}
@@ -565,47 +511,47 @@ export default function Dashboard({params:{locale}}:{params:{locale:string}}) {
                       </span>
                       </div>
                    </div>
-                   <article className='d-flex justify-content-between'>
+                   <article className='d-flex justify-content-between align-items-center'>
 
                    <div className='d-flex gap-6  align-items-center'>
                     <strong className='fw-600 fs-12 text-dark-black'>{t('event_table.total_tickets')}:</strong>
                     <span className='fs-12 text-dark-black'>{event?.reporting_data.range_total_tickets}</span>
                    </div>
-                   <div className=' border-end border mx-10' style={{ height:"24px",width:"0" }}></div>
+                   <div className=' border-end mx-10' style={{ height:"24px",width:"0" }}></div>
                    <div className='d-flex gap-6 align-items-center'>
                     <strong className='fw-600 fs-12 text-dark-black'>Waiting:</strong>
                     <span className='fs-12 text-dark-black'>{event?.reporting_data.range_waiting_list_attendees}</span>
                    </div>
-                   <div className=' border-end border mx-10' style={{ height:"24px",width:"0" }}></div>
+                   <div className=' border-end mx-10' style={{ height:"24px",width:"0" }}></div>
                    <div className='d-flex gap-6  align-items-center'>
                     <strong className='fw-600 fs-12 text-dark-black'>{t('event_table.sold_tickets')}:</strong>
                     <span className='fs-12 text-dark-black'>{event?.reporting_data.range_sold_tickets}</span>
                    </div>
-                   <div className=' border-end border mx-10' style={{ height:"24px",width:"0" }}></div>
+                   <div className=' border-end mx-10' style={{ height:"24px",width:"0" }}></div>
                    <div className='d-flex gap-6 align-items-center'>
                     <strong className='fw-600 fs-12 #text-dark-black'>{t('event_table.revenue')}:</strong>
                     <span className='fs-12 text-dark-black'>{event?.reporting_data.total_range_revenue_text}</span>
                    </div>
-                   <div className=' border-end border mx-10' style={{ height:"24px",width:"0" }}></div>
+                   <div className=' border-end mx-10' style={{ height:"24px",width:"0" }}></div>
                    <div className='d-flex gap-6  align-items-center'>
                     <strong className='fw-600 fs-12 text-dark-black'>{t('event_table.total_revenue')}:</strong>
                     <span className='fs-12 text-dark-black'>{event?.reporting_data.total_revenue_text}</span>
                    </div>
                    <div  className="ebs-table-box ebs-box-1  d-flex justify-content-end ms-4">
-                                  <ul className='d-flex ebs-panel-list m-0 p-0 '>
-                                    <li className=''>
-                                      <div onClick={(e) => e.stopPropagation()} className="ebs-dropdown-area ">
-                                        <button onClick={handleToggle} className='ebs-btn-panel ebs-btn-dropdown'>
-                                          <i className="material-icons">more_horiz</i>
-                                        </button>
-                                        <div style={{minWidth: 130}} className="ebs-dropdown-menu">
-                                          <Link href={'/manage/events/'+event.id +'/orders'} className="dropdown-item">{t('view_details')}</Link>
-                                          <button className="dropdown-item" >{t('export_orders')}</button>
-                                        </div>
-                                      </div>
-                                    </li>
-                                  </ul>
-                                </div>
+                      <ul className='d-flex ebs-panel-list m-0 p-0 '>
+                        <li className=''>
+                          <div onClick={(e) => e.stopPropagation()} className="ebs-dropdown-area ">
+                            <button onClick={handleToggle} className='ebs-btn-panel ebs-btn-dropdown'>
+                              <i className="material-icons">more_horiz</i>
+                            </button>
+                            <div style={{minWidth: 130}} className="ebs-dropdown-menu">
+                              <Link href={'/manage/events/'+event.id +'/orders'} className="dropdown-item">{t('view_details')}</Link>
+                              <button className="dropdown-item" >{t('export_orders')}</button>
+                            </div>
+                          </div>
+                        </li>
+                      </ul>
+                    </div>
                    </article>
 
                   </div>
@@ -629,13 +575,13 @@ export default function Dashboard({params:{locale}}:{params:{locale:string}}) {
                     </div>
 
                {/* pagination */}
-               <div className='d-flex justify-content-end align-items-center pt-3'>
+               {events.length > 0 && !loading  && <div  className='d-flex justify-content-end align-items-center pt-3'>
                       <Pagination
                           currentPage={currentPage}
                           totalPages={totalPages}
                           onPageChange={handlePageChange}
                       />
-                    <div style={{minWidth: 60}} onClick={(e) => e.stopPropagation()} className="ebs-dropdown-area">
+                    <div ref={_divElement} style={{minWidth: 60}} onClick={(e) => e.stopPropagation()} className="ebs-dropdown-area">
                         <button onClick={handleToggle} className="ebs-btn-dropdown btn-select">
                           {limit} <i className="material-symbols-outlined">expand_more</i>
                         </button>
@@ -645,7 +591,7 @@ export default function Dashboard({params:{locale}}:{params:{locale:string}}) {
                           ))}
                         </div>
                       </div>
-                    </div>
+                    </div>}
                 </div>
               </div>
       {downloading ? <FullPageLoader className={''} fixed={''}/> : null}

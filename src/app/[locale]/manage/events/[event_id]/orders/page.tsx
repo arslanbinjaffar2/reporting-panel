@@ -51,6 +51,7 @@ export default function OrderListing({ params }: { params: { locale:string, even
   const [toggle, setToggle] = useState(false)
   const [startDate, setStartDate] = useState(storedOrderFilters !== null ? storedOrderFilters.start_date : '');
   const [endDate, setEndDate] = useState(storedOrderFilters !== null ? storedOrderFilters.end_date : '');
+  const _divElement = React.useRef<HTMLDivElement>(null)
   const [orderFilterData, setOrderFilterData] = useState(storedOrderFilters !== null ? {...storedOrderFilters, regFormId:0} : {
       field:'',
       range:'today',
@@ -63,6 +64,17 @@ export default function OrderListing({ params }: { params: { locale:string, even
       page:1,
       regFormId:0
   });
+  	useEffect(() => {
+			var _offset = 0;
+			if (_divElement.current) {
+				_offset = window.innerHeight - (_divElement.current?.offsetTop + 300)
+			}
+			if (_offset <= 0 ){
+				_divElement.current?.classList.add('ebs-direction-bottom')
+			} else {
+				_divElement.current?.classList.remove('ebs-direction-bottom')
+			}
+		}, [])
 
   useEffect(() => {
     savefiltersToLocalStorage(orderFilterData);
@@ -225,30 +237,6 @@ export default function OrderListing({ params }: { params: { locale:string, even
   
   return (
     <>
-              {/* <div className="top-landing-page">
-                <div className="row d-flex">
-                  <div className="col-4">
-                    <div className="logo">
-                      <a href="">
-                        <Image
-                          src={"/img/logo.svg"}
-                          alt=""
-                          width="200"
-                          height="29"
-                          className="logos"
-                        />
-                      </a>
-                    </div>
-                  </div>
-                  <div className="col-8">
-                    <div className="right-top-header">
-                      <button className="btn btn-default">
-                        Export Orders
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div> */}
               <div style={{ background: "#fff", borderRadius: '0 0 8px 8px' }} className="main-data-table">
               <div className="ebs-ticket-section">
                   <div className='d-flex justify-content-between mb-2'>
@@ -386,6 +374,23 @@ export default function OrderListing({ params }: { params: { locale:string, even
                       </div>
                     </div>}
                   </div>
+                  <div className="d-flex justify-content-end mb-3">
+                     <div className='d-flex justify-content-end align-items-center'>
+                      <Pagination
+                          currentPage={currentPage}
+                          totalPages={totalPages}
+                          onPageChange={handlePageChange}
+                      />
+                    <div style={{minWidth: 60}} onClick={(e) => e.stopPropagation()} className="ebs-dropdown-area">
+                        <button onClick={handleToggle} className="ebs-btn-dropdown btn-select">
+                          {limit}<i className="material-symbols-outlined">expand_more</i>
+                        </button>
+                        <div className="ebs-dropdown-menu">
+                          {[10, 20, 50, 100, 500].map((l)=>(<button key={l} className="dropdown-item" onClick={(e)=> { handleLimitChange(e, l) }}>{l}</button>))}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                   <div className="ebs-data-table ebs-order-table position-relative border rounded_4">
                     <div className="d-flex align-items-center ebs-table-header bg-light-header ps-3 pe-4">
                       <div className="ebs-table-box ebs-box-1 " style={{ width:"80px" }}>
@@ -485,26 +490,7 @@ export default function OrderListing({ params }: { params: { locale:string, even
                           />
                               }
 
-                            {/* {order.order_attendees.length <= 1 ? <p>{`${order?.order_attendee?.first_name} ${order?.order_attendee?.last_name}`}</p> : (
-                              <div onClick={(e) => e.stopPropagation()} className="ebs-dropdown-area">
-                              <div className="d-flex align-items-center">
-                                  <p>{`${order?.order_attendee?.first_name} ${order?.order_attendee?.last_name}`}</p>  
-                                  <button onClick={handleToggle} className='ebs-btn-panel ebs-btn-dropdown'>
-                                  <i className="material-icons">expand_more</i>
-                                  </button>
-                                  <div style={{minWidth: 180}} className="ebs-dropdown-menu">
-                                    <h5>attendees ({order.order_attendees.length})</h5>
-                                    {order?.order_attendees?.map((attendee:any, k:number)=>(
-                                      <div className="ebs-dropdown-list" key={k}>
-                                      <p className="name">{`${attendee.attendee_detail?.first_name} ${attendee.attendee_detail?.last_name}`}</p>
-                                      <p className="email">{attendee.attendee_detail?.email}</p>
-                                      </div>
-                                    ))}
-                                    
-                                    </div>
-                                </div>
-                                </div>
-                              )} */}
+                          
                           </div>
                           <div className="ebs-table-box ebs-box-2" style={{ width:"189px" }}><strong   className='fs-12 fw-600 text-dove-grey word-break' title={order?.order_attendee?.email}>{order?.order_attendee?.email}</strong></div>
                           <div style={{ width:"189px" }}className="ebs-table-box ebs-box-2"><p className='text-dove-grey white-space-wrap' title={order?.order_attendee?.detail?.title}>{order?.order_attendee?.detail?.title}</p></div>
@@ -535,7 +521,7 @@ export default function OrderListing({ params }: { params: { locale:string, even
                           totalPages={totalPages}
                           onPageChange={handlePageChange}
                       />
-                    <div style={{minWidth: 60}} onClick={(e) => e.stopPropagation()} className="ebs-dropdown-area">
+                    <div ref={_divElement} style={{minWidth: 60}} onClick={(e) => e.stopPropagation()} className="ebs-dropdown-area">
                         <button onClick={handleToggle} className="ebs-btn-dropdown btn-select">
                           {limit}<i className="material-symbols-outlined">expand_more</i>
                         </button>
@@ -558,19 +544,6 @@ const MoreAttendees = ({data,toggle,classes}: any) => {
     <div style={{background: 'white',maxWidth:"150px",width:"100%",height: "221px",overflowX:"hidden",overflowY:"auto",
     zIndex:"9999",left:"20%",top:"70%"}} 
     className={ `text-start rounded_4  box-shadow-white mt-1 ${classes}` }>
-
-      {/* <div style={{background: '#EEF2F4', cursor:'default'}} className="d-flex align-items-center ebs-table-content" >
-          <div className="ebs-table-box ebs-box-1" />
-          <div className="ebs-table-box ebs-box-1" />
-        <div className="ebs-table-box ebs-box-2"><p><strong onClick={() => setToggle(!toggle)}> <i  style={{fontSize: 18}} className="material-icons">{toggle ? 'expand_more' : 'chevron_right' }</i>  <span style={{marginRight:'5px'}}>{data?.length - 1}</span> {"more attendees"}  </strong></p></div>
-        <div className="ebs-table-box ebs-box-2" />
-        <div className="ebs-table-box  ebs-box-4" />
-       <div className="ebs-table-box ebs-box-4" />
-       <div className="ebs-table-box ebs-box-4" />
-       <div className="ebs-table-box ebs-box-3" style={{paddingRight: 0}} />
-       <div className="ebs-table-box ebs-box-3" style={{paddingRight: 0}} />
-       <div className="ebs-table-box ebs-box-3 d-flex justify-content-end" />
-      </div> */}
       <div className='mt-2 p-2 border-down-grey fw-bold '>
           <strong className='text-charcoal-grey fs-12 fw-600'>ATTENDEES ({data.slice(1,data.length).length})</strong>
       </div>
@@ -585,12 +558,6 @@ const MoreAttendees = ({data,toggle,classes}: any) => {
       
      )} 
       </div>
-      {/* <div style={{background: 'white', cursor:'default'}}  className="d-flex align-items-center ebs-table-content w-100"> 
-          <div className="border-down-grey p-2 " >
-            <strong className='text-charcoal-grey fs-12 fw-600' >asasasaasa</strong>
-            <span className='text-dove-grey fs-10' >dfdfhdfgh asasasasaaaaaaaaaaaaaaaa</span>
-            </div>  
-        </div> */}
     </div>
     
     }
