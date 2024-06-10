@@ -1,0 +1,189 @@
+.bg-dark-pink{
+    background-color: $color-primary !important;
+}
+.text-dark-black{
+    color: $darktext;
+}
+.bg-dark-grey{
+    background: $border;
+}
+.bg-light-header{
+    background: $lightheader;
+}
+.text-dove-grey{
+    color: $text;
+}
+.text-charcoal-grey{
+    color: $charcoalgrey;
+}
+.text-innertext{
+    color: $innertext;
+}
+.fw-600{
+    font-weight: 600;
+}
+.fs-12{
+    font-size: 12px;
+}
+.fs-10{
+    font-size: 10px;
+}
+.mx-10{
+    margin:0 10px;
+}
+.ms-6{
+    margin-left: 6px;
+}
+.mb-10{
+    margin-bottom: 10px;
+}
+// padding
+.p-20{
+    padding: 20px;
+}
+// line height
+.line-height-0{
+    line-height: 0;
+}
+.line-height-1{
+    line-height: 0.5;
+}
+.rounded_4{
+    border-radius: 4px;
+}
+.rounded_2{
+    border-radius: 2px;
+}
+.cursor-pointer{
+    cursor: pointer;
+}
+.border-down-grey{
+    border-bottom: 1px solid $border;
+}
+.box-shadow-white{
+    box-shadow: 0px 0px 7px #0000001F;
+}
+.h-0{
+    height: 0px;
+}
+.min-width{
+    min-width: 0px;
+}
+.gap-6{
+gap: 6px;
+}
+.gap-45{
+    gap: 45px;
+}
+
+.gap-12{
+    gap: 12px;
+    }
+    .gap-0{
+        gap: 0px;
+    }
+.word-break{
+    word-break: break-all;
+}
+
+.white-space-wrap{
+    white-space: normal !important;
+}
+
+
+.custom-flex{
+    flex: 1 1 auto;
+}
+.custom-flex-16{
+    flex: 1 1 16px;
+}
+.truncate  {
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+/* WebKit-based browsers */
+::-webkit-scrollbar {
+    width: 4px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    background: #e8e8e85d; /* Change this to your desired background color */
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: #e8e8e871; /* Change this to your desired handle color */
+    border-radius: 2px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: grey; /* Change this to your desired handle color on hover */
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

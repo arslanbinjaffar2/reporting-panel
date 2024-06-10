@@ -1,5 +1,5 @@
 'use client'
-import React, { useEffect, useState, useMemo } from 'react';
+import React, { useEffect, useState, useMemo, useRef } from 'react';
 import Image from 'next/image'
 import Dropdown from '@/components/DropDown';
 import Pagination from '@/components/pagination';
@@ -12,6 +12,7 @@ import Loader from '@/components/Loader';
 import DateTime from '@/components/DateTimePicker';
 import TicketDetail from '@/components/TicketDetail';
 import { useTranslations } from 'next-intl';
+import Link from 'next/link';
 
 // const rangeFilters = [
 //   { id: 'today', name: "Today" },
@@ -385,111 +386,133 @@ export default function OrderListing({ params }: { params: { locale:string, even
                       </div>
                     </div>}
                   </div>
-                  <div className="ebs-data-table ebs-order-table position-relative">
-                    <div className="d-flex align-items-center ebs-table-header">
-                      <div className="ebs-table-box ebs-box-1">
-                        <strong>
+                  <div className="ebs-data-table ebs-order-table position-relative border rounded_4">
+                    <div className="d-flex align-items-center ebs-table-header bg-light-header ps-3 pe-4">
+                      <div className="ebs-table-box ebs-box-1 " style={{ width:"80px" }}>
+                        <strong className='fs-12 fw-600'>
                           {t('order_table.number')}
-                          <span className='d-flex flex-column'>
-                            <em className={`material-symbols-outlined ${sort === 'asc' && sortCol === 'order_number' ? 'fw-bolder' : 'cursor-pointer'}`} onClick={()=>{handleSortChange('asc', 'order_number')}}>keyboard_arrow_up</em> 
-                            <em className={`material-symbols-outlined ${sort === 'desc' && sortCol === 'order_number' ? 'fw-bolder' : 'cursor-pointer'}`} onClick={()=>{handleSortChange('desc', 'order_number')}}>keyboard_arrow_down</em>
-                          </span>
+                          {/* <span className='d-flex flex-column line-height-0 ms-6'>
+                            <em className={`text-innertext fs-12  line-height-1 material-symbols-outlined  ${sort === 'asc' && sortCol === 'order_number' ? 'fw-bolder' : 'cursor-pointer'}`} onClick={()=>{handleSortChange('asc', 'order_number')}}>keyboard_arrow_up</em> 
+                            <em className={`text-innertext fs-12 line-height-1 material-symbols-outlined ${sort === 'desc' && sortCol === 'order_number' ? 'fw-bolder' : 'cursor-pointer'}`} onClick={()=>{handleSortChange('desc', 'order_number')}}>keyboard_arrow_down</em>
+                          </span> */}
                         </strong>
                       </div>
-                      <div className="ebs-table-box ebs-box-1"><strong>                          
+                      <div className="ebs-table-box ebs-box-1" >
+                        <strong className='fs-12 fw-600'>                          
                         {t('order_table.date')} 
-                      <span className='d-flex flex-column'>
-                      <em className={`material-symbols-outlined ${sort === 'asc' && sortCol === 'order_date' ? 'fw-bolder' : 'cursor-pointer'}`} onClick={()=>{handleSortChange('asc', 'order_date')}}>keyboard_arrow_up</em> 
-                      <em className={`material-symbols-outlined ${sort === 'desc' && sortCol === 'order_date' ? 'fw-bolder' : 'cursor-pointer'}`} onClick={()=>{handleSortChange('desc', 'order_date')}}>keyboard_arrow_down</em>
+                      <span className='d-flex flex-column line-height-0 ms-6'>
+                      <em className={`text-innertext fs-12  line-height-1 material-symbols-outlined ${sort === 'asc' && sortCol === 'order_date' ? 'fw-bolder' : 'cursor-pointer'}`} onClick={()=>{handleSortChange('asc', 'order_date')}}>keyboard_arrow_up</em> 
+                      <em className={`text-innertext fs-12  line-height-1 material-symbols-outlined ${sort === 'desc' && sortCol === 'order_date' ? 'fw-bolder' : 'cursor-pointer'}`} onClick={()=>{handleSortChange('desc', 'order_date')}}>keyboard_arrow_down</em>
                     </span>
                       </strong></div>
-                      <div className="ebs-table-box ebs-box-2"><strong>
+                      <div className="ebs-table-box ebs-box-2" style={{ width:"189px" }}>
+                        <strong className='fs-12 fw-600'>
                       {t('order_table.attendee_name')}
-                      <span className='d-flex flex-column'>
-                      <em className={`material-symbols-outlined ${sort === 'asc' && sortCol === 'name' ? 'fw-bolder' : 'cursor-pointer'}`} onClick={()=>{handleSortChange('asc', 'name')}}>keyboard_arrow_up</em> 
-                      <em className={`material-symbols-outlined ${sort === 'desc' && sortCol === 'name' ? 'fw-bolder' : 'cursor-pointer'}`} onClick={()=>{handleSortChange('desc', 'name')}}>keyboard_arrow_down</em>
+                      <span className='d-flex flex-column line-height-0 ms-6'>
+                      <em className={`text-innertext fs-12  line-height-1 material-symbols-outlined ${sort === 'asc' && sortCol === 'name' ? 'fw-bolder' : 'cursor-pointer'}`} onClick={()=>{handleSortChange('asc', 'name')}}>keyboard_arrow_up</em> 
+                      <em className={`text-innertext fs-12  line-height-1 material-symbols-outlined ${sort === 'desc' && sortCol === 'name' ? 'fw-bolder' : 'cursor-pointer'}`} onClick={()=>{handleSortChange('desc', 'name')}}>keyboard_arrow_down</em>
                     </span>
                       </strong></div>
-                      <div className="ebs-table-box ebs-box-2"><strong>
+                      <div className="ebs-table-box ebs-box-2" style={{ width:"189px" }}>
+                        <strong className='fs-12 fw-600'>
                       {t('order_table.attendee_email')}
-                      <span className='d-flex flex-column'>
-                      <em className={`material-symbols-outlined ${sort === 'asc' && sortCol === 'email' ? 'fw-bolder' : 'cursor-pointer'}`} onClick={()=>{handleSortChange('asc', 'email')}}>keyboard_arrow_up</em> 
-                      <em className={`material-symbols-outlined ${sort === 'desc' && sortCol === 'email' ? 'fw-bolder' : 'cursor-pointer'}`} onClick={()=>{handleSortChange('desc', 'email')}}>keyboard_arrow_down</em>
+                      <span className='d-flex flex-column line-height-0 ms-6'>
+                      <em className={`text-innertext fs-12  line-height-1 material-symbols-outlined ${sort === 'asc' && sortCol === 'email' ? 'fw-bolder' : 'cursor-pointer'}`} onClick={()=>{handleSortChange('asc', 'email')}}>keyboard_arrow_up</em> 
+                      <em className={`text-innertext fs-12  line-height-1 material-symbols-outlined ${sort === 'desc' && sortCol === 'email' ? 'fw-bolder' : 'cursor-pointer'}`} onClick={()=>{handleSortChange('desc', 'email')}}>keyboard_arrow_down</em>
                     </span>
                       </strong></div>
-                      <div style={{width: 150}} className="ebs-table-box ebs-box-2"><strong>
+                      <div style={{ width:"189px" }} className="ebs-table-box ebs-box-2">
+                        <strong className='fs-12 fw-600'>
                       {t('order_table.job_title')}
-                      <span className='d-flex flex-column'>
-                      <em className={`material-symbols-outlined ${sort === 'asc' && sortCol === 'job_title' ? 'fw-bolder' : 'cursor-pointer'}`} onClick={()=>{handleSortChange('asc', 'job_title')}}>keyboard_arrow_up</em> 
-                      <em className={`material-symbols-outlined ${sort === 'desc' && sortCol === 'job_title' ? 'fw-bolder' : 'cursor-pointer'}`} onClick={()=>{handleSortChange('desc', 'job_title')}}>keyboard_arrow_down</em>
+                      <span className='d-flex flex-column line-height-0 ms-6'>
+                      <em className={`text-innertext fs-12  line-height-1 material-symbols-outlined ${sort === 'asc' && sortCol === 'job_title' ? 'fw-bolder' : 'cursor-pointer'}`} onClick={()=>{handleSortChange('asc', 'job_title')}}>keyboard_arrow_up</em> 
+                      <em className={`text-innertext fs-12  line-height-1 material-symbols-outlined ${sort === 'desc' && sortCol === 'job_title' ? 'fw-bolder' : 'cursor-pointer'}`} onClick={()=>{handleSortChange('desc', 'job_title')}}>keyboard_arrow_down</em>
                     </span>  
                       </strong></div>
-                      <div className="ebs-table-box ebs-box-4"><strong>
+                      <div className="ebs-table-box ebs-box-4" style={{ width:"189px" }}>
+                        <strong className='fs-12 fw-600'>
                       {t('order_table.company')}
-                      <span className='d-flex flex-column'>
-                      <em className={`material-symbols-outlined ${sort === 'asc' && sortCol === 'company' ? 'fw-bolder' : 'cursor-pointer'}`} onClick={()=>{handleSortChange('asc', 'company')}}>keyboard_arrow_up</em> 
-                      <em className={`material-symbols-outlined ${sort === 'desc' && sortCol === 'company' ? 'fw-bolder' : 'cursor-pointer'}`} onClick={()=>{handleSortChange('desc', 'company')}}>keyboard_arrow_down</em>
+                      <span className='d-flex flex-column line-height-0 ms-6'>
+                      <em className={`text-innertext fs-12  line-height-1 material-symbols-outlined ${sort === 'asc' && sortCol === 'company' ? 'fw-bolder' : 'cursor-pointer'}`} onClick={()=>{handleSortChange('asc', 'company')}}>keyboard_arrow_up</em> 
+                      <em className={`text-innertext fs-12  line-height-1 material-symbols-outlined ${sort === 'desc' && sortCol === 'company' ? 'fw-bolder' : 'cursor-pointer'}`} onClick={()=>{handleSortChange('desc', 'company')}}>keyboard_arrow_down</em>
                     </span>
                       </strong></div>
-                      <div className="ebs-table-box ebs-box-4"><strong>
+                      <div className="ebs-table-box ebs-box-4" style={{ width:"189px" }}>
+                        <strong className='fs-12 fw-600'>
                       {t('order_table.amount')}
                        
-                      <span className='d-flex flex-column'>
-                      <em className={`material-symbols-outlined ${sort === 'asc' && sortCol === 'amount' ? 'fw-bolder' : 'cursor-pointer'}`} onClick={()=>{handleSortChange('asc', 'amount')}}>keyboard_arrow_up</em> 
-                      <em className={`material-symbols-outlined ${sort === 'desc' && sortCol === 'amount' ? 'fw-bolder' : 'cursor-pointer'}`} onClick={()=>{handleSortChange('desc', 'amount')}}>keyboard_arrow_down</em>
+                      <span className='d-flex flex-column line-height-0 ms-6'>
+                      <em className={`text-innertext fs-12  line-height-1 material-symbols-outlined ${sort === 'asc' && sortCol === 'amount' ? 'fw-bolder' : 'cursor-pointer'}`} onClick={()=>{handleSortChange('asc', 'amount')}}>keyboard_arrow_up</em> 
+                      <em className={`text-innertext fs-12  line-height-1 material-symbols-outlined ${sort === 'desc' && sortCol === 'amount' ? 'fw-bolder' : 'cursor-pointer'}`} onClick={()=>{handleSortChange('desc', 'amount')}}>keyboard_arrow_down</em>
                     </span></strong></div>
-                      <div className="ebs-table-box ebs-box-4"><strong>
+                      <div className="ebs-table-box ebs-box-4" style={{ width:"80px" }}>
+                        <strong className='fs-12 fw-600'>
                       {t('order_table.sales_agent')}
-                      <span className='d-flex flex-column'>
-                      <em className={`material-symbols-outlined ${sort === 'asc' && sortCol === 'sales_agent' ? 'fw-bolder' : 'cursor-pointer'}`} onClick={()=>{handleSortChange('asc', 'sales_agent')}}>keyboard_arrow_up</em> 
-                      <em className={`material-symbols-outlined ${sort === 'desc' && sortCol === 'sales_agent' ? 'fw-bolder' : 'cursor-pointer'}`} onClick={()=>{handleSortChange('desc', 'sales_agent')}}>keyboard_arrow_down</em>
+                      <span className='d-flex flex-column  line-height-0 ms-6'>
+                      <em className={`text-innertext fs-12  line-height-1 material-symbols-outlined ${sort === 'asc' && sortCol === 'sales_agent' ? 'fw-bolder' : 'cursor-pointer'}`} onClick={()=>{handleSortChange('asc', 'sales_agent')}}>keyboard_arrow_up</em> 
+                      <em className={`text-innertext fs-12  line-height-1 material-symbols-outlined ${sort === 'desc' && sortCol === 'sales_agent' ? 'fw-bolder' : 'cursor-pointer'}`} onClick={()=>{handleSortChange('desc', 'sales_agent')}}>keyboard_arrow_down</em>
                     </span>
                       </strong></div>
-                      <div className="ebs-table-box ebs-box-4" style={{width: 150}}><strong>
+                      <div className="ebs-table-box ebs-box-4" style={{ width:"80px" }}>
+                        <strong className='fs-12 fw-600'>
                       {t('order_table.order_status')}
-                      <span className='d-flex flex-column'>
-                      <em className={`material-symbols-outlined ${sort === 'asc' && sortCol === 'order_status' ? 'fw-bolder' : 'cursor-pointer'}`} onClick={()=>{handleSortChange('asc', 'order_status')}}>keyboard_arrow_up</em> 
-                      <em className={`material-symbols-outlined ${sort === 'desc' && sortCol === 'order_status' ? 'fw-bolder' : 'cursor-pointer'}`} onClick={()=>{handleSortChange('desc', 'order_status')}}>keyboard_arrow_down</em>
+                      <span className='d-flex flex-column line-height-0 ms-6'>
+                      <em className={`text-innertext fs-12  line-height-1 material-symbols-outlined ${sort === 'asc' && sortCol === 'order_status' ? 'fw-bolder' : 'cursor-pointer'}`} onClick={()=>{handleSortChange('asc', 'order_status')}}>keyboard_arrow_up</em> 
+                      <em className={`text-innertext fs-12  line-height-1 material-symbols-outlined ${sort === 'desc' && sortCol === 'order_status' ? 'fw-bolder' : 'cursor-pointer'}`} onClick={()=>{handleSortChange('desc', 'order_status')}}>keyboard_arrow_down</em>
                     </span>
                         </strong></div>
                     </div>
                     <div style={{minHeight:"calc(100vh - 720px)"}}>
                       {event_orders !== null ? event_orders.data.length > 0 ? event_orders.data.map((order:any,k:number) => 
-                      <div key={order.id} >
-                        <div key={k} className="d-flex align-items-center ebs-table-content" style={{cursor:'text'}}>
-                          <div className="ebs-table-box ebs-box-1"><p title={order.order_number}>{order.order_number}</p></div>
-                          <div className="ebs-table-box ebs-box-1"><p>{moment(order.order_date).format('DD-MM-YYYY')}</p></div>
-                          <div className="ebs-table-box ebs-box-2 ebs-attendee-name-list">
-                            <p title={`${order?.order_attendee?.first_name} ${order?.order_attendee?.last_name}`}>{`${order?.order_attendee?.first_name} ${order?.order_attendee?.last_name}`}</p>
+
+                      <div key={order.id} className={`${
+                        k !== event_orders.data.length - 1 ? "border-down-grey" : ""
+                    }`}>
+                    
+                        <div key={k} className="d-flex align-items-center ebs-table-content ps-3 pe-4" style={{cursor:'text'}}>
+                          <div className="ebs-table-box ebs-box-1"  style={{ width:"80px" }}>
+                            <p  title={order.order_number} className='text-dove-grey fs-12'>{order.order_number}</p></div>
+                          <div className="ebs-table-box ebs-box-1"><p className='text-dove-grey fs-12'>{moment(order.order_date).format('DD-MM-YYYY')}</p></div>
+                          <div className="ebs-table-box ebs-box-2 ebs-attendee-name-list d-flex align-items-center gap-2 position-relative" style={{ width:"189px" }}>
+                            <strong  title={`${order?.order_attendee?.first_name} ${order?.order_attendee?.last_name}`}
+                            className='fs-12 text-dove-grey fw-600 word-break'
+                            >{`${order?.order_attendee?.first_name} ${order?.order_attendee?.last_name}`}</strong>
+                            {order?.order_attendees?.length > 1 && 
+                          <AttendeeName
+                          sort={sort}
+                          sortCol={sortCol}
+                          order={order}
+                          />
+                              }
+
                             {/* {order.order_attendees.length <= 1 ? <p>{`${order?.order_attendee?.first_name} ${order?.order_attendee?.last_name}`}</p> : (
                               <div onClick={(e) => e.stopPropagation()} className="ebs-dropdown-area">
-                                <div className="d-flex align-items-center">
+                              <div className="d-flex align-items-center">
                                   <p>{`${order?.order_attendee?.first_name} ${order?.order_attendee?.last_name}`}</p>  
                                   <button onClick={handleToggle} className='ebs-btn-panel ebs-btn-dropdown'>
-                                    <i className="material-icons">expand_more</i>
+                                  <i className="material-icons">expand_more</i>
                                   </button>
                                   <div style={{minWidth: 180}} className="ebs-dropdown-menu">
                                     <h5>attendees ({order.order_attendees.length})</h5>
                                     {order?.order_attendees?.map((attendee:any, k:number)=>(
                                       <div className="ebs-dropdown-list" key={k}>
-                                        <p className="name">{`${attendee.attendee_detail?.first_name} ${attendee.attendee_detail?.last_name}`}</p>
-                                        <p className="email">{attendee.attendee_detail?.email}</p>
+                                      <p className="name">{`${attendee.attendee_detail?.first_name} ${attendee.attendee_detail?.last_name}`}</p>
+                                      <p className="email">{attendee.attendee_detail?.email}</p>
                                       </div>
                                     ))}
                                     
-                                  </div>
+                                    </div>
                                 </div>
-                              </div>
-                            )} */}
+                                </div>
+                              )} */}
                           </div>
-                          <div className="ebs-table-box ebs-box-2"><p title={order?.order_attendee?.email}>{order?.order_attendee?.email}</p></div>
-                          <div style={{width: 150}} className="ebs-table-box ebs-box-2"><p title={order?.order_attendee?.detail?.title}>{order?.order_attendee?.detail?.title}</p></div>
-                          <div className="ebs-table-box ebs-box-4"><p title={order?.order_attendee?.detail?.company_name}>{order?.order_attendee?.detail?.company_name}</p></div>
-                          <div className="ebs-table-box ebs-box-4"><p title={order?.reporting_panel_total_text}>{order?.reporting_panel_total_text}</p></div>
-                          <div className="ebs-table-box ebs-box-4"><p title={order?.sales_agent_name}>{order?.sales_agent_name}</p></div>
-                          <div className="ebs-table-box ebs-box-4" style={{width: 150}}><p style={{fontWeight: 600, color: order.billing_order_status == 'completed' ? '#60A259' : '#AB8D2E'}}>{order.billing_order_status}</p></div>
+                          <div className="ebs-table-box ebs-box-2" style={{ width:"189px" }}><strong   className='fs-12 fw-600 text-dove-grey word-break' title={order?.order_attendee?.email}>{order?.order_attendee?.email}</strong></div>
+                          <div style={{ width:"189px" }}className="ebs-table-box ebs-box-2"><p className='text-dove-grey white-space-wrap' title={order?.order_attendee?.detail?.title}>{order?.order_attendee?.detail?.title}</p></div>
+                          <div className="ebs-table-box ebs-box-4" style={{ width:"189px" }}><p className='text-dove-grey fs-12 word-break ' title={order?.order_attendee?.detail?.company_name}>{order?.order_attendee?.detail?.company_name}</p></div>
+                          <div className="ebs-table-box ebs-box-4" style={{ width:"189px" }}><p className='text-dove-grey fs-12 ' title={order?.reporting_panel_total_text}>{order?.reporting_panel_total_text}</p></div>
+                          <div className="ebs-table-box ebs-box-4" style={{ width:"80px" }}><p className='text-dove-grey fs-12 ' title={order?.sales_agent_name}>{order?.sales_agent_name}</p></div>
+                          <div className="ebs-table-box ebs-box-4" style={{width: 80}}><p className='text-dove-grey' style={{fontWeight: 500, color: order.billing_order_status == 'completed' ? '#60A259' : '#AB8D2E'}}>{order.billing_order_status}</p></div>
                         </div>
-                        {order?.order_attendees?.length > 1 && <MoreAttendees data={order.order_attendees} />}
                       </div>
                       ) : (
                         <div style={{minHeight: '335px', backgroundColor: '#fff', borderRadius: '8px'}} className='d-flex align-items-center justify-content-center h-100 w-100'>
@@ -528,11 +551,15 @@ export default function OrderListing({ params }: { params: { locale:string, even
 }
 
 
-const MoreAttendees = ({data}: any) => {
-  const [toggle, setToggle] = useState(false)
+const MoreAttendees = ({data,toggle,classes}: any) => {
   return (
-    <div style={{background: '#EEF2F4',}} className='rounded-4'>
-      <div style={{background: '#EEF2F4', cursor:'default'}} className="d-flex align-items-center ebs-table-content" >
+    <>
+    {toggle && 
+    <div style={{background: 'white',maxWidth:"150px",width:"100%",height: "221px",overflowX:"hidden",overflowY:"auto",
+    zIndex:"9999",left:"20%",top:"70%"}} 
+    className={ `text-start rounded_4  box-shadow-white mt-1 ${classes}` }>
+
+      {/* <div style={{background: '#EEF2F4', cursor:'default'}} className="d-flex align-items-center ebs-table-content" >
           <div className="ebs-table-box ebs-box-1" />
           <div className="ebs-table-box ebs-box-1" />
         <div className="ebs-table-box ebs-box-2"><p><strong onClick={() => setToggle(!toggle)}> <i  style={{fontSize: 18}} className="material-icons">{toggle ? 'expand_more' : 'chevron_right' }</i>  <span style={{marginRight:'5px'}}>{data?.length - 1}</span> {"more attendees"}  </strong></p></div>
@@ -543,26 +570,76 @@ const MoreAttendees = ({data}: any) => {
        <div className="ebs-table-box ebs-box-3" style={{paddingRight: 0}} />
        <div className="ebs-table-box ebs-box-3" style={{paddingRight: 0}} />
        <div className="ebs-table-box ebs-box-3 d-flex justify-content-end" />
+      </div> */}
+      <div className='mt-2 p-2 border-down-grey fw-bold '>
+          <strong className='text-charcoal-grey fs-12 fw-600'>ATTENDEES ({data.slice(1,data.length).length})</strong>
       </div>
-      {toggle && <React.Fragment>
-        {data.map((attendee:any,k:any) =>
-         k === 0 ? null : (<div style={{background: '#EEF2F4', cursor:'default'}} key={attendee.id} className="d-flex align-items-center ebs-table-content">
-          <div className="ebs-table-box ebs-box-1" />
-          <div className="ebs-table-box ebs-box-1" />
-          <div className="ebs-table-box ebs-box-2" style={{paddingLeft:'32px'}}>
-            <p title={`${attendee?.attendee_detail?.first_name} ${attendee?.attendee_detail?.last_name}`}><strong>{attendee?.attendee_detail?.first_name} {attendee?.attendee_detail?.last_name}</strong></p>
-            <p title={attendee?.attendee_detail?.email}>{attendee?.attendee_detail?.email} </p>
-            </div>
-          <div className="ebs-table-box ebs-box-2"></div>
-          <div className="ebs-table-box  ebs-box-4" />
-        <div className="ebs-table-box ebs-box-4" />
-        <div className="ebs-table-box ebs-box-4" />
-        <div className="ebs-table-box ebs-box-3" style={{paddingRight: 0}} />
-        <div className="ebs-table-box ebs-box-3" style={{paddingRight: 0}} />
-        <div className="ebs-table-box ebs-box-3 d-flex justify-content-end" />
-        </div>)
-      )}
-      </React.Fragment>}
+     <div className='flex flex-column align-items-start'>
+        {data.length>0 && data.slice(1,data.length).map((attendee:any,k:any) =>   
+          <div style={{background: 'white', cursor:'default'}} key={attendee.id} className="d-flex align-items-center ebs-table-content w-100"> 
+          <div className="border-down-grey p-2 d-flex flex-column w-100" >
+            <strong className='text-charcoal-grey fs-12 fw-600' title={`${attendee?.attendee_detail?.first_name} ${attendee?.attendee_detail?.last_name}`}><strong>{attendee?.attendee_detail?.first_name} {attendee?.attendee_detail?.last_name}</strong></strong>
+            <span className='text-dove-grey fs-10' title={attendee?.attendee_detail?.email}>{attendee?.attendee_detail?.email} </span>
+            </div>  
+        </div>
+      
+     )} 
+      </div>
+      {/* <div style={{background: 'white', cursor:'default'}}  className="d-flex align-items-center ebs-table-content w-100"> 
+          <div className="border-down-grey p-2 " >
+            <strong className='text-charcoal-grey fs-12 fw-600' >asasasaasa</strong>
+            <span className='text-dove-grey fs-10' >dfdfhdfgh asasasasaaaaaaaaaaaaaaaa</span>
+            </div>  
+        </div> */}
     </div>
+    
+    }
+
+    </>
+
+  )
+}
+
+
+function SingleAttendeeName({setToggleMoreAttendees,toggleMoreAttendees,sort,sortCol}:any){
+  const attendeeNameRef = useRef<any>();
+
+  useEffect(() => {
+    const handleClickOutside = (event:any) => {
+      if (attendeeNameRef.current && !attendeeNameRef.current?.contains(event.target)) {
+        setToggleMoreAttendees(false);
+      }
+    };
+
+    document.addEventListener('click', handleClickOutside);
+
+    return () => {
+      document.removeEventListener('click', handleClickOutside);
+    };
+  }, [toggleMoreAttendees]);
+  return(
+    <span ref={attendeeNameRef} className='bg-dark-grey d-flex justify-content-center align-items-center rounded_2 cursor-pointer ' style={{ width:"14px",height:"14px" }}>
+    <em className={`fw-bolder text-innertext fs-12 line-height-1 material-symbols-outlined ${sort === 'desc' && sortCol === 'order_number' ? 'fw-bolder' : 'cursor-pointer'}`} 
+     onClick={()=>setToggleMoreAttendees(!toggleMoreAttendees)}>
+     keyboard_arrow_down</em>
+   </span>
+  )
+}
+
+
+function AttendeeName({sort,sortCol,order}:any){
+  const [toggleMoreAttendees, setToggleMoreAttendees] = useState(false)
+
+  return(
+    <>
+    <SingleAttendeeName setToggleMoreAttendees={setToggleMoreAttendees}
+    toggleMoreAttendees={toggleMoreAttendees}
+    sort={sort}
+    sortCol={sortCol}
+    />
+  <MoreAttendees classes={"position-absolute"} data={order?.order_attendees} 
+  toggle={toggleMoreAttendees}
+  />
+</>
   )
 }
