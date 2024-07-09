@@ -43,11 +43,12 @@ export default function RootLayout({ children, params}: { children: React.ReactN
 
     }
 
-    const exportAllEventOrders = () =>{
+    const exportAllEventOrders = (selectedOption:string) =>{
       setDownloading(true);
+      setOpenModal(false);
       let storedEventFilterData = typeof window !== "undefined" ? localStorage.getItem("eventFilterData") : null;
       const storedEventFilters = (storedEventFilterData && storedEventFilterData !== undefined) ? JSON.parse(storedEventFilterData) : {};
-      axios.post(`${AGENT_ENDPOINT}/export-orders`, storedEventFilters, {
+      axios.post(`${AGENT_ENDPOINT}/export-orders`, { ...storedEventFilters, selectedOption }, {
         headers: authHeader('GET'),
         responseType: 'blob'
       }).then((res)=>{
@@ -64,12 +65,13 @@ export default function RootLayout({ children, params}: { children: React.ReactN
       });
     }
 
-    const exportEventOrders = (event_id:string) =>{
+    const exportEventOrders = (event_id:string, selectedOption:string) =>{
       setDownloading(true);
+      setOpenModal(false);
       let storedOrderFilterData =
       typeof window !== "undefined" && localStorage.getItem("orderFilterData");
       const storedOrderFilters = storedOrderFilterData && storedOrderFilterData !== undefined ? JSON.parse(storedOrderFilterData) : null;
-      axios.post(`${AGENT_ENDPOINT}/export-event-orders/${event_id}`, storedOrderFilters, {
+      axios.post(`${AGENT_ENDPOINT}/export-event-orders/${event_id}`, { ...storedOrderFilters, selectedOption }, {
         headers: authHeader('GET'),
         responseType: 'blob'
       }).then((res)=>{
