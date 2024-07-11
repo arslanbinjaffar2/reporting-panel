@@ -124,7 +124,14 @@ gap: 4px;
 }
 
 
-
+.btn-cancel{
+    color: black;
+    background: #EEF2F4 !important;
+&:hover {
+    background: #86A4AE !important;
+    color: white;
+}
+}
 
 
 
