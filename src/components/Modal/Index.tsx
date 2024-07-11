@@ -21,14 +21,14 @@ const Index = (props: { show: boolean, onHide: () => void, pathname: string, exp
       <BootstrapModal.Body className='border-0 py-2 '>
         <Form.Check
           checked={selectedOption === 'all'}
-          label="All"
+          label="All (includes group booking)"
           name="group1"
           type={'radio'}
           onChange={() => setSelectedOption('all')}
         />
         <Form.Check
           checked={selectedOption === 'mainAttendee'}
-          label="Main Attendee"
+          label="Unique invoice with header sum"
           name="group1"
           type={'radio'}
           onChange={() => setSelectedOption('mainAttendee')}
