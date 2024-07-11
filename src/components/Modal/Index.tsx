@@ -46,7 +46,7 @@ const Index = (props: { show: boolean, onHide: () => void, pathname: string, exp
               props.setOpenModal(false)
             }
           }}
-        >Submit</Button>
+        >Exports</Button>
       </BootstrapModal.Footer>
     </BootstrapModal>
   )
