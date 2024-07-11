@@ -11,6 +11,9 @@ import moment from 'moment';
 import { AGENT_ENDPOINT } from '@/constants/endpoints';
 import FullPageLoader from '@/components/FullPageLoader';
 import { useLocale, useTranslations } from 'next-intl';
+import Button from '@/components/Button/Index';
+import Modal from '@/components/Modal/Index';
+
 
 const languages = [{ id: 1, name: "English", locale:'en' }, { id: 2, name: "Danish", locale:'da' }];
 
@@ -18,6 +21,7 @@ const languages = [{ id: 1, name: "English", locale:'en' }, { id: 2, name: "Dani
 export default function RootLayout({ children, params}: { children: React.ReactNode, params: { locale:string, event_id: string } }) {
     const t = useTranslations('manage-events-layout');
     const router = useRouter();
+    const [openModal,setOpenModal]=useState(false)
     const {user} = useAppSelector((state: RootState) => state.authUser);
     const { event } = useAppSelector((state: RootState) => state.event);
     const dispatch = useAppDispatch();
@@ -39,11 +43,12 @@ export default function RootLayout({ children, params}: { children: React.ReactN
 
     }
 
-    const exportAllEventOrders = () =>{
+    const exportAllEventOrders = (selectedOption:string) =>{
       setDownloading(true);
+      setOpenModal(false);
       let storedEventFilterData = typeof window !== "undefined" ? localStorage.getItem("eventFilterData") : null;
       const storedEventFilters = (storedEventFilterData && storedEventFilterData !== undefined) ? JSON.parse(storedEventFilterData) : {};
-      axios.post(`${AGENT_ENDPOINT}/export-orders`, storedEventFilters, {
+      axios.post(`${AGENT_ENDPOINT}/export-orders`, { ...storedEventFilters, selectedOption }, {
         headers: authHeader('GET'),
         responseType: 'blob'
       }).then((res)=>{
@@ -60,12 +65,13 @@ export default function RootLayout({ children, params}: { children: React.ReactN
       });
     }
 
-    const exportEventOrders = (event_id:string) =>{
+    const exportEventOrders = (event_id:string, selectedOption:string) =>{
       setDownloading(true);
+      setOpenModal(false);
       let storedOrderFilterData =
       typeof window !== "undefined" && localStorage.getItem("orderFilterData");
       const storedOrderFilters = storedOrderFilterData && storedOrderFilterData !== undefined ? JSON.parse(storedOrderFilterData) : null;
-      axios.post(`${AGENT_ENDPOINT}/export-event-orders/${event_id}`, storedOrderFilters, {
+      axios.post(`${AGENT_ENDPOINT}/export-event-orders/${event_id}`, { ...storedOrderFilters, selectedOption }, {
         headers: authHeader('GET'),
         responseType: 'blob'
       }).then((res)=>{
@@ -170,15 +176,9 @@ export default function RootLayout({ children, params}: { children: React.ReactN
                   </div>
                   <div className="col-8">
                     <div className="right-top-header">
-                      <button className="btn btn-default" onClick={(e)=>{
-                          if(!pathname.endsWith("/manage/events")){
-                            exportEventOrders( pathname.includes('/da') ? pathname.split('/')[4] : pathname.split('/')[3]);
-                          }else{
-                            exportAllEventOrders();
-                          }
-                        }}>
-                        {t('export_orders')}
-                      </button>
+                    <Button 
+                    setOpenModal={setOpenModal}
+                    />
                     </div>
                   </div>
                 </div>
@@ -189,6 +189,15 @@ export default function RootLayout({ children, params}: { children: React.ReactN
         </div>
     </main>
       {downloading ? <FullPageLoader className={''} fixed={''}/> : null}
+
+
+      <Modal
+         show={openModal}
+         exportAllEventOrders={exportAllEventOrders} exportEventOrders={exportEventOrders}
+          pathname={pathname}
+         onHide={() => setOpenModal(false)}
+         setOpenModal={setOpenModal}
+      />
     </>
   )
 }

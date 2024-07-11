@@ -41,7 +41,11 @@
     },
     "manage-events-layout":{
         "return_to_list_label":"Return to list",
-        "export_orders":"EXPORT ORDERS"
+        "export_orders":"EXPORT ORDERS",
+        "export":"Export",
+        "cancel":"Cancel",
+        "all_includes_group_booking":"All (includes group booking)",
+        "unique_invoice_with_header_summary":"Unique invoice with header sum"
     },
     "manage-events-page":{
         "no_data_available":"No data available",

@@ -41,7 +41,11 @@
     },
     "manage-events-layout":{
         "return_to_list_label":"Tillage til listen",
-        "export_orders":"EKSPORT ORDRER"
+        "export_orders":"EKSPORT ORDRER",
+        "export":"Eksport",
+        "cancel":"Annullere",
+        "all_includes_group_booking":"Alle (inklusive gruppebooking)",
+        "unique_invoice_with_header_summary":"Unik faktura med overskriftssummer"
     },
     "manage-events-page":{
         "no_data_available":"Ingen data er tilgængelig",
