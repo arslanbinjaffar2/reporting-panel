@@ -37,9 +37,8 @@ const Index = (props: { show: boolean, onHide: () => void, pathname: string, exp
         />
       </BootstrapModal.Body>
       <BootstrapModal.Footer className='border-0 py-2 '>
-        <Button onClick={props.onHide} className="p-2 border-0 btn btn-secondary">{t('cancel')}</Button>
+        <Button onClick={props.onHide} className="border-0 btn btn-cancel" >Cancel</Button>
         <Button
-          className="p-2"
           onClick={(e) => {
             if (!props.pathname.endsWith("/manage/events")) {
               props.exportEventOrders(props.pathname.includes('/da') ? props.pathname.split('/')[4] : props.pathname.split('/')[3], selectedOption);
